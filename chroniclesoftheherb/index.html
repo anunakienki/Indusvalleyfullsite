@@ -249,10 +249,41 @@
 
     // Same Apps Script URL used across every gate/promo function on this page.
 
+    var headerScrollInitialized = false;
+    function initHeaderAutoHide(){
+      if(headerScrollInitialized) return;
+      headerScrollInitialized = true;
+      var headerEl = document.querySelector('.sp-header');
+      if(!headerEl) return;
+      var spacer = document.createElement('div');
+      spacer.style.height = headerEl.offsetHeight + 'px';
+      headerEl.parentNode.insertBefore(spacer, headerEl.nextSibling);
+      window.addEventListener('resize', function(){
+        spacer.style.height = headerEl.offsetHeight + 'px';
+      });
+      var lastScrollY = window.scrollY;
+      var ticking = false;
+      window.addEventListener('scroll', function(){
+        if(ticking) return;
+        ticking = true;
+        requestAnimationFrame(function(){
+          var currentY = window.scrollY;
+          if(currentY > lastScrollY && currentY > 80){
+            headerEl.classList.add('header-hidden');
+          } else {
+            headerEl.classList.remove('header-hidden');
+          }
+          lastScrollY = currentY;
+          ticking = false;
+        });
+      }, {passive:true});
+    }
+
     function showStore(){
       gateAge.hidden = true;
       gateMember.hidden = true;
       storeApp.hidden = false;
+      initHeaderAutoHide();
     }
     function showMemberGate(){
       gateAge.hidden = true;
