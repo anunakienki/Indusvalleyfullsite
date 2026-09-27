@@ -138,12 +138,16 @@ body.watermark-earthy::before{
 
 /* ---------------- Header / nav ---------------- */
 header.site{
-  position:sticky;top:0;z-index:20;
+  position:fixed;top:0;left:0;right:0;z-index:20;
   background:
     radial-gradient(ellipse 120% 60% at 15% -10%, rgba(255,79,163,0.18), transparent 60%),
     radial-gradient(ellipse 100% 50% at 90% 10%, rgba(124,255,178,0.10), transparent 55%),
     var(--space-black);
   background-attachment:fixed;
+  transition:transform 0.35s ease;
+}
+header.site.header-hidden{
+  transform:translateY(-100%);
 }
 .nav-row{
   display:grid;
@@ -593,6 +597,12 @@ footer.site a{color:var(--bio-green);text-decoration:none;}
 .disclaimer-box p:last-child{margin-bottom:0;}
 .form-msg{margin-top:12px;font-size:0.85rem;color:var(--plasma-pink);}
 .form-msg[hidden]{display:none;}
+.access-code-reminder{
+  margin-top:14px;padding:12px 14px;
+  border:1px solid var(--hairline);border-radius:10px;
+  background:rgba(124,255,178,0.06);
+  font-size:0.82rem;color:var(--bio-green);line-height:1.5;
+}
 #membershipSuccess{text-align:center;}
 .btn{
   flex:1;
@@ -701,6 +711,11 @@ footer.site a{color:var(--bio-green);text-decoration:none;}
 .qr-modal-code{
   margin-top:14px;font-family:var(--mono);font-size:0.85rem;
   color:var(--bio-green);letter-spacing:0.05em;
+}
+.qr-screenshot-reminder{
+  margin-top:16px;padding:12px 14px;
+  border:1px dashed var(--hairline);border-radius:10px;
+  font-size:0.8rem;color:var(--dust);line-height:1.5;
 }
 
 /* ---------------- Staff redeem result ---------------- */
@@ -1166,7 +1181,7 @@ footer.site a{color:var(--bio-green);text-decoration:none;}
   --portal-line:rgba(233,228,216,0.14);
   --portal-bronze:#8C7A5B;
   position:relative;z-index:1;
-  padding:20px 24px 40px;
+  padding:20px 24px 8px;
   text-align:center;
 }
 .portal-hint{
@@ -1284,7 +1299,15 @@ footer.site a{color:var(--bio-green);text-decoration:none;}
    future one). Each store sets its own --store-accent on <body>
    to recolor everything here without duplicating CSS per store.
    ============================================================ */
-.sp-header{padding:20px 0;}
+.sp-header{
+  padding:20px 0;
+  position:fixed;top:0;left:0;right:0;z-index:20;
+  background:var(--space-black);
+  transition:transform 0.35s ease;
+}
+.sp-header.header-hidden{
+  transform:translateY(-100%);
+}
 .sp-brand{
   font-family:var(--display);font-weight:700;font-size:1.3rem;
   color:var(--starlight);text-decoration:none;
