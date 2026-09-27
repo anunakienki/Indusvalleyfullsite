@@ -54,19 +54,26 @@
         <input type="tel" id="mfPhone" name="phone" autocomplete="tel">
       </div>
 
-      <fieldset class="form-field">
-        <legend>Are you 18 years or older?</legend>
-        <label class="radio-option"><input type="radio" name="ageConfirm" value="yes" required> Yes</label>
-        <label class="radio-option"><input type="radio" name="ageConfirm" value="no"> No</label>
-      </fieldset>
-      <p class="age-block-msg" id="ageBlockMsg" hidden>You must be 18 or older to join. Come back when you're 18 — see you then 🌙</p>
+      <div class="form-field">
+        <label for="mfDob">Date of birth</label>
+        <input type="date" id="mfDob" name="dob" required>
+      </div>
+      <div class="form-field">
+        <label for="mfCurrentAge">Your current age</label>
+        <input type="number" id="mfCurrentAge" name="currentAge" min="1" max="120" required>
+      </div>
+      <div class="form-field">
+        <label for="mfMatricYear">What year did you finish high school (matric)?</label>
+        <input type="number" id="mfMatricYear" name="matricYear" min="1950" max="2026" required>
+      </div>
+      <p class="age-block-msg" id="ageBlockMsg" hidden></p>
 
       <label class="consent-row">
         <input type="checkbox" id="mfConsent" required>
-        <span>I confirm I am 18 or older, the details above are accurate, and I agree to the club's <button type="button" class="linklike-inline" id="disclaimerToggle">membership terms &amp; disclaimer</button>.</span>
+        <span>I confirm I am 18 or older, the details above are accurate, and I agree to the club's membership terms &amp; disclaimer below.</span>
       </label>
 
-      <div class="disclaimer-box" id="disclaimerBox" hidden>
+      <div class="disclaimer-box" id="disclaimerBox">
         <h4>Membership Terms &amp; Disclaimer</h4>
         <p>This membership form is provided for the purpose of joining Earthy Essentials as a private members' club. By submitting this form, you confirm that you are 18 years of age or older, and that all details you have provided are true and accurate to the best of your knowledge.</p>
         <p>Membership is intended for personal, private, and responsible use in accordance with applicable law. Earthy Essentials does not encourage or condone unlawful use, sale, or distribution of any product. It remains the member's responsibility to understand and comply with the laws applicable to them in their jurisdiction.</p>
@@ -91,6 +98,7 @@
         <button class="btn primary" id="accessCodeSubmit">Enter store</button>
       </div>
       <p class="access-code-msg" id="accessCodeMsg" hidden></p>
+      <p class="access-code-reminder">📧 A membership number will be emailed to you when you join — check your email for your verification code.</p>
     </div>
   </div>
 </section>
@@ -105,6 +113,7 @@
     <h2 id="qrModalTitle">Show this to the cashier</h2>
     <div id="qrCodeCanvas" class="qr-canvas"></div>
     <p class="qr-modal-code" id="qrModalCodeText"></p>
+    <p class="qr-screenshot-reminder">📸 Screenshot and save this before closing — you'll show it to the cashier in-store for your discount.</p>
     <button class="btn primary" id="qrModalClose" style="width:100%;margin-top:16px;">Done</button>
   </div>
 </div>
@@ -480,10 +489,46 @@
 
     // Same Apps Script URL used across every gate/promo function on this page.
 
+    var headerScrollInitialized = false;
+    function initHeaderAutoHide(){
+      if(headerScrollInitialized) return;
+      headerScrollInitialized = true;
+      var headerEl = document.querySelector('header.site');
+      if(!headerEl) return;
+
+      // Fixed positioning takes the header out of document flow, so reserve
+      // the same space it used to occupy (measured, since its height varies
+      // with the logo size) to stop content jumping up underneath it.
+      var spacer = document.createElement('div');
+      spacer.style.height = headerEl.offsetHeight + 'px';
+      headerEl.parentNode.insertBefore(spacer, headerEl.nextSibling);
+      window.addEventListener('resize', function(){
+        spacer.style.height = headerEl.offsetHeight + 'px';
+      });
+
+      var lastScrollY = window.scrollY;
+      var ticking = false;
+      window.addEventListener('scroll', function(){
+        if(ticking) return;
+        ticking = true;
+        requestAnimationFrame(function(){
+          var currentY = window.scrollY;
+          if(currentY > lastScrollY && currentY > 80){
+            headerEl.classList.add('header-hidden');
+          } else {
+            headerEl.classList.remove('header-hidden');
+          }
+          lastScrollY = currentY;
+          ticking = false;
+        });
+      }, {passive:true});
+    }
+
     function showStore(){
       gateAge.hidden = true;
       gateMember.hidden = true;
       storeApp.hidden = false;
+      initHeaderAutoHide();
     }
     function showMemberGate(){
       gateAge.hidden = true;
@@ -511,27 +556,69 @@
       window.location.href = 'https://www.google.com';
     });
 
-    // ---- Membership form: age-radio guard ----
-    var ageRadios = document.querySelectorAll('input[name="ageConfirm"]');
+    // ---- Membership form: DOB + cross-check age guard ----
+    // Three independent signals must agree before we accept someone as 18+:
+    // date of birth, a separately-typed current age, and a plausible matric
+    // year. None of these are foolproof on their own (all are self-reported),
+    // but requiring them to be mutually consistent catches careless attempts
+    // — actual identity verification still happens in-store.
     var ageBlockMsg = document.getElementById('ageBlockMsg');
     var memberSubmitBtn = document.getElementById('memberSubmitBtn');
-    ageRadios.forEach(function(radio){
-      radio.addEventListener('change', function(){
-        if(radio.value === 'no' && radio.checked){
+
+    function calculateAgeFromDob(dobStr){
+      var dob = new Date(dobStr);
+      if(isNaN(dob.getTime())) return null;
+      var today = new Date();
+      var age = today.getFullYear() - dob.getFullYear();
+      var monthDiff = today.getMonth() - dob.getMonth();
+      if(monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())){
+        age--;
+      }
+      return age;
+    }
+
+    function validateAgeFields(){
+      var dobVal = document.getElementById('mfDob').value;
+      var currentAgeVal = document.getElementById('mfCurrentAge').value;
+      var matricYearVal = document.getElementById('mfMatricYear').value;
+
+      if(!dobVal || !currentAgeVal || !matricYearVal){
+        return null; // not all filled in yet — don't show an error yet
+      }
+
+      var calculatedAge = calculateAgeFromDob(dobVal);
+      var typedAge = parseInt(currentAgeVal, 10);
+      var matricYear = parseInt(matricYearVal, 10);
+      var birthYear = new Date(dobVal).getFullYear();
+
+      if(calculatedAge === null || calculatedAge < 18){
+        return 'You must be 18 or older to join. Come back when you\'re 18 — see you then 🌙';
+      }
+      if(typedAge !== calculatedAge){
+        return 'Your date of birth and current age don\'t match — please double check both.';
+      }
+      if(matricYear < (birthYear + 15) || matricYear > (birthYear + 21)){
+        return 'Your matric year doesn\'t line up with your date of birth — please double check.';
+      }
+      return '';
+    }
+
+    ['mfDob', 'mfCurrentAge', 'mfMatricYear'].forEach(function(id){
+      document.getElementById(id).addEventListener('input', function(){
+        var result = validateAgeFields();
+        if(result === null) return;
+        if(result){
           ageBlockMsg.hidden = false;
+          ageBlockMsg.textContent = result;
           memberSubmitBtn.disabled = true;
-        } else if(radio.value === 'yes' && radio.checked){
+        } else {
           ageBlockMsg.hidden = true;
           memberSubmitBtn.disabled = false;
         }
       });
     });
 
-    // ---- Disclaimer toggle ----
-    document.getElementById('disclaimerToggle').addEventListener('click', function(){
-      var box = document.getElementById('disclaimerBox');
-      box.hidden = !box.hidden;
-    });
+    // Disclaimer box is now always visible (scrollable), no toggle needed.
 
     // ---- Membership form submit ----
     document.getElementById('membershipForm').addEventListener('submit', function(ev){
@@ -539,10 +626,15 @@
       var formMsg = document.getElementById('formMsg');
       formMsg.hidden = true;
 
-      var ageValue = document.querySelector('input[name="ageConfirm"]:checked');
-      if(!ageValue || ageValue.value !== 'yes'){
+      var ageCheck = validateAgeFields();
+      if(ageCheck === null){
         formMsg.hidden = false;
-        formMsg.textContent = 'You must confirm you are 18 or older to join.';
+        formMsg.textContent = 'Please fill in your date of birth, current age, and matric year.';
+        return;
+      }
+      if(ageCheck){
+        formMsg.hidden = false;
+        formMsg.textContent = ageCheck;
         return;
       }
       if(!document.getElementById('mfConsent').checked){
@@ -554,7 +646,8 @@
       var payload = {
         name: document.getElementById('mfName').value,
         email: document.getElementById('mfEmail').value,
-        phone: document.getElementById('mfPhone').value
+        phone: document.getElementById('mfPhone').value,
+        dob: document.getElementById('mfDob').value
       };
 
       memberSubmitBtn.disabled = true;
