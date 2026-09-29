@@ -784,7 +784,9 @@
       var btn = this;
       btn.disabled = true;
       btn.textContent = 'Claiming…';
-      fetch(APPS_SCRIPT_URL + '?action=claimPromo')
+      var memberCodeForClaim = '';
+      try { memberCodeForClaim = localStorage.getItem('ee_last_code') || ''; } catch(e){}
+      fetch(APPS_SCRIPT_URL + '?action=claimPromo&memberCode=' + encodeURIComponent(memberCodeForClaim))
         .then(function(res){ return res.json(); })
         .then(function(data){
           if(data.error){
