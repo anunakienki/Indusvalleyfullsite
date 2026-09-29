@@ -65,6 +65,39 @@
     </form>
 
     <div style="margin-top:56px;padding-top:40px;border-top:1px solid var(--hairline);">
+      <p class="eyebrow">Individual</p>
+      <h1 style="font-family:var(--display);font-size:2rem;margin-bottom:8px;">Send a promo to one member</h1>
+      <p style="color:var(--dust);">For birthdays, thank-yous, or anything else meant for just one person. Emails them a code immediately.</p>
+
+      <form id="individualPromoForm" class="member-form" style="margin-top:24px;">
+        <div class="form-field">
+          <label for="indivMemberSelect">Member</label>
+          <select id="indivMemberSelect" required style="width:100%;background:var(--space-black);border:1px solid var(--hairline);border-radius:10px;padding:12px 14px;color:var(--starlight);font-family:var(--body);font-size:0.95rem;">
+            <option value="">Loading members…</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label for="indivPromoType">Special</label>
+          <select id="indivPromoType" style="width:100%;background:var(--space-black);border:1px solid var(--hairline);border-radius:10px;padding:12px 14px;color:var(--starlight);font-family:var(--body);font-size:0.95rem;">
+            <option value="birthday">🎂 Birthday</option>
+            <option value="loyalty">⭐ Loyalty</option>
+            <option value="thank_you">🙏 Random thank you</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label for="indivPromoValue">Value (e.g. 15, if a percentage — otherwise leave blank)</label>
+          <input type="text" id="indivPromoValue" placeholder="15">
+        </div>
+        <div class="form-field">
+          <label for="indivPromoLabel">Message shown to them / label on the code</label>
+          <input type="text" id="indivPromoLabel" placeholder="Happy birthday! 15% off your cart this month" required>
+        </div>
+        <button type="submit" class="btn primary" id="indivPromoSubmit">Send it</button>
+        <p class="form-msg" id="indivPromoMsg" hidden></p>
+      </form>
+    </div>
+
+    <div style="margin-top:56px;padding-top:40px;border-top:1px solid var(--hairline);">
       <p class="eyebrow">Stores</p>
       <h1 style="font-family:var(--display);font-size:2rem;margin-bottom:8px;">Manage stores</h1>
       <p style="color:var(--dust);">Add a store, edit its details, or toggle it live/coming-soon — no code changes needed. The mall's portal ring, search, and A-Z list update automatically.</p>
@@ -73,6 +106,7 @@
 
       <button type="button" class="btn" id="addStoreBtn" style="width:100%;margin-top:16px;">+ Add a new store</button>
     </div>
+
 
     <div class="orbit-store-popup" id="storeEditModal" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:340px;max-width:90vw;z-index:900;text-align:left;" hidden>
       <button class="orbit-popup-close" id="storeEditClose" aria-label="Close">×</button>
@@ -207,6 +241,123 @@
           btn.disabled = false;
           btn.textContent = 'Save special';
         });
+    });
+    document.getElementById('individualPromoForm').addEventListener('submit', function(ev){
+      ev.preventDefault();
+      var msg = document.getElementById('indivPromoMsg');
+      var btn = document.getElementById('indivPromoSubmit');
+      msg.hidden = true;
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+
+      var payload = {
+        action: 'assignPromo',
+        pin: enteredPin,
+        memberEmail: document.getElementById('indivMemberSelect').value,
+        type: document.getElementById('indivPromoType').value,
+        value: document.getElementById('indivPromoValue').value,
+        label: document.getElementById('indivPromoLabel').value
+      };
+
+      fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload)
+      })
+        .then(function(res){ return res.json(); })
+        .then(function(data){
+          if(data.success){
+            msg.hidden = false;
+            msg.style.color = 'var(--bio-green)';
+            msg.textContent = 'Sent — code emailed to that member.';
+            document.getElementById('indivPromoValue').value = '';
+            document.getElementById('indivPromoLabel').value = '';
+          } else {
+            throw new Error(data.error || 'Failed to send');
+          }
+        })
+        .catch(function(err){
+          msg.hidden = false;
+          msg.style.color = 'var(--plasma-pink)';
+          msg.textContent = err.message === 'Invalid admin PIN'
+            ? 'Wrong PIN — go back and re-enter it.'
+            : (err.message === 'No member found with that email'
+              ? "No member found with that email — check it's correct."
+              : "Couldn't send — check your connection and try again.");
+        })
+        .finally(function(){
+          btn.disabled = false;
+          btn.textContent = 'Send it';
+        });
+    });
+  })();
+
+  // ===================== Individual promo: member dropdown =====================
+  (function(){
+    var typeDefaults = {
+      birthday: 'Happy birthday! Here\'s a little something for you 🎂',
+      loyalty: 'Thanks for being a loyal member — here\'s a little something for you ⭐',
+      thank_you: 'Just wanted to say thanks — here\'s a little something for you 🙏'
+    };
+
+    function daysUntilNextBirthday(dobStr){
+      if(!dobStr) return 9999;
+      var dob = new Date(dobStr);
+      if(isNaN(dob.getTime())) return 9999;
+      var today = new Date();
+      var next = new Date(today.getFullYear(), dob.getMonth(), dob.getDate());
+      if(next < today){ next.setFullYear(today.getFullYear() + 1); }
+      return Math.round((next - today) / (1000 * 60 * 60 * 24));
+    }
+
+    function formatDob(dobStr){
+      if(!dobStr) return '';
+      var d = new Date(dobStr);
+      if(isNaN(d.getTime())) return '';
+      var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      return months[d.getMonth()] + ' ' + d.getDate();
+    }
+
+    function loadMembers(){
+      var select = document.getElementById('indivMemberSelect');
+      var pin = document.getElementById('adminPin').value.trim();
+      fetch(APPS_SCRIPT_URL + '?action=getMembers&pin=' + encodeURIComponent(pin))
+        .then(function(res){ return res.json(); })
+        .then(function(data){
+          if(!data.members){
+            select.innerHTML = '<option value="">Could not load members</option>';
+            return;
+          }
+          var members = data.members.slice().sort(function(a, b){
+            return daysUntilNextBirthday(a.dob) - daysUntilNextBirthday(b.dob);
+          });
+          select.innerHTML = '';
+          members.forEach(function(m){
+            var opt = document.createElement('option');
+            opt.value = m.email;
+            var dobPart = formatDob(m.dob);
+            var soon = daysUntilNextBirthday(m.dob) <= 14 ? ' 🎂' : '';
+            opt.textContent = (m.name || m.email) + (dobPart ? ' — birthday ' + dobPart : '') + soon;
+            select.appendChild(opt);
+          });
+          if(members.length === 0){
+            select.innerHTML = '<option value="">No members yet</option>';
+          }
+        })
+        .catch(function(){
+          select.innerHTML = '<option value="">Could not load members</option>';
+        });
+    }
+
+    document.getElementById('indivPromoType').addEventListener('change', function(){
+      var labelField = document.getElementById('indivPromoLabel');
+      if(!labelField.value || Object.values(typeDefaults).indexOf(labelField.value) > -1){
+        labelField.value = typeDefaults[this.value] || '';
+      }
+    });
+
+    document.getElementById('pinSubmit').addEventListener('click', function(){
+      setTimeout(loadMembers, 50);
     });
   })();
 
