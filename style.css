@@ -493,7 +493,14 @@ footer.site{
   font-size:0.78rem;
   letter-spacing:0.04em;
 }
-footer.site a{color:var(--bio-green);text-decoration:none;}
+footer.site a{color:var(--store-accent, var(--bio-green));text-decoration:none;}
+
+/* Standalone section-index label (e.g. "01 / Shop"), used outside the
+   older .category wrapper by the generic store template. */
+.index{
+  font-family:var(--mono);font-size:0.8rem;letter-spacing:0.04em;
+  color:var(--store-accent, var(--bio-green));margin-bottom:6px;
+}
 
 /* ---------------- Gate screens (age + membership) ---------------- */
 .gate-screen{
@@ -556,6 +563,12 @@ footer.site a{color:var(--bio-green);text-decoration:none;}
   letter-spacing:0.06em;text-transform:uppercase;color:var(--dust);
   margin-bottom:6px;padding:0;border:none;
 }
+.form-field input[type="file"]{
+  display:block;width:100%;box-sizing:border-box;
+  background:var(--space-black);
+  border:1px solid var(--hairline);border-radius:10px;
+  padding:10px 12px;color:var(--dust);font-family:var(--body);font-size:0.85rem;
+}
 .form-field input[type="text"], .form-field input[type="email"], .form-field input[type="tel"]{
   width:100%;background:var(--space-black);
   border:1px solid var(--hairline);border-radius:10px;
@@ -616,7 +629,7 @@ footer.site a{color:var(--bio-green);text-decoration:none;}
   color:var(--starlight);
   cursor:pointer;
 }
-.btn.primary{background:var(--bio-green);color:var(--space-black);border-color:var(--bio-green);font-weight:600;}
+.btn.primary{background:var(--store-accent, var(--bio-green));color:var(--space-black);border-color:var(--store-accent, var(--bio-green));font-weight:600;}
 .btn:focus-visible, a:focus-visible, .const-node:focus-visible circle{
   outline:2px solid var(--plasma-pink);outline-offset:3px;
 }
@@ -1257,6 +1270,22 @@ footer.site a{color:var(--bio-green);text-decoration:none;}
   animation:card-glow 2.6s ease-in-out infinite;
 }
 .orbit-store-popup[hidden]{display:none;}
+
+/* Admin modals (store/product editors) reuse the popup card shell above but
+   need a solid background and a real backdrop, unlike the mall's deliberately
+   translucent portal-ring popup. */
+.admin-modal-backdrop{
+  position:fixed;inset:0;background:rgba(10,11,20,0.75);
+  z-index:899;
+}
+.admin-modal-backdrop[hidden]{display:none;}
+.orbit-store-popup.admin-modal{
+  background:#15121f;
+  animation:none;
+  max-height:90vh;
+  overflow-y:auto;
+  box-shadow:0 0 0 1px rgba(124,255,178,0.15), 0 20px 60px -10px rgba(0,0,0,0.6);
+}
 .orbit-store-popup .store-card-logo{width:120px;height:auto;margin:10px auto;}
 .orbit-popup-close{
   position:absolute;top:8px;right:10px;
@@ -1302,7 +1331,14 @@ footer.site a{color:var(--bio-green);text-decoration:none;}
 .sp-header{
   padding:20px 0;
   position:fixed;top:0;left:0;right:0;z-index:20;
-  background:var(--space-black);
+  background:
+    radial-gradient(1px 1px at 12% 30%, rgba(233,228,216,0.5), transparent),
+    radial-gradient(1px 1px at 28% 70%, rgba(233,228,216,0.35), transparent),
+    radial-gradient(1px 1px at 47% 20%, rgba(233,228,216,0.4), transparent),
+    radial-gradient(1px 1px at 63% 60%, rgba(233,228,216,0.3), transparent),
+    radial-gradient(1px 1px at 81% 35%, rgba(233,228,216,0.45), transparent),
+    radial-gradient(1px 1px at 93% 75%, rgba(233,228,216,0.3), transparent),
+    var(--space-black);
   transition:transform 0.35s ease;
 }
 .sp-header.header-hidden{
@@ -1395,4 +1431,14 @@ footer.site a{color:var(--bio-green);text-decoration:none;}
   border:1px solid var(--hairline);
   background:#000;
   box-shadow:0 0 32px -6px rgba(124,255,178,0.25);
+}
+
+/* ---- Mobile fit for the landing portal (tight gaps, clear of Netlify badge) ---- */
+@media (max-width:640px){
+  .portal-section{padding:12px 12px 0;}
+  .portal-hint{margin-bottom:4px;}
+  .portal-stage{height:250px;}
+  .portal-stage .iv-hub .hub-stage{transform:scale(0.8);}
+  .directory-heading{margin-top:0;}
+  .landing{padding-bottom:96px;} /* keeps Browse A-Z clear of the floating Netlify badge */
 }

@@ -346,8 +346,9 @@
         var sinR = Math.sin(rotationOffset);
         var rawX = xOrb + loopX;
         var rawY = yOrb + loopY;
-        var x = rawX * cosR - rawY * sinR;
-        var yFlat = (rawX * sinR + rawY * cosR) * SQUASH;
+        var kScale = Math.min(1, rect.width / 680); // shrink the orbit to fit narrow phone screens
+        var x = (rawX * cosR - rawY * sinR) * kScale;
+        var yFlat = (rawX * sinR + rawY * cosR) * SQUASH * kScale;
 
         var depth = Math.sin(E);
         var scale = 0.8 + (depth + 1) / 2 * 0.3;
