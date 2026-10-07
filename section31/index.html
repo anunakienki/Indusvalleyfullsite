@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Section 31 — Indus Valley</title>
+<meta name="description" content="Section 31: comics, challenges, gaming and intel. Open to all. Part of the Indus Valley digital mall.">
+<meta name="theme-color" content="#07090d">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Section 31 — Comics, challenges, gaming &amp; intel">
+<meta property="og:description" content="Classified treasures for the ultimate collector. Open to all. Part of the Indus Valley digital mall.">
+<meta property="og:image" content="https://indusvalley.earth/section31/assets/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="stylesheet" href="css/section31.css?v=20261008b">
+<script src="js/pre.js?v=20261008b"></script>
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- original "31" badge (angular facility seal) — reused in the header, hero and door -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="badge31" viewBox="0 0 100 100">
+    <polygon points="50,3 91,24 91,66 50,97 9,66 9,24" fill="none" stroke="currentColor" stroke-width="3"/>
+    <polygon points="50,15 80,30 80,61 50,84 20,61 20,30" fill="currentColor" fill-opacity=".09" stroke="currentColor" stroke-width="1.2"/>
+    <path d="M9 24 L27 33 M91 24 L73 33 M50 97 L50 84 M9 66 L20 61 M91 66 L80 61" stroke="currentColor" stroke-width="2" fill="none"/>
+    <text x="50" y="58" text-anchor="middle" font-family="Space Grotesk, system-ui, sans-serif" font-size="29" font-weight="700" letter-spacing="1" fill="currentColor">31</text>
+  </symbol>
+</svg>
+
+<noscript><p style="padding:90px 20px;text-align:center">Section 31 needs JavaScript to open its doors.</p></noscript>
+
+<!-- boot-up intro -->
+<div class="boot" id="boot" role="dialog" aria-label="Facility access sequence">
+  <button class="boot-skip" id="bootSkip" type="button">Skip ›</button>
+  <pre class="boot-log" id="bootLog" aria-live="polite"></pre>
+</div>
+
+<div class="warp" id="warp" aria-hidden="true"></div>
+
+<header class="hdr" id="hdr">
+  <div class="hdr-in">
+    <a class="brand" href="#top" aria-label="Section 31 — back to top"><svg class="b" viewBox="0 0 100 100" aria-hidden="true"><use href="#badge31"/></svg><span>SECTION 31</span></a>
+    <nav class="nav" aria-label="Zones">
+      <a href="#zone1">The Floor</a>
+      <a href="#zone2">Kobayashi Maru</a>
+      <a href="#zone3">Holodeck</a>
+      <a href="#zone4">Spock’s Corner</a>
+      <a href="#zone5">Ancient X-Files</a>
+      <a href="#zone6">Transmissions</a>
+      <a href="#zone7">Saber Academy</a>
+      <a href="#clearance">Clearance</a>
+      <a href="#door">Find us</a>
+    </nav>
+    <button class="chip" id="clearChip" type="button" aria-label="Request clearance">Clearance: Visitor</button>
+  </div>
+</header>
+
+<main id="main">
+  <!-- ============ HERO ============ -->
+  <section class="hero" aria-label="Section 31 entrance">
+    <div class="hero-bg"></div>
+    <svg class="grid-floor" id="gridFloor" aria-hidden="true" focusable="false" preserveAspectRatio="none">
+      <defs><linearGradient id="gfFade" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="130"><stop offset="0" stop-color="#19e3ff" stop-opacity="0"/><stop offset=".55" stop-color="#19e3ff" stop-opacity=".5"/><stop offset="1" stop-color="#19e3ff" stop-opacity=".8"/></linearGradient></defs>
+      <g id="gfV" fill="none" stroke="url(#gfFade)" stroke-width="1.2"></g>
+      <g id="gfH" stroke="#19e3ff" stroke-width="1.2"></g>
+    </svg>
+    <div class="horizon" aria-hidden="true"></div>
+    <div class="scan" aria-hidden="true"></div>
+    <div class="hero-in">
+      <svg class="badge" viewBox="0 0 100 100" role="img" aria-label="Section 31 seal"><use href="#badge31"/></svg>
+      <div class="kicker">[ Classified ] Comics · Challenges · Gaming · Intel · Ancients · Podcast</div>
+      <h1>SECTION 31</h1>
+      <p class="tagline" id="heroTagline"></p>
+      <p class="redline">Operating from the sub-level beneath the <span class="redact" tabindex="0" role="button" aria-label="Reveal text">Indus Valley</span> mall.</p>
+      <div class="hero-cta">
+        <a class="btn primary" href="#zone1">Enter the facility</a>
+        <button class="btn" type="button" data-open-clearance>Request clearance</button>
+      </div>
+      <span class="chip open-tag" style="cursor:default">Open to all · all ages</span>
+      <div class="dock-wrap">
+        <nav class="zone-dock" id="zoneDock" aria-label="Choose a zone"></nav>
+        <div class="dock-peek" id="dockPeek" aria-hidden="true"></div>
+      </div>
+    </div>
+    <div class="scroll-cue" aria-hidden="true">Scroll ↓</div>
+  </section>
+
+  <!-- ============ FACILITY MAP ============ -->
+  <section class="facility" id="facility">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="kicker">Facility map</div>
+        <h2>Seven zones. One facility.</h2>
+        <p>Pick a door. Each zone has its own reason to come back every week.</p>
+      </div>
+      <div class="zone-grid" id="zoneGrid"></div>
+    </div>
+  </section>
+
+  <!-- ============ ZONE 01 — THE FLOOR ============ -->
+  <section class="zone" id="zone1" style="--z:#19e3ff">
+    <div class="wrap">
+      <div class="zone-head">
+        <div class="kicker">Zone 01 · The Floor</div>
+        <h2>Section 31</h2>
+        <p>The main floor. Comics, trading cards, collectables and fandom shelves, plus a locked case for the grails.</p>
+      </div>
+
+      <div class="blk-title"><h3>Specials</h3><span class="fine">Placeholder offers</span></div>
+      <div class="specials" id="specialsGrid"></div>
+
+      <div class="blk-title">
+        <h3>The shelves</h3>
+        <span class="drop-clock" id="dropClock"></span>
+      </div>
+      <div class="filters" id="comicFilters" role="group" aria-label="Choose a shelf"></div>
+      <div id="shelfFile"></div>
+      <div class="comic-grid" id="comicGrid"></div>
+      <p class="fine" id="deliveryNote" style="margin:16px 0 0"></p>
+
+      <div class="blk-title"><h3>Pull list</h3><span class="fine demo-note">Demo — nothing is sent</span></div>
+      <div class="two-col">
+        <div class="card">
+          <p class="muted" style="margin-top:0">Tap “Add to pull list” on any title above, and we’ll hold your copy when it lands.</p>
+          <div class="pull-chips" id="pullChips"></div>
+          <form id="pullForm" novalidate>
+            <div class="row2">
+              <div class="field"><label for="pullName">Name or handle</label><input id="pullName" autocomplete="nickname" required></div>
+              <div class="field"><label for="pullContact">WhatsApp or email</label><input id="pullContact" autocomplete="email" required></div>
+            </div>
+            <div class="field"><label for="pullGuardian">Parent / guardian contact (if you’re under 18)</label><input id="pullGuardian" placeholder="Optional for adults"></div>
+            <button class="btn primary" type="submit">Hold my copies</button>
+            <div class="result" id="pullMsg" aria-live="polite"></div>
+          </form>
+        </div>
+        <div class="card">
+          <div class="kicker">Why a pull list?</div>
+          <p class="muted">Comic shops run on new-release day. Reserve your titles and they’re waiting for you on Wednesday — no hunting, no sell-outs.</p>
+          <p class="muted" style="margin-bottom:0">Want to sell instead? See <a href="#collection">We buy collections</a> below.</p>
+        </div>
+      </div>
+
+      <div class="blk-title" id="collection"><h3>We buy collections</h3><span class="fine demo-note">Demo — nothing is sent</span></div>
+      <div class="card">
+        <p class="muted" style="margin-top:0">Got longboxes in the garage? Tell us what you have and we’ll come back with an offer.</p>
+        <form id="collForm" novalidate>
+          <div class="row2">
+            <div class="field"><label for="collName">Name</label><input id="collName" autocomplete="name" required></div>
+            <div class="field"><label for="collContact">WhatsApp or email</label><input id="collContact" autocomplete="email" required></div>
+          </div>
+          <div class="row2">
+            <div class="field"><label for="collType">What do you have?</label><select id="collType"></select></div>
+            <div class="field"><label for="collSize">Roughly how many?</label><select id="collSize"></select></div>
+          </div>
+          <div class="field"><label for="collNotes">Anything worth knowing? (titles, eras, condition)</label><textarea id="collNotes" rows="3"></textarea></div>
+          <p class="fine" style="margin:0 0 12px">Sellers under 18 need a parent or guardian to get in touch.</p>
+          <button class="btn primary" type="submit">Ask for a valuation</button>
+          <div class="result" id="collMsg" aria-live="polite"></div>
+        </form>
+      </div>
+
+      <div class="blk-title"><h3>The Evidence Locker</h3><span class="fine">Tap or hover a redaction to read it</span></div>
+      <div class="locker">
+        <div class="locker-top">
+          <h3>🔒 Grails &amp; key issues</h3>
+          <span class="chip" style="cursor:default">Clearance: Visitor · view only</span>
+        </div>
+        <div class="files" id="lockerFiles"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ZONE 02 — KOBAYASHI MARU ============ -->
+  <section class="zone" id="zone2" style="--z:#ffb454">
+    <div class="wrap">
+      <div class="zone-head">
+        <div class="kicker">Zone 02 · The Learning Zone</div>
+        <h2>The Kobayashi Maru</h2>
+        <p>The learning zone. Lessons in chess, Rubik’s cube and board games with our teachers, then practise, compete and prove it.</p>
+      </div>
+
+      <div class="blk-title"><h3>Specials</h3><span class="fine">Placeholder offers</span></div>
+      <div class="specials" id="kmSpecials"></div>
+
+      <div class="blk-title"><h3>Learn to play</h3><span class="fine">Pick a game · times depend on teacher availability</span></div>
+      <div class="filters" id="kmFilters" role="group" aria-label="Choose a game"></div>
+      <div id="kmFile"></div>
+      <div class="lessons" id="kmLessons"></div>
+
+      <div class="blk-title"><h3>Gear to practise with</h3></div>
+      <div class="comic-grid" id="kmGrid"></div>
+
+      <div class="two-col" style="margin-top:28px">
+        <div class="card">
+          <div class="kicker">Puzzle of the week</div>
+          <p class="muted" style="margin:6px 0 4px">Decrypt the transmission. Solve it and it pays out a code you can redeem at the till.</p>
+          <div class="cipher" id="cipherText"></div>
+          <div class="puzzle-row">
+            <input id="cipherInput" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="TYPE THE MESSAGE" aria-label="Your decrypted message">
+            <button class="btn primary" id="cipherBtn" type="button">Decrypt</button>
+            <button class="btn" id="cipherHintBtn" type="button">Hint</button>
+          </div>
+          <div class="result" id="cipherResult" aria-live="polite"></div>
+          <div class="fine demo-note" style="margin-top:10px">Demo: checked in your browser. The live build would verify on the server and issue a real promo code.</div>
+        </div>
+
+        <div class="card">
+          <div class="kicker">Speed-cube leaderboard</div>
+          <p class="muted" style="margin:6px 0 12px">Handles only — no accounts, no personal details.</p>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>#</th><th>Cadet</th><th>Best solve</th></tr></thead>
+              <tbody id="boardBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="blk-title"><h3>Challenge nights</h3></div>
+      <div class="events" id="evZone2"></div>
+
+      <div class="card" style="margin-top:20px;display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap">
+        <div style="flex:1 1 320px">
+          <div class="kicker">For companies &amp; teams</div>
+          <h3 style="font-family:var(--display);margin:6px 0 4px">Team assessment sessions</h3>
+          <p class="muted" style="margin:0">People-skills scenarios, run as a game. Communication, pressure and decision-making — observed, not lectured.</p>
+        </div>
+        <button class="btn primary" id="teamBtn" type="button">Request a session</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ZONE 03 — HOLODECK ============ -->
+  <section class="zone" id="zone3" style="--z:#b388ff">
+    <div class="wrap">
+      <div class="zone-head">
+        <div class="kicker">Zone 03 · Gaming &amp; Portals</div>
+        <h2>The Holodeck</h2>
+        <p>Step into a different world. Every game lives here: flight sims, Call of Duty on mobile and PC, console, retro and more. News, how-to-play sessions, challenges with live scoreboards, and portals to our channels.</p>
+      </div>
+
+      <div class="blk-title"><h3>Specials</h3><span class="fine">Placeholder offers</span></div>
+      <div class="specials" id="hdSpecials"></div>
+
+      <div class="blk-title"><h3>Game library</h3><span class="fine">Pick a game · everything below follows it</span></div>
+      <div class="filters" id="hdFilters" role="group" aria-label="Choose a game"></div>
+      <div id="hdFile"></div>
+
+      <div class="blk-title"><h3>Game news</h3></div>
+      <div class="lessons" id="hdNews"></div>
+
+      <div class="blk-title"><h3>Challenges &amp; scoreboards</h3><span class="fine">Handles only · no personal details</span></div>
+      <div class="lessons" id="hdChallenges"></div>
+
+      <div class="blk-title"><h3>Learn new games</h3><span class="fine">How-to-play sessions with our coaches</span></div>
+      <div class="lessons" id="hdLessons"></div>
+
+      <div class="blk-title"><h3>Gaming gear</h3></div>
+      <div class="comic-grid" id="hdGrid"></div>
+
+      <div class="blk-title"><h3>Portals</h3><span class="fine">Our online channels · tap a portal to jump through</span></div>
+      <div class="ring-wrap"><div class="ring" id="ring"></div><div class="core" aria-hidden="true">THE<br>GRID</div></div>
+
+      <div class="blk-title"><h3>Programs</h3></div>
+      <div class="events" id="evZone3"></div>
+    </div>
+  </section>
+
+  <!-- ============ ZONE 04 — SPOCK'S CORNER ============ -->
+  <section class="zone" id="zone4" style="--z:#5eead4">
+    <div class="wrap">
+      <div class="zone-head">
+        <div class="kicker">Zone 04 · The Intelligence Corner</div>
+        <h2>Spock’s Corner</h2>
+        <p>Logic prevails. The intellectual corner: coding, cyber security, engineering and ancient technology. Every conversation is welcome here, from debates and study groups to big ideas, with tables you can book.</p>
+      </div>
+
+      <div class="blk-title"><h3>Specials</h3><span class="fine">Placeholder offers</span></div>
+      <div class="specials" id="scSpecials"></div>
+
+      <div class="blk-title"><h3>Explore a topic</h3><span class="fine">Pick a subject · everything below follows it</span></div>
+      <div class="filters" id="scFilters" role="group" aria-label="Choose a topic"></div>
+      <div id="scFile"></div>
+
+      <div class="blk-title"><h3>On the table</h3><span class="fine">Conversations, debates and ideas sessions</span></div>
+      <div class="lessons" id="scTopics"></div>
+
+      <div class="blk-title"><h3>Study groups &amp; classes</h3></div>
+      <div class="lessons" id="scLessons"></div>
+
+      <div class="two-col" style="margin-top:28px">
+        <div class="card">
+          <div class="kicker">Book a table</div>
+          <form id="bookForm" style="margin-top:12px" novalidate>
+            <div class="row2">
+              <div class="field"><label for="bkDate">Date</label><input id="bkDate" type="date" required></div>
+              <div class="field"><label for="bkSlot">Time slot</label>
+                <select id="bkSlot"><option>09:00 – 12:00</option><option>12:00 – 15:00</option><option selected>15:00 – 18:00</option></select></div>
+            </div>
+            <div class="row2">
+              <div class="field"><label for="bkSize">Team size</label>
+                <select id="bkSize"><option>2 – 4 people</option><option selected>5 – 8 people</option><option>9+ people</option></select></div>
+              <div class="field"><label for="bkPurpose">What for?</label>
+                <select id="bkPurpose"><option>DevOps sprint</option><option>Study group</option><option>Workshop</option><option>Team meeting</option></select></div>
+            </div>
+            <div class="field"><label for="bkContact">Your name or team (optional)</label><input id="bkContact" autocomplete="nickname"></div>
+            <button class="btn primary" type="submit">Book on WhatsApp</button>
+            <div class="result" id="bookResult" aria-live="polite"></div>
+            <div class="fine" style="margin-top:8px">We confirm every booking on WhatsApp.</div>
+          </form>
+        </div>
+        <div class="card">
+          <div class="kicker">Price list</div>
+          <ul class="price-list" id="priceList" style="margin-top:8px"></ul>
+          <div class="fine demo-note" style="margin-top:12px">Placeholder prices.</div>
+        </div>
+      </div>
+
+      <div class="blk-title"><h3>Talks &amp; nights</h3></div>
+      <div class="events" id="evZone4"></div>
+
+      <div class="blk-title"><h3>Briefings</h3><span class="fine">Short, practical reads</span></div>
+      <div class="brief-grid" id="briefGrid"></div>
+
+      <div class="blk-title"><h3>Kits &amp; books</h3></div>
+      <div class="comic-grid" id="scGrid"></div>
+    </div>
+  </section>
+
+  <!-- ============ ZONE 05 — ANCIENT X-FILES ============ -->
+  <section class="zone" id="zone5" style="--z:#e6c98a">
+    <div class="wrap">
+      <div class="zone-head">
+        <div class="kicker">Zone 05 · Unsolved Mysteries</div>
+        <h2>Ancient X-Files</h2>
+        <p>Go back in time: Sumer, Atlantis, ancient India and the epics, Egypt, Ethiopia and ancient Africa, ancient astronauts and declassified files. Here you are free to think in any direction. Every case shows the evidence and the theories side by side, so you can weigh them yourself.</p>
+      </div>
+
+      <div class="blk-title"><h3>Specials</h3><span class="fine">Placeholder offers</span></div>
+      <div class="specials" id="axSpecials"></div>
+
+      <div class="blk-title"><h3>Explore the ancient world</h3><span class="fine">Pick an era or mystery · everything below follows it</span></div>
+      <div class="filters" id="axFilters" role="group" aria-label="Choose an era or mystery"></div>
+      <div id="axFile"></div>
+
+      <div class="blk-title"><h3>Case files</h3><span class="fine">Tap a redaction to read it · switch Evidence / Theories</span></div>
+      <div class="files" id="axFiles"></div>
+
+      <div class="blk-title"><h3>Watch, listen &amp; read</h3><span class="fine">Podcasts, researchers and documents we recommend</span></div>
+      <div class="lessons" id="axMedia"></div>
+
+      <div class="blk-title"><h3>Open questions</h3><span class="fine">Theory nights and debates · all views welcome</span></div>
+      <div class="lessons" id="axTopics"></div>
+
+      <div class="blk-title"><h3>Archive shop</h3></div>
+      <div class="comic-grid" id="axGrid"></div>
+
+      <div class="blk-title"><h3>Archive nights</h3></div>
+      <div class="events" id="evZone5"></div>
+
+      <div class="card" style="margin-top:20px;display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap">
+        <div style="flex:1 1 320px">
+          <div class="kicker">Transmissions from the archive</div>
+          <h3 style="font-family:var(--display);margin:6px 0 4px">Our ancient civilisations channel</h3>
+          <p class="muted" style="margin:0">Short videos and a podcast on the world’s oldest mysteries. Follow the case between visits.</p>
+        </div>
+        <div class="ax-links" id="axLinks"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ZONE 06 — TRANSMISSIONS (podcast & content) ============ -->
+  <section class="zone" id="zone6" style="--z:#ff5d6c">
+    <div class="wrap">
+      <div class="zone-head">
+        <div class="kicker">Zone 06 · Our Podcast &amp; Content</div>
+        <h2>Transmissions</h2>
+        <p>Our podcast and everything we create: episodes, videos, streams and behind the scenes. Tune in wherever you listen.</p>
+      </div>
+      <div class="pc-platforms" id="pcPlatforms"></div>
+      <div id="pcLatest"></div>
+
+      <div class="blk-title"><h3>Specials</h3><span class="fine">Placeholder offers</span></div>
+      <div class="specials" id="pcSpecials"></div>
+
+      <div class="blk-title"><h3>Shows &amp; channels</h3><span class="fine">Pick a show · its episodes open below</span></div>
+      <div class="filters" id="pcFilters" role="group" aria-label="Choose a show"></div>
+      <div id="pcFile"></div>
+
+      <div class="blk-title"><h3>Episodes &amp; videos</h3></div>
+      <div class="lessons" id="pcMedia"></div>
+
+      <div class="blk-title"><h3>Coming up</h3><span class="fine">Next episodes and live shows</span></div>
+      <div class="lessons" id="pcTopics"></div>
+
+      <div class="blk-title"><h3>Merch</h3></div>
+      <div class="comic-grid" id="pcGrid"></div>
+
+      <div class="blk-title"><h3>Live recordings</h3></div>
+      <div class="events" id="evZone6"></div>
+    </div>
+  </section>
+
+  <!-- ============ ZONE 07 — THE SABER ACADEMY (Star Wars) ============ -->
+  <section class="zone" id="zone7" style="--z:#4ade80">
+    <div class="wrap">
+      <div class="zone-head">
+        <div class="kicker">Zone 07 · Star Wars</div>
+        <h2>The Saber Academy</h2>
+        <p>Learn real lightsaber moves, from your first stance to full duel choreography. Plus lore, cosplay and gear for every fan.</p>
+      </div>
+
+      <div class="blk-title"><h3>Specials</h3><span class="fine">Placeholder offers</span></div>
+      <div class="specials" id="swSpecials"></div>
+
+      <div class="blk-title"><h3>Choose your path</h3><span class="fine">Tap an icon to open it</span></div>
+      <div class="filters" id="swFilters" role="group" aria-label="Choose a path"></div>
+      <div id="swFile"></div>
+
+      <div class="blk-title"><h3>Lessons</h3><span class="fine">Taught step by step · training sabers provided</span></div>
+      <div class="lessons" id="swLessons"></div>
+
+      <div class="blk-title"><h3>Watch &amp; learn</h3></div>
+      <div class="lessons" id="swMedia"></div>
+
+      <div class="blk-title"><h3>Talk the galaxy</h3></div>
+      <div class="lessons" id="swTopics"></div>
+
+      <div class="blk-title"><h3>Sabers &amp; gear</h3></div>
+      <div class="comic-grid" id="swGrid"></div>
+
+      <div class="blk-title"><h3>Academy nights</h3></div>
+      <div class="events" id="evZone7"></div>
+    </div>
+  </section>
+
+  <!-- ============ CLEARANCE LEVELS ============ -->
+  <section class="zone" id="clearance" style="--z:#19e3ff">
+    <div class="wrap">
+      <div class="zone-head">
+        <div class="kicker">Concept · Stage 3</div>
+        <h2>Clearance levels</h2>
+        <p>A light, open-to-all loyalty ladder. Pick a handle — no email, no ID, no age gate.</p>
+      </div>
+      <div class="tier-grid" id="tierGrid"></div>
+    </div>
+  </section>
+
+  <!-- ============ THE DOOR / FIND US ============ -->
+  <section class="zone" id="door" style="--z:#19e3ff">
+    <div class="wrap">
+      <div class="zone-head">
+        <div class="kicker">Find us</div>
+        <h2>No sign. No name. Look for the 31.</h2>
+        <p>The street door is unmarked matte black with a single badge and a QR plate. Scan it to request clearance.</p>
+      </div>
+      <div class="two-col" style="margin-top:34px;align-items:center">
+        <div>
+          <div class="door-art"><svg class="b" viewBox="0 0 100 100" aria-hidden="true"><use href="#badge31"/></svg><div class="door-qr" id="doorQr" aria-label="QR plate (decorative placeholder)"></div></div>
+          <div class="door-cap demo-note">QR plate is a decorative placeholder</div>
+        </div>
+        <div class="card"><ul class="contact-list" id="contactList"></ul></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span id="mallLine">SECTION 31 — part of the <a id="mallLink" href="https://indusvalley.earth/">Indus Valley</a> digital mall</span>
+    <span class="demo-note">Demo build · placeholder content · <button class="link" id="replayIntro" type="button">replay intro</button></span>
+  </div>
+</footer>
+
+<dialog id="clearDlg" aria-labelledby="clearTitle">
+  <form id="clearForm" method="dialog" novalidate>
+    <div class="kicker">Request clearance</div>
+    <h3 id="clearTitle">Choose your handle</h3>
+    <p class="muted" style="margin-top:0">Handles only. No email, no ID, no personal details.</p>
+    <div class="field"><label for="handleInput">Handle (3–16 letters or numbers)</label><input id="handleInput" maxlength="16" autocomplete="off" placeholder="e.g. Nova"></div>
+    <div class="result" id="handleMsg" aria-live="polite"></div>
+    <div class="dlg-actions">
+      <button class="btn small" type="button" id="clearReset" hidden>Reset to visitor</button>
+      <button class="btn small" type="button" id="clearCancel">Cancel</button>
+      <button class="btn small primary" type="submit">Grant clearance</button>
+    </div>
+  </form>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="js/data.js?v=20261008b"></script>
+<script src="js/app.js?v=20261008b"></script>
+</body>
+</html>

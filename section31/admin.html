@@ -1,0 +1,715 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Section 31 · Admin</title>
+<link rel="icon" href="assets/favicon.svg">
+<link rel="stylesheet" href="css/section31.css?v=20261008b">
+<style>
+body{padding-bottom:40px}
+[hidden]{display:none!important}
+.a-wrap *,.a-hdr *{box-sizing:border-box;min-width:0}
+.find,.img-f input[type=text]{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:9px 12px;color:var(--text);font:inherit}
+.find:focus{border-color:var(--cyan);outline:none}
+.a-hdr{position:sticky;top:0;z-index:50;background:rgba(7,9,13,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top,0px)}
+.a-hdr-in{max-width:1200px;margin:0 auto;padding:12px 18px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.a-brand{font-family:var(--display);font-weight:700;letter-spacing:.06em;margin-right:auto}
+.a-brand small{font-family:var(--mono);font-size:.68rem;color:var(--cyan);letter-spacing:.14em;margin-left:8px}
+.a-status{font-family:var(--mono);font-size:.7rem;color:var(--dim)}
+.a-status.dirty{color:var(--amber)}
+.a-acts{display:flex;gap:8px;flex-wrap:wrap}
+.a-wrap{max-width:1200px;margin:0 auto;padding:22px 18px;display:grid;grid-template-columns:230px 1fr;gap:24px;align-items:start}
+.a-nav{position:sticky;top:76px;display:flex;flex-direction:column;gap:4px}
+.a-nav .grp{font-family:var(--mono);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin:14px 0 4px}
+.a-nav button{all:unset;cursor:pointer;padding:8px 12px;border-radius:8px;color:var(--dim);font-size:.9rem}
+.a-nav button:hover{background:rgba(255,255,255,.04);color:var(--text)}
+.a-nav button.on{background:rgba(25,227,255,.1);color:var(--cyan)}
+.a-nav button:focus-visible{outline:2px solid var(--cyan)}
+.ed-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.ed-head h2{font-family:var(--display);margin:0;font-size:1.5rem}
+.ed-head p{margin:4px 0 0;color:var(--dim);font-size:.9rem;max-width:62ch}
+.find{max-width:260px}
+.item{border:1px solid var(--line);border-radius:12px;background:var(--panel);margin-bottom:10px}
+.item[open]{border-color:var(--line2)}
+.item summary{display:flex;align-items:center;gap:12px;padding:12px 14px;cursor:pointer;list-style:none}
+.item summary::-webkit-details-marker{display:none}
+.item summary::after{content:"Edit";margin-left:auto;font-family:var(--mono);font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
+.item[open] summary::after{content:"Close"}
+.item .th{width:38px;height:50px;border-radius:5px;flex:none;background:linear-gradient(160deg,hsl(var(--h,200) 68% 40%),hsl(calc(var(--h,200) + 45) 70% 13%));background-size:cover;background-position:center}
+.item .t{font-weight:600}
+.item .s{display:block;font-family:var(--mono);font-size:.7rem;color:var(--faint);margin-top:2px}
+.item.hid .t{text-decoration:line-through;color:var(--dim)}
+.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(230px,100%),1fr));gap:0 16px;padding:4px 14px 0}
+.fields .wide{grid-column:1/-1}
+.field small{color:var(--faint);font-size:.74rem}
+.field input[type=checkbox]{width:20px;height:20px;accent-color:var(--cyan)}
+.chk{flex-direction:row;align-items:center;gap:10px}
+.item-acts{display:flex;gap:8px;flex-wrap:wrap;padding:4px 14px 14px}
+.btn.danger{border-color:rgba(255,93,108,.6);color:var(--alert)}
+.img-f{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.img-f .pv{width:84px;height:112px;border-radius:6px;border:1px dashed var(--line2);background:#0b1017 center/cover no-repeat;display:grid;place-items:center;font-family:var(--mono);font-size:.62rem;color:var(--faint);text-align:center}
+.img-f .col{display:flex;flex-direction:column;gap:8px;flex:1;min-width:160px}
+.login{max-width:420px;margin:12vh auto;padding:0 18px}
+.note{border:1px dashed rgba(255,180,84,.5);background:rgba(255,180,84,.05);border-radius:10px;padding:10px 14px;font-size:.86rem;color:var(--text);margin-bottom:16px}
+.vers{display:grid;gap:12px;max-width:640px}
+.vers .card{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.vers p{margin:4px 0 0;color:var(--dim);font-size:.86rem}
+.toast{bottom:calc(20px + env(safe-area-inset-bottom,0px))}
+/* ---------- changes to publish ---------- */
+.a-nav .cnt{display:inline-block;min-width:18px;margin-left:6px;padding:0 6px;border-radius:999px;background:var(--amber);color:#1b1000;font-family:var(--mono);font-size:.62rem;font-weight:700;text-align:center;line-height:18px}
+.item.chg-added{border-left:3px solid var(--mint)}
+.item.chg-changed{border-left:3px solid var(--amber)}
+.item.chg-added summary::before,.item.chg-changed summary::before{font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;font-weight:700;padding:2px 7px;border-radius:4px;flex:none}
+.item.chg-added summary::before{content:"NEW";background:var(--mint);color:#031014}
+.item.chg-changed summary::before{content:"CHANGED";background:var(--amber);color:#1b1000}
+.chg-review{border:1px solid rgba(255,180,84,.5);background:rgba(255,180,84,.06);border-radius:12px;padding:12px 16px;margin-bottom:18px}
+.chg-grp{margin-bottom:22px}
+.chg-grp h3{font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin:0 0 8px}
+.chg-row{display:grid;grid-template-columns:auto 1fr auto;gap:6px 12px;align-items:start;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--panel);margin-bottom:8px}
+.chg-b{font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;font-weight:700;padding:3px 7px;border-radius:4px;margin-top:2px}
+.k-added .chg-b{background:var(--mint);color:#031014}.k-changed .chg-b{background:var(--amber);color:#1b1000}.k-removed .chg-b{background:var(--alert);color:#1b0306}
+.k-removed .chg-t{text-decoration:line-through;color:var(--dim)}
+.chg-t{font-weight:600}
+.chg-row ul{grid-column:2/3;margin:2px 0 0;padding-left:18px;color:var(--dim);font-size:.84rem}
+.chg-row ul b{color:var(--text);font-weight:500}
+.chg-acts{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+@media (max-width:620px){.chg-row{grid-template-columns:auto 1fr}.chg-acts{grid-column:1/-1;justify-content:flex-start}.chg-row ul{grid-column:1/-1}}
+@media (max-width:820px){
+  .a-wrap{grid-template-columns:1fr}
+  .a-nav{position:static;flex-direction:row;overflow-x:auto;gap:6px;padding-bottom:6px}
+  .a-nav .grp{display:none}
+  .a-nav button{white-space:nowrap;border:1px solid var(--line)}
+  .a-status{width:100%;order:3}
+}
+</style>
+</head>
+<body>
+<header class="a-hdr" id="hdr" hidden>
+  <div class="a-hdr-in">
+    <div class="a-brand">SECTION 31 <small id="modeTag">ADMIN</small></div>
+    <span class="a-status" id="status">Loaded</span>
+    <div class="a-acts">
+      <button class="btn small" type="button" id="bPreview">Preview</button>
+      <button class="btn small" type="button" id="bSave">Save draft</button>
+      <button class="btn small primary" type="button" id="bPublish">Publish</button>
+      <button class="btn small" type="button" id="bOut" hidden>Log out</button>
+    </div>
+  </div>
+</header>
+
+<section class="login" id="login" hidden>
+  <div class="card">
+    <div class="kicker">Restricted · Staff only</div>
+    <h2 style="font-family:var(--display);margin:8px 0 16px">Section 31 admin</h2>
+    <form id="loginForm">
+      <div class="field"><label for="pin">PIN</label><input id="pin" type="password" inputmode="numeric" autocomplete="current-password" required></div>
+      <button class="btn primary" type="submit">Enter</button>
+      <div class="result" id="loginMsg" aria-live="polite" style="margin-top:10px"></div>
+    </form>
+  </div>
+</section>
+
+<div class="a-wrap" id="app" hidden>
+  <nav class="a-nav" id="nav" aria-label="Sections"></nav>
+  <main id="ed"></main>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="js/data.js?v=20261008b"></script>
+<script>
+(function () {
+  'use strict';
+  /* ---------------- setup ---------------- */
+  const START = JSON.parse(JSON.stringify(S31)); delete START.api;
+  const API = S31.api || '';
+  const LOCAL = !API;
+  const $ = s => document.querySelector(s);
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const clone = o => JSON.parse(JSON.stringify(o));
+  const ss = { get(k) { try { return sessionStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { sessionStorage.setItem(k, v); } catch (e) {} }, del(k) { try { sessionStorage.removeItem(k); } catch (e) {} } };
+  const ls = { get(k) { try { return JSON.parse(localStorage.getItem(k) || 'null'); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { return false; } }, del(k) { try { localStorage.removeItem(k); } catch (e) {} } };
+  let role = 'admin', base = 'admin', tempUntil = '', team = [];
+  let rev = null, doc = null, live = null, previous = null, me = '', activity = [], sec = 'stock', dirty = false, token = ss.get('s31_admin_token') || '';
+  const opened = {};          // which list items are expanded, per section
+  let toastT;
+  function toast(m) { const t = $('#toast'); t.textContent = m; t.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 3200); }
+  function getP(o, p) { return p.split('.').reduce((a, k) => (a == null ? undefined : a[k]), o); }
+  function setP(o, p, v) { const ks = p.split('.'); let a = o; ks.slice(0, -1).forEach(k => { if (a[k] == null || typeof a[k] !== 'object') a[k] = {}; a = a[k]; }); a[ks[ks.length - 1]] = v; }
+  const slug = s => String(s || '').toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 24) || 'shelf';
+
+  /* ---------------- what can be edited ----------------
+     type 'list' = add / remove / reorder items; 'object' = a fixed set of fields.
+     Field types: text, area, num, sel, shelf, zone, check, lines (one per line), rows (cols split by |), img, color. */
+  const DOW = [0, 1, 2, 3, 4, 5, 6].map(n => ({ v: n, l: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][n] }));
+  const shelvesIn = zf => (doc.shelves || []).filter(s => (s.zone || 'zone1') === zf);
+  const zoneOfShelfId = id => (((doc.shelves || []).find(s => s.id === id) || {}).zone) || 'zone1';
+  function itemZone(s, it) { return ['stock', 'lessons', 'news', 'challenges', 'topics', 'media'].indexOf(s.path) > -1 ? zoneOfShelfId(it.shelf) : s.path === 'ancients.files' ? 'zone5' : (it.zone || 'zone1'); }
+  const usesOf = id => ['stock', 'lessons', 'news', 'challenges', 'topics', 'media', 'specials'].reduce((n, k) => n + (doc[k] || []).filter(x => x.shelf === id).length, 0) + ((doc.ancients || {}).files || []).filter(x => x.shelf === id).length;
+  /* Zone 1 is the template: every zone with a shop gets the same Stock / Shelves / Specials editors. */
+  function cat(zf, grp, more) {
+    const sfx = zf === 'zone1' ? '' : '-' + zf, z1 = zf === 'zone1', shelfWord = z1 ? 'Shelves' : 'Categories';
+    const stockFields = [
+      { k: 'img', t: 'img', l: 'Photo', wide: 1 },
+      { k: 'name', t: 'text', l: 'Name' }, { k: 'line', t: 'text', l: z1 ? 'Issue / size / edition' : 'Size / type', h: z1 ? 'e.g. #14, Vol. 2, Booster pack' : 'e.g. Magnetic, Workshop seat' },
+      { k: 'shelf', t: 'shelf', l: z1 ? 'Shelf' : 'Category' }, { k: 'price', t: 'text', l: 'Price', h: 'e.g. R95' },
+      { k: 'was', t: 'text', l: 'Old price (optional)', h: 'Shows crossed out, for markdowns' },
+      { k: 'status', t: 'sel', l: 'Stock status', o: [{ v: 'in', l: 'In stock' }, { v: 'low', l: 'Low stock' }, { v: 'out', l: 'Sold out' }, { v: 'preorder', l: 'Pre-order' }] },
+      { k: 'tag', t: 'text', l: 'Cover tag (optional)', h: 'e.g. NEW, WED' }
+    ].concat(z1 ? [] : [{ k: 'cta', t: 'text', l: 'Button text (optional)', h: 'Default “Reserve”. e.g. Book a seat' }]).concat([
+      { k: 'hue', t: 'num', l: 'Cover colour (0–360)', h: 'Used when there is no photo' },
+      { k: 'hidden', t: 'check', l: 'Hide from the site' }
+    ]);
+    const lessons = more && more.lessons ? [{ grp: grp, id: 'lessons' + sfx, zf: zf, label: 'Lessons', type: 'list', path: 'lessons',
+        help: 'Add a lesson when a teacher is available. Set the times, or mark it Full or Teacher away. Customers book by WhatsApp.',
+        title: i => i.title, sub: i => [shelfName(i.shelf), i.level, ({ open: 'taking bookings', full: 'full', paused: 'teacher away' })[i.status || 'open'], (i.slots || []).length + ' time(s)'].filter(Boolean).join(' · '),
+        newItem: () => ({ shelf: (shelvesIn(zf)[0] || {}).id || '', title: 'New lesson', level: 'Beginner', ages: '', teacher: '', slots: [], length: '60 min', seats: 6, price: '', status: 'open', blurb: '' }),
+        fields: [
+          { k: 'img', t: 'img', l: 'Photo (optional)', wide: 1 },
+          { k: 'title', t: 'text', l: 'Lesson name' }, { k: 'shelf', t: 'shelf', l: 'Game' },
+          { k: 'level', t: 'sel', l: 'Level', o: ['Beginner', 'Intermediate', 'Advanced', 'All levels'].map(v => ({ v: v, l: v })) },
+          { k: 'status', t: 'sel', l: 'Status', o: [{ v: 'open', l: 'Taking bookings' }, { v: 'full', l: 'Full (waitlist)' }, { v: 'paused', l: 'Teacher away' }] },
+          { k: 'teacher', t: 'text', l: 'Teacher' }, { k: 'ages', t: 'text', l: 'Ages', h: 'e.g. 8+' },
+          { k: 'slots', t: 'lines', l: 'Times available (one per line)', h: 'e.g. Saturday 10:00', wide: 1 },
+          { k: 'length', t: 'text', l: 'Length', h: 'e.g. 60 min' }, { k: 'seats', t: 'num', l: 'Group size (max)' },
+          { k: 'price', t: 'text', l: 'Price', h: 'e.g. R120 per lesson' },
+          { k: 'blurb', t: 'area', l: 'What you’ll learn', wide: 1 },
+          { k: 'hidden', t: 'check', l: 'Hide from the site' }
+        ] }] : [];
+    const news = more && more.news ? [{ id: 'news' + sfx, zf: zf, label: 'News', type: 'list', path: 'news',
+        help: 'Game news and store announcements. Newest date shows first (6 at a time).',
+        title: i => i.title, sub: i => [i.date, shelfName(i.shelf)].filter(Boolean).join(' · '),
+        newItem: () => ({ shelf: (shelvesIn(zf)[0] || {}).id || '', date: new Date().toISOString().slice(0, 10), title: 'New post', blurb: '', url: '' }),
+        fields: [{ k: 'img', t: 'img', l: 'Photo (optional)', wide: 1 }, { k: 'title', t: 'text', l: 'Headline', wide: 1 }, { k: 'shelf', t: 'shelf', l: 'Game' },
+          { k: 'date', t: 'text', l: 'Date', h: 'YYYY-MM-DD' }, { k: 'blurb', t: 'area', l: 'Story', wide: 1 }, { k: 'url', t: 'text', l: 'Read-more link (optional)', wide: 1 },
+          { k: 'hidden', t: 'check', l: 'Hide from the site' }] }] : [];
+    const challenges = more && more.challenges ? [{ id: 'challenges' + sfx, zf: zf, label: 'Challenges & scores', type: 'list', path: 'challenges',
+        help: 'Run a challenge and keep its scoreboard up to date. Handles only, never real names.',
+        title: i => i.title, sub: i => [shelfName(i.shelf), (i.board || []).length + ' scores', i.ends === 'month-end' ? 'ends month-end' : i.ends ? 'ends ' + i.ends : 'ongoing'].join(' · '),
+        newItem: () => ({ shelf: (shelvesIn(zf)[0] || {}).id || '', title: 'New challenge', unit: 'Score', prize: '', ends: 'month-end', blurb: '', board: [] }),
+        fields: [{ k: 'title', t: 'text', l: 'Challenge name', wide: 1 }, { k: 'shelf', t: 'shelf', l: 'Game' }, { k: 'unit', t: 'text', l: 'Score label', h: 'e.g. Points, Elims, Time' },
+          { k: 'prize', t: 'text', l: 'Prize (optional)' }, { k: 'ends', t: 'text', l: 'Ends', h: 'YYYY-MM-DD, month-end, or blank' },
+          { k: 'blurb', t: 'area', l: 'Rules', wide: 1 },
+          { k: 'board', t: 'rows', l: 'Scoreboard: handle | score, best first (one per line)', wide: 1 },
+          { k: 'hidden', t: 'check', l: 'Hide from the site' }] }] : [];
+    const topics = more && more.topics ? [{ id: 'topics' + sfx, zf: zf, label: 'Topics on the table', type: 'list', path: 'topics',
+        help: 'Conversations, debates and ideas sessions. “Coming soon” shows a Notify me button.',
+        title: i => i.title, sub: i => [shelfName(i.shelf), i.format, i.when].filter(Boolean).join(' · '),
+        newItem: () => ({ shelf: (shelvesIn(zf)[0] || {}).id || '', title: 'New topic', format: 'Open chat', when: '', host: '', status: 'open', blurb: '' }),
+        fields: [{ k: 'title', t: 'text', l: 'Topic or question', wide: 1 }, { k: 'shelf', t: 'shelf', l: 'Subject' },
+          { k: 'format', t: 'text', l: 'Format', h: 'e.g. Debate, Open chat, Study group' },
+          { k: 'when', t: 'text', l: 'When', h: 'e.g. Saturdays 15:00' }, { k: 'host', t: 'text', l: 'Host (optional)' },
+          { k: 'status', t: 'sel', l: 'Status', o: [{ v: 'open', l: 'Open: Join in' }, { v: 'soon', l: 'Coming soon: Notify me' }] },
+          { k: 'blurb', t: 'area', l: 'Details', wide: 1 }, { k: 'hidden', t: 'check', l: 'Hide from the site' }] }] : [];
+    const media = more && more.media ? [{ id: 'media' + sfx, zf: zf, label: 'Watch, listen & read', type: 'list', path: 'media',
+        help: 'Post links to podcasts, videos, researchers, books and archives. Paste the full link; until then it shows “Link coming soon”.',
+        title: i => i.title, sub: i => [i.type, i.source, shelfName(i.shelf)].filter(Boolean).join(' · '),
+        newItem: () => ({ shelf: (shelvesIn(zf)[0] || {}).id || '', type: 'Video', source: '', title: 'New link', url: '', blurb: '' }),
+        fields: [{ k: 'img', t: 'img', l: 'Picture (optional)', wide: 1 }, { k: 'title', t: 'text', l: 'Title', wide: 1 },
+          { k: 'type', t: 'sel', l: 'Type', o: ['Podcast', 'Video', 'Book', 'Article', 'Research', 'Archive'].map(v => ({ v: v, l: v })) },
+          { k: 'source', t: 'text', l: 'Source / who', h: 'e.g. The Joe Rogan Experience' }, { k: 'shelf', t: 'shelf', l: zf === 'zone6' ? 'Show' : 'Era or mystery' },
+          { k: 'date', t: 'text', l: 'Date (optional)', h: 'YYYY-MM-DD · newest shows first' },
+          { k: 'url', t: 'text', l: 'Link', h: 'Full link, starting https://', wide: 1 }, { k: 'blurb', t: 'area', l: 'Why it’s worth it', wide: 1 },
+          { k: 'hidden', t: 'check', l: 'Hide from the site' }] }] : [];
+    const extra = media.concat(topics).concat(news).concat(challenges).concat(lessons);
+    if (extra.length) { extra[0].grp = grp; extra.slice(1).forEach(x => { delete x.grp; }); grp = undefined; }
+    return extra.concat([
+      { grp: grp, id: 'stock' + sfx, zf: zf, label: 'Stock', type: 'list', path: 'stock', find: true,
+        help: 'Everything for sale in this zone. Add, edit, hide or remove items. Upload a photo or leave it blank for a coloured cover.',
+        title: i => i.name + (i.line ? ' · ' + i.line : ''), sub: i => [i.price, shelfName(i.shelf), statusName(i.status)].filter(Boolean).join(' · '),
+        newItem: () => ({ name: 'New item', line: '', shelf: (shelvesIn(zf)[0] || {}).id || '', price: 'R0', status: 'in', hue: 200 }),
+        fields: stockFields },
+      { id: 'shelves' + sfx, zf: zf, label: shelfWord, type: 'list', path: 'shelves',
+        help: 'Add or remove ' + shelfWord.toLowerCase() + '. The story, “Did you know?” facts and fun fact show when a customer taps one.',
+        title: i => i.name, sub: i => usesOf(i.id) + ' linked · code ' + (i.id || '(set on save)'),
+        newItem: () => (z1 ? { id: '', _auto: 1, name: 'New shelf', title: '', story: '', dyk: [], note: '' } : Object.assign({ id: '', _auto: 1, zone: zf, name: 'New category', title: '', story: '', dyk: [], note: '' }, more && more.icons ? { icon: 'spark' } : {})),
+        fields: [
+          { k: 'name', t: 'text', l: 'Button name' }, { k: 'title', t: 'text', l: 'Heading' },
+          { k: 'id', t: 'text', l: 'Code', h: 'Short, no spaces. Leave blank and it is made for you. Changing it moves its stock off.' },
+          { k: 'story', t: 'area', l: 'Story', wide: 1 },
+          { k: 'dyk', t: 'lines', l: 'Did you know? (one per line)', wide: 1 },
+          { k: 'note', t: 'area', l: 'Fun fact', wide: 1 }
+        ].concat(more && more.icons ? [{ k: 'icon', t: 'sel', l: 'Icon on the tile', o: [['saber', 'Lightsaber'], ['book', 'Book'], ['robe', 'Robe'], ['helmet', 'Helmet'], ['film', 'Film'], ['star', 'Star'], ['spark', 'Spark']].map(x => ({ v: x[0], l: x[1] })) }] : []) },
+      { id: 'specials' + sfx, zf: zf, label: 'Specials', type: 'list', path: 'specials',
+        help: '2-for-1, month-end, bundles: anything. Specials disappear by themselves after the end date.',
+        title: i => i.title, sub: i => [i.badge, i.ends === 'month-end' ? 'ends month-end' : i.ends ? 'ends ' + i.ends : 'ongoing'].join(' · '),
+        newItem: () => Object.assign(z1 ? {} : { zone: zf }, { badge: 'Special', title: 'New special', blurb: '', shelf: '', starts: '', ends: 'month-end' }),
+        fields: [
+          { k: 'badge', t: 'text', l: 'Badge', h: 'e.g. 2 for 1, Month-end, Bundle' }, { k: 'title', t: 'text', l: 'Title' },
+          { k: 'blurb', t: 'area', l: 'Details', wide: 1 },
+          { k: 'shelf', t: 'shelf', l: 'Link to ' + (z1 ? 'shelf' : 'category') + ' (optional)', none: 1 },
+          { k: 'starts', t: 'text', l: 'Starts (optional)', h: 'YYYY-MM-DD' },
+          { k: 'ends', t: 'text', l: 'Ends', h: 'YYYY-MM-DD, or month-end, or blank for ongoing' },
+          { k: 'hidden', t: 'check', l: 'Hide from the site' }
+        ] }
+    ]);
+  }
+  const SECTIONS = [
+    { grp: 'Review', id: 'changes', label: 'Changes to publish', type: 'changes' },
+    ...cat('zone1', 'Zone 01 · The Floor'),
+    { id: 'locker', label: 'Evidence Locker', type: 'list', path: 'locker',
+      help: 'Grails and key issues in the locked case.',
+      title: i => i.title, sub: i => [i.id, i.price].filter(Boolean).join(' · '),
+      newItem: () => ({ id: '031-X', title: 'New grail', era: '', grade: '', note: '', price: 'On enquiry' }),
+      fields: [{ k: 'id', t: 'text', l: 'File number' }, { k: 'title', t: 'text', l: 'Title' }, { k: 'era', t: 'text', l: 'Era' }, { k: 'grade', t: 'text', l: 'Grade' }, { k: 'note', t: 'text', l: 'Note' }, { k: 'price', t: 'text', l: 'Price' }, { k: 'featured', t: 'check', l: 'Case file of the week' }] },
+
+    ...cat('zone2', 'Zone 02 · Kobayashi Maru', { lessons: true }),
+    { id: 'puzzle', label: 'Puzzle & leaderboard', type: 'object',
+      help: 'Weekly puzzle and the speed-cube board.',
+      fields: [{ k: 'puzzle.cipher', t: 'text', l: 'Coded message', wide: 1 }, { k: 'puzzle.answer', t: 'text', l: 'Answer', wide: 1 }, { k: 'puzzle.hint', t: 'area', l: 'Hint', wide: 1 }, { k: 'puzzle.reward', t: 'text', l: 'Reward code' },
+        { k: 'board', t: 'rows', l: 'Leaderboard (rank | handle | time, one per line)', wide: 1 }] },
+    { id: 'events', label: 'Events (all zones)', type: 'list', path: 'events',
+      help: 'Challenge nights, tournaments, talks and archive nights. Dates work themselves out.',
+      title: i => i.name, sub: i => [zoneName(i.zone), i.kind === 'monthly' ? 'monthly' : 'weekly', (DOW[i.dow] || {}).l, i.time].filter(Boolean).join(' · '),
+      newItem: () => ({ zone: 'zone2', name: 'New event', blurb: '', kind: 'weekly', nth: 1, dow: 6, time: '14:00', cta: 'Save my seat' }),
+      fields: [{ k: 'zone', t: 'zone', l: 'Zone' }, { k: 'name', t: 'text', l: 'Name' }, { k: 'blurb', t: 'area', l: 'Details', wide: 1 },
+        { k: 'kind', t: 'sel', l: 'Repeats', o: [{ v: 'weekly', l: 'Weekly' }, { v: 'monthly', l: 'Monthly' }] },
+        { k: 'nth', t: 'sel', l: 'Which week (monthly only)', num: 1, o: [1, 2, 3, 4].map(n => ({ v: n, l: ['1st', '2nd', '3rd', '4th'][n - 1] })) },
+        { k: 'dow', t: 'sel', l: 'Day', num: 1, o: DOW }, { k: 'time', t: 'text', l: 'Time', h: 'HH:MM, e.g. 18:30' }, { k: 'cta', t: 'text', l: 'Button text' }] },
+
+    ...cat('zone3', 'Zone 03 · Holodeck', { news: true, challenges: true, lessons: true }),
+    { id: 'portals', label: 'Portals & channels', type: 'list', path: 'portals',
+      help: 'Links on the orbiting portal ring.', title: i => i.name, sub: i => i.url,
+      newItem: () => ({ name: 'New portal', url: '#' }), fields: [{ k: 'name', t: 'text', l: 'Name' }, { k: 'url', t: 'text', l: 'Link' }] },
+
+    ...cat('zone4', 'Zone 04 · Spock’s Corner', { topics: true, lessons: true }),
+    { id: 'tables', label: 'Book a table', type: 'object', help: 'The choices customers see in the booking form. Bookings arrive on WhatsApp.',
+      fields: [{ k: 'tables.purposes', t: 'lines', l: 'What for? (one per line)', wide: 1 }, { k: 'tables.slots', t: 'lines', l: 'Time slots (one per line)', wide: 1 }, { k: 'tables.sizes', t: 'lines', l: 'Group sizes (one per line)', wide: 1 }] },
+    { id: 'prices', label: 'Price list', type: 'object', help: 'Table bookings and workshop prices.',
+      fields: [{ k: 'prices', t: 'rows', l: 'Item | price (one per line)', wide: 1 }] },
+    { id: 'briefings', label: 'Briefings', type: 'list', path: 'briefings', help: 'Short reads and talk topics.',
+      title: i => i.title, sub: i => [i.tag, i.mins].filter(Boolean).join(' · '),
+      newItem: () => ({ title: 'New briefing', tag: 'Security', mins: '5 min read', blurb: '', url: '' }),
+      fields: [{ k: 'title', t: 'text', l: 'Title', wide: 1 }, { k: 'tag', t: 'text', l: 'Tag' }, { k: 'mins', t: 'text', l: 'Reading time' }, { k: 'blurb', t: 'area', l: 'Summary', wide: 1 }, { k: 'url', t: 'text', l: 'Link (optional)', wide: 1 }] },
+
+    { grp: 'Zone 05 · Ancient X-Files', id: 'axfiles', zf: 'zone5', label: 'Case files', type: 'list', path: 'ancients.files',
+      help: 'Each file has an Evidence and a Theories side.', title: i => i.title, sub: i => [i.id, i.status].filter(Boolean).join(' · '),
+      newItem: () => ({ id: 'AX-0', shelf: (shelvesIn('zone5')[0] || {}).id || '', title: 'New case file', where: '', when: '', status: 'Unsolved', evidence: '', theory: '' }),
+      fields: [{ k: 'shelf', t: 'shelf', l: 'Era or mystery' }, { k: 'id', t: 'text', l: 'File number' }, { k: 'title', t: 'text', l: 'Title' }, { k: 'where', t: 'text', l: 'Where' }, { k: 'when', t: 'text', l: 'When' }, { k: 'status', t: 'text', l: 'Status' },
+        { k: 'featured', t: 'check', l: 'Unsolved file of the week' }, { k: 'evidence', t: 'area', l: 'Evidence', wide: 1 }, { k: 'theory', t: 'area', l: 'Theories', wide: 1 }] },
+    ...cat('zone5', 'Zone 05 · Ancient X-Files', { media: true, topics: true }).map(x => (delete x.grp, x)),
+    { id: 'axmore', label: 'Our channel', type: 'object', help: 'Links on the “Transmissions from the archive” card.',
+      fields: [{ k: 'ancients.channels', t: 'rows', l: 'Channel links: name | link (one per line)', wide: 1, obj: ['name', 'url'] }] },
+
+    ...cat('zone6', 'Zone 06 · Transmissions', { media: true, topics: true }),
+    { id: 'podcast', label: 'Listen on', type: 'object', help: 'The “listen on” buttons at the top of Zone 06. The newest episode or video shows as “Latest transmission”.',
+      fields: [{ k: 'podcast.platforms', t: 'rows', l: 'Platform | link (one per line)', wide: 1, obj: ['name', 'url'] }] },
+    ...cat('zone7', 'Zone 07 · Saber Academy', { lessons: true, media: true, topics: true, icons: true }),
+    { grp: 'Whole site', id: 'store', label: 'Store details', type: 'object', help: 'Shown in the hero, the Find us section and the footer.',
+      fields: [{ k: 'tagline', t: 'text', l: 'Tagline', wide: 1 }, { k: 'contact.address', t: 'text', l: 'Address', wide: 1 },
+        { k: 'contact.hours', t: 'rows', l: 'Opening hours: days | hours (one per line)', wide: 1 },
+        { k: 'contact.whatsapp', t: 'text', l: 'WhatsApp number', h: 'Digits only, with 27, e.g. 27821234567' }, { k: 'contact.instagram', t: 'text', l: 'Instagram' }, { k: 'contact.email', t: 'text', l: 'Email' },
+        { k: 'bookingLink', t: 'text', l: 'Booking page link', h: 'Google Calendar or Calendly' }, { k: 'delivery', t: 'area', l: 'Delivery note', wide: 1 },
+        { k: 'prelaunch', t: 'check', l: 'Pre-launch mode: hide prices and specials, show Notify me buttons and the opening banner', wide: 1 },
+        { k: 'launchNote', t: 'area', l: 'Opening banner text', wide: 1 },
+        { k: 'demo', t: 'check', l: 'Show "demo, nothing is sent" notes' }] },
+    { id: 'zones', label: 'Zone names', type: 'list', path: 'zones', fixed: 1, help: 'Names and lines on the facility map. Zones themselves can’t be added or removed here.',
+      title: i => 'Zone ' + i.no + ' · ' + i.name, sub: i => i.role,
+      fields: [{ k: 'name', t: 'text', l: 'Name' }, { k: 'short', t: 'text', l: 'Button & menu name', h: 'Short, e.g. Holodeck' }, { k: 'role', t: 'text', l: 'Role' }, { k: 'line', t: 'area', l: 'Line', wide: 1 }, { k: 'pull', t: 'text', l: 'Comes back for' }, { k: 'color', t: 'color', l: 'Accent colour' }] },
+    { id: 'tiers', label: 'Clearance levels', type: 'list', path: 'tiers', fixed: 1, help: 'Visitor, Cadet and Operative.',
+      title: i => i.name, sub: i => i.blurb,
+      fields: [{ k: 'name', t: 'text', l: 'Name' }, { k: 'blurb', t: 'text', l: 'Line' }, { k: 'perks', t: 'lines', l: 'Perks (one per line)', wide: 1 }] },
+    { id: 'team', label: 'Team & access', type: 'team', adminOnly: 1 },
+    { id: 'versions', label: 'Versions & backup', type: 'versions' }
+  ];
+  const visible = s => !s.adminOnly || (base === 'admin' && !LOCAL);
+  const fmtWhen = iso => new Date(iso).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' });
+  const secOf = id => SECTIONS.find(s => s.id === id);
+  const shelfName = id => ((doc.shelves || []).find(s => s.id === id) || {}).name || (id ? '⚠ no shelf' : '');
+  const zoneName = id => ((doc.zones || []).find(z => z.id === id) || {}).name || id;
+  const statusName = v => ({ in: 'In stock', low: 'Low stock', out: 'Sold out', preorder: 'Pre-order' }[v] || '');
+
+  /* ---------------- what changed since the last publish ----------------
+     Every list item carries a hidden _uid so edits are matched exactly; older items
+     without one are matched by identical content, then by title. */
+  let lastDiff = { list: [], bySec: {}, count: 0 }, reviewWho = '', reviewNote = '';
+  (function () { let g = ''; SECTIONS.forEach(s => { if (s.grp) g = s.grp; s.group = g; }); })();
+  const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+  function ensureUids(d) {
+    if (!d) return;
+    SECTIONS.forEach(s => { if (s.type !== 'list') return; const arr = getP(d, s.path); if (Array.isArray(arr)) arr.forEach(x => { if (x && typeof x === 'object' && !Array.isArray(x) && !x._uid) x._uid = uid(); }); });
+  }
+  const bare = o => JSON.stringify(o, (k, v) => (k === '_uid' || k === '_auto') ? undefined : v);
+  function showVal(f, v) {
+    if (v == null || v === '' || (Array.isArray(v) && !v.length)) return '—';
+    if (f && f.t === 'img') return 'photo';
+    if (f && f.t === 'check') return v ? 'yes' : 'no';
+    if (f && f.t === 'shelf') return shelfName(v) || v;
+    if (f && f.o) { const o = f.o.find(x => String(x.v) === String(v)); if (o) return o.l; }
+    let t = Array.isArray(v) ? (f && (f.t === 'lines' || f.t === 'rows') ? toText(f, v).replace(/\n/g, ' / ') : JSON.stringify(v)) : (typeof v === 'object' ? JSON.stringify(v) : String(v));
+    return t.length > 70 ? t.slice(0, 67) + '…' : t;
+  }
+  function fieldDiffs(s, A, B) {
+    const keys = Array.from(new Set(Object.keys(A || {}).concat(Object.keys(B || {})))).filter(k => k !== '_uid' && k !== '_auto');
+    return keys.filter(k => JSON.stringify((A || {})[k]) !== JSON.stringify((B || {})[k])).map(k => {
+      const f = (s.fields || []).find(x => x.k === k);
+      return { l: f ? f.l : k, from: showVal(f, (A || {})[k]), to: showVal(f, (B || {})[k]) };
+    });
+  }
+  function diffAll() {
+    const out = { list: [], bySec: {}, count: 0 };
+    if (!live || !doc) return out;
+    const add = e => { out.list.push(e); out.count++; (out.bySec[e.sec] = out.bySec[e.sec] || { n: 0, items: {} }).n++; if (e.j != null) out.bySec[e.sec].items[e.j] = e.kind; };
+    const done = {};
+    SECTIONS.forEach(s => {
+      if (s.type === 'object') {
+        s.fields.forEach(f => {
+          const A = getP(live, f.k), B = getP(doc, f.k);
+          if (JSON.stringify(A) !== JSON.stringify(B)) add({ sec: s.id, kind: 'changed', title: f.l, k: f.k, fields: [{ l: f.l, from: showVal(f, A), to: showVal(f, B) }] });
+        });
+        return;
+      }
+      if (s.type !== 'list' || done[s.path]) return;
+      done[s.path] = 1;
+      const secs = SECTIONS.filter(x => x.type === 'list' && x.path === s.path);
+      const secFor = it => (secs.find(x => !x.zf || itemZone(x, it) === x.zf) || s);
+      const A = getP(live, s.path) || [], B = getP(doc, s.path) || [];
+      const usedA = new Set(), pairs = [], pend = [];
+      const byUid = {}; A.forEach((x, i) => { if (x && x._uid) byUid[x._uid] = i; });
+      B.forEach((x, j) => { const i = x && x._uid ? byUid[x._uid] : undefined; if (i !== undefined && !usedA.has(i)) { usedA.add(i); pairs.push([i, j]); } else pend.push(j); });
+      const sA = A.map(bare), pend2 = [];
+      pend.forEach(j => { const sb = bare(B[j]), i = sA.findIndex((x, k) => !usedA.has(k) && !(A[k] && A[k]._uid) && x === sb); if (i > -1) { usedA.add(i); pairs.push([i, j]); } else pend2.push(j); });
+      const added = [];
+      pend2.forEach(j => { const t = s.title(B[j]), i = A.findIndex((x, k) => !usedA.has(k) && !(x && x._uid) && s.title(x) === t); if (i > -1) { usedA.add(i); pairs.push([i, j]); } else added.push(j); });
+      pairs.forEach(([i, j]) => { if (bare(A[i]) === bare(B[j])) return; const sx = secFor(B[j]); add({ sec: sx.id, kind: 'changed', title: sx.title(B[j]), path: s.path, i: i, j: j, fields: fieldDiffs(sx, A[i], B[j]) }); });
+      added.forEach(j => { const sx = secFor(B[j]); add({ sec: sx.id, kind: 'added', title: sx.title(B[j]), path: s.path, j: j, fields: [] }); });
+      A.forEach((x, i) => { if (usedA.has(i)) return; const sx = secFor(x); add({ sec: sx.id, kind: 'removed', title: sx.title(x), path: s.path, i: i, fields: [] }); });
+    });
+    return out;
+  }
+  function changesHTML() {
+    const D = lastDiff;
+    let h = '<div class="ed-head"><div><h2>Changes to publish <span class="fine">(' + D.count + ')</span></h2><p>Everything that is different from the live site. Open an item to check it, or Undo a change you don’t want. New items are marked NEW and edited ones CHANGED in their lists too.</p></div></div>';
+    if (reviewWho) h += '<div class="chg-review"><b>Sent for review by ' + esc(reviewWho) + '</b>' + (reviewNote ? '<div class="muted">“' + esc(reviewNote) + '”</div>' : '') + '<div class="fine" style="margin-top:6px">Check below, press Preview to see it on the site, then Publish.</div></div>';
+    if (!live) return h + '<p class="muted">Nothing has been published yet, so everything is new. After the first Publish, this page lists only what changed.</p>';
+    if (!D.count) return h + '<p class="muted">No changes. The editor matches the live site.</p>';
+    const groups = [];
+    SECTIONS.forEach(s => { const rows = D.list.filter(e => e.sec === s.id); if (rows.length) groups.push([s, rows]); });
+    return h + groups.map(([s, rows]) => '<div class="chg-grp"><h3>' + esc((s.group ? s.group + ' · ' : '') + s.label) + '</h3>' + rows.map(e => {
+      const n = D.list.indexOf(e);
+      return '<div class="chg-row k-' + e.kind + '"><span class="chg-b">' + ({ added: 'NEW', changed: 'CHANGED', removed: 'REMOVED' })[e.kind] + '</span>' +
+        '<span class="chg-t">' + esc(e.title || '(untitled)') + '</span>' +
+        '<span class="chg-acts">' + (e.j != null ? '<button type="button" class="btn small" data-goto="' + n + '">Open</button>' : '') + '<button type="button" class="btn small danger" data-undo="' + n + '">' + (e.kind === 'removed' ? 'Put back' : 'Undo') + '</button></span>' +
+        (e.fields && e.fields.length ? '<ul>' + e.fields.map(f => '<li>' + esc(f.l) + ': ' + esc(f.from) + ' → <b>' + esc(f.to) + '</b></li>').join('') + '</ul>' : '') + '</div>';
+    }).join('') + '</div>').join('');
+  }
+  function undoChange(e) {
+    if (e.k) { setP(doc, e.k, clone(getP(live, e.k))); return; }
+    const arr = getP(doc, e.path), A = getP(live, e.path) || [];
+    if (e.kind === 'added') arr.splice(e.j, 1);
+    else if (e.kind === 'changed') arr[e.j] = clone(A[e.i]);
+    else arr.splice(Math.min(e.i, arr.length), 0, clone(A[e.i]));
+  }
+
+  /* ---------------- backend ---------------- */
+  async function call(action, extra) {
+    const r = await fetch(API, { method: 'POST', body: JSON.stringify(Object.assign({ action: action, token: token }, extra || {})) });
+    const j = await r.json();
+    if (!j.ok && j.error === 'auth') { token = ''; ss.del('s31_admin_token'); showLogin('Session expired. Log in again; your changes are kept.'); throw new Error('Please log in again.'); }
+    if (!j.ok) { const err = new Error(j.error === 'conflict' ? 'Someone else saved first.' : (j.error || 'Something went wrong.')); err.info = j; throw err; }
+    return j;
+  }
+
+  /* ---------------- status ---------------- */
+  function setDirty(v) { dirty = v; const s = $('#status'); s.classList.toggle('dirty', v); if (v) s.textContent = 'Unsaved changes'; }
+  function setStatus(t) { const s = $('#status'); s.classList.remove('dirty'); s.textContent = t; }
+  const now = () => new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  window.addEventListener('beforeunload', e => { if (dirty) { e.preventDefault(); e.returnValue = ''; } });
+
+  /* ---------------- fields ---------------- */
+  function opts(f) {
+    if (f.t === 'shelf') { const z = secOf(sec).zf; return (f.none ? [{ v: '', l: '(none)' }] : []).concat((doc.shelves || []).filter(s => !z || (s.zone || 'zone1') === z).map(s => ({ v: s.id, l: s.name }))); }
+    if (f.t === 'zone') return (doc.zones || []).filter(z => z.id !== 'zone1').map(z => ({ v: z.id, l: z.name }));
+    return f.o;
+  }
+  function toText(f, v) {
+    if (f.t === 'lines') return (v || []).join('\n');
+    if (f.t === 'rows') return (v || []).map(r => f.obj ? f.obj.map(k => r[k] || '').join(' | ') : [].concat(r).join(' | ')).join('\n');
+    return v == null ? '' : v;
+  }
+  function fromText(f, txt) {
+    const ls2 = txt.split('\n').map(s => s.trim()).filter(Boolean);
+    if (f.t === 'lines') return ls2;
+    return ls2.map(l => { const c = l.split('|').map(s => s.trim()); if (!f.obj) return c; const o = {}; f.obj.forEach((k, i) => { o[k] = c[i] || ''; }); return o; });
+  }
+  function fieldHTML(f, v, id) {
+    const a = 'id="' + id + '" data-k="' + esc(f.k) + '"', h = f.h ? '<small>' + esc(f.h) + '</small>' : '', cls = 'field' + (f.wide ? ' wide' : '');
+    if (f.t === 'check') return '<label class="' + cls + ' chk"><input type="checkbox" ' + a + (v ? ' checked' : '') + '>' + esc(f.l) + '</label>';
+    let inp;
+    if (f.t === 'img') {
+      return '<div class="' + cls + '"><label>' + esc(f.l) + '</label><div class="img-f"><div class="pv" style="' + (v ? 'background-image:url(&quot;' + esc(v) + '&quot;)' : '') + '">' + (v ? '' : 'No photo') + '</div>' +
+        '<div class="col"><input type="file" accept="image/*" hidden data-up="' + id + '"><div class="item-acts" style="padding:0"><button type="button" class="btn small" data-pick="' + id + '">Upload photo</button>' + (v ? '<button type="button" class="btn small danger" data-clearimg="' + id + '">Remove</button>' : '') + '</div>' +
+        '<input ' + a + ' type="text" value="' + esc(v) + '" placeholder="…or paste an image link"></div></div></div>';
+    }
+    if (f.t === 'area' || f.t === 'lines' || f.t === 'rows') inp = '<textarea ' + a + ' rows="' + (f.t === 'area' ? 3 : 4) + '">' + esc(toText(f, v)) + '</textarea>';
+    else if (f.t === 'sel' || f.t === 'shelf' || f.t === 'zone') {
+      const o = opts(f), has = o.some(x => String(x.v) === String(v));
+      inp = '<select ' + a + '>' + (has ? '' : '<option value="' + esc(v) + '" selected>' + (v === '' || v == null ? '(choose)' : '⚠ ' + esc(v)) + '</option>') + o.map(x => '<option value="' + esc(x.v) + '"' + (String(x.v) === String(v) ? ' selected' : '') + '>' + esc(x.l) + '</option>').join('') + '</select>';
+    }
+    else if (f.t === 'num') inp = '<input ' + a + ' type="number" value="' + esc(v) + '">';
+    else if (f.t === 'color') inp = '<input ' + a + ' type="color" value="' + esc(v || '#19e3ff') + '" style="height:44px;padding:4px">';
+    else inp = '<input ' + a + ' type="text" value="' + esc(v) + '">';
+    return '<div class="' + cls + '"><label for="' + id + '">' + esc(f.l) + '</label>' + inp + h + '</div>';
+  }
+  function readInput(f, el) {
+    if (f.t === 'check') return el.checked;
+    if (f.t === 'lines' || f.t === 'rows') return fromText(f, el.value);
+    if (f.t === 'num') return el.value === '' ? '' : +el.value;
+    if (f.num) return +el.value;
+    return el.value;
+  }
+
+  /* ---------------- rendering ---------------- */
+  function renderNav() {
+    $('#nav').innerHTML = SECTIONS.filter(visible).map(s => (s.grp ? '<div class="grp">' + esc(s.grp) + '</div>' : '') + '<button type="button" data-sec="' + s.id + '" class="' + (s.id === sec ? 'on' : '') + '">' + esc(s.label) + (s.type === 'changes' ? (lastDiff.count ? '<span class="cnt">' + lastDiff.count + '</span>' : '') : (lastDiff.bySec[s.id] ? '<span class="cnt">' + lastDiff.bySec[s.id].n + '</span>' : '')) + '</button>').join('');
+  }
+  function itemSummary(s, it) {
+    const th = s.id === 'stock' ? '<span class="th" style="--h:' + (+it.hue || 0) + (it.img ? ';background-image:url(&quot;' + esc(it.img) + '&quot;)' : '') + '"></span>' : '';
+    return th + '<span><span class="t">' + esc(s.title(it) || '(untitled)') + '</span><span class="s">' + esc(s.sub ? s.sub(it) : '') + '</span></span>';
+  }
+  function render() {
+    lastDiff = diffAll();
+    renderNav();
+    if (!visible(secOf(sec))) sec = 'stock';
+    const s = secOf(sec), ed = $('#ed');
+    const note = LOCAL ? '<div class="note">Local demo mode: no backend is connected, so changes are saved in this browser only. Add your Apps Script link to <b>api</b> in js/data.js to go live.</div>' : '';
+    if (s.type === 'versions') {
+      ed.innerHTML = note + '<div class="ed-head"><div><h2>Versions &amp; backup</h2><p>Bring back an earlier version. It loads into the editor; nothing changes on the site until you Publish.</p></div></div><div class="vers">' +
+        '<div class="card"><div><b>Live version</b><p>What customers see right now.</p></div><button class="btn small" type="button" data-ver="live"' + (live ? '' : ' disabled') + '>Load</button></div>' +
+        '<div class="card"><div><b>Before the last publish</b><p>Undo your most recent publish.</p></div><button class="btn small" type="button" data-ver="prev"' + (previous ? '' : ' disabled') + '>Load</button></div>' +
+        '<div class="card"><div><b>Starter content</b><p>The original placeholder site.</p></div><button class="btn small" type="button" data-ver="start">Load</button></div>' +
+        '<div class="card"><div><b>Download a backup</b><p>Saves everything as a file on this computer.</p></div><button class="btn small" type="button" data-ver="dl">Download</button></div>' +
+        (activity.length ? '<div class="card" style="display:block"><b>Recent activity</b>' + activity.map(x => '<p>' + esc(new Date(x.when).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })) + ' · <b>' + esc(x.who) + '</b> · ' + esc(x.what) + (x.detail ? ' · ' + esc(x.detail) : '') + '</p>').join('') + '</div>' : '') + '</div>';
+      return;
+    }
+    if (s.type === 'changes') { ed.innerHTML = note + changesHTML(); return; }
+    if (s.type === 'team') {
+      const sups = team.filter(u => u.base !== 'admin');
+      ed.innerHTML = '<div class="ed-head"><div><h2>Team &amp; access</h2><p>Admins publish. Supervisors edit and press “Send for review”. Give a supervisor temporary admin access when you are away; it switches off by itself. People and PINs are set in Script Properties (S31_USERS), never here.</p></div></div><div class="vers">' +
+        team.map(u => '<div class="card"><div><b>' + esc(u.name) + '</b><p>' + (u.base === 'admin' ? 'Admin' : u.tempUntil ? 'Supervisor · <b style="color:var(--amber)">temporary admin until ' + esc(fmtWhen(u.tempUntil)) + '</b>' : 'Supervisor') + '</p></div>' +
+          (u.base === 'admin' ? '' : u.tempUntil ? '<button class="btn small danger" type="button" data-revoke="' + esc(u.name) + '">Remove admin access</button>'
+            : '<div class="item-acts" style="padding:0"><select data-hours="' + esc(u.name) + '"><option value="24">for 1 day</option><option value="72">for 3 days</option><option value="168">for 1 week</option><option value="336">for 2 weeks</option></select><button class="btn small primary" type="button" data-grant="' + esc(u.name) + '">Give admin access</button></div>') + '</div>').join('') +
+        (sups.length ? '' : '<p class="muted">No supervisors yet. Add one in Script Properties: <code>Name:PIN:supervisor</code>.</p>') + '</div>';
+      return;
+    }
+    if (s.type === 'object') {
+      ed.innerHTML = note + '<div class="ed-head"><div><h2>' + esc(s.label) + '</h2><p>' + esc(s.help || '') + '</p></div></div><div class="card"><div class="fields" style="padding:0">' +
+        s.fields.map((f, n) => fieldHTML(f, getP(doc, f.k), 'o' + n)).join('') + '</div></div>';
+      return;
+    }
+    let list = getP(doc, s.path); if (!Array.isArray(list)) { list = []; setP(doc, s.path, list); }
+    const op = opened[s.id] || (opened[s.id] = {});
+    ed.innerHTML = note + '<div class="ed-head"><div><h2>' + esc(s.label) + ' <span class="fine">(' + list.filter(it => !s.zf || itemZone(s, it) === s.zf).length + ')</span></h2><p>' + esc(s.help || '') + '</p></div>' +
+      '<div class="item-acts" style="padding:0">' + (s.find ? '<input class="find" id="find" type="search" placeholder="Find…" aria-label="Find">' : '') + (s.fixed ? '' : '<button class="btn small primary" type="button" data-add>+ Add</button>') + '</div></div>' +
+      list.map((it, i) => (s.zf && itemZone(s, it) !== s.zf) ? '' : '<details class="item' + (it.hidden ? ' hid' : '') + ((lastDiff.bySec[s.id] || { items: {} }).items[i] ? ' chg-' + lastDiff.bySec[s.id].items[i] : '') + '" data-i="' + i + '"' + (op[i] ? ' open' : '') + '><summary>' + itemSummary(s, it) + '</summary>' +
+        '<div class="fields">' + s.fields.map((f, n) => fieldHTML(f, it[f.k], 'f' + i + '_' + n)).join('') + '</div>' +
+        '<div class="item-acts">' + (s.fixed ? '' : '<button type="button" class="btn small" data-mv="-1">↑ Up</button><button type="button" class="btn small" data-mv="1">↓ Down</button><button type="button" class="btn small" data-dup>Duplicate</button><button type="button" class="btn small danger" data-del>Remove</button>') + '</div></details>').join('') +
+      (list.length ? '' : '<p class="muted">Nothing here yet. Press “+ Add”.</p>');
+  }
+
+  /* ---------------- editing ---------------- */
+  function fieldFor(el) {
+    const s = secOf(sec), k = el.dataset.k; if (!s.fields) return null;
+    return s.fields.find(f => f.k === k);
+  }
+  const ed = $('#ed');
+  ed.addEventListener('input', e => {
+    const el = e.target; if (el.id === 'find') { const q = el.value.toLowerCase(); ed.querySelectorAll('.item').forEach(d => { d.hidden = q && d.querySelector('summary').textContent.toLowerCase().indexOf(q) < 0; }); return; }
+    const f = el.dataset && el.dataset.k ? fieldFor(el) : null; if (!f) return;
+    const s = secOf(sec), v = readInput(f, el);
+    if (s.type === 'object') setP(doc, f.k, v);
+    else { const d = el.closest('.item'), it = getP(doc, s.path)[+d.dataset.i]; it[f.k] = v; if (s.path === 'shelves' && f.k === 'name' && it._auto) autoCode(it); d.querySelector('summary').innerHTML = itemSummary(s, it); d.classList.toggle('hid', !!it.hidden);
+      if (f.t === 'img') { const pv = el.closest('.img-f').querySelector('.pv'); pv.style.backgroundImage = v ? 'url("' + v.replace(/"/g, '%22') + '")' : ''; pv.textContent = v ? '' : 'No photo'; } }
+    setDirty(true);
+  });
+  ed.addEventListener('toggle', e => { const d = e.target; if (d.classList && d.classList.contains('item')) (opened[sec] || (opened[sec] = {}))[d.dataset.i] = d.open; }, true);
+  ed.addEventListener('click', async e => {
+    const b = e.target.closest('button'); if (!b) return;
+    const s = secOf(sec);
+    if (b.dataset.ver) return version(b.dataset.ver);
+    if (b.dataset.goto) {
+      const e = lastDiff.list[+b.dataset.goto]; if (!e) return;
+      sec = e.sec; const op2 = opened[sec] || (opened[sec] = {}); Object.keys(op2).forEach(k => delete op2[k]); op2[e.j] = true; render();
+      const el = ed.querySelector('.item[data-i="' + e.j + '"]'); if (el) el.scrollIntoView({ block: 'start' }); else window.scrollTo(0, 0);
+      return;
+    }
+    if (b.dataset.undo) { const e = lastDiff.list[+b.dataset.undo]; if (!e) return; undoChange(e); setDirty(true); render(); toast('Undone in the editor. Save or Publish to keep it.'); return; }
+    if (b.dataset.grant || b.dataset.revoke) {
+      const name = b.dataset.grant || b.dataset.revoke, hrs = b.dataset.grant ? +ed.querySelector('[data-hours="' + CSS.escape(name) + '"]').value : 0;
+      if (b.dataset.grant && !confirm('Give ' + name + ' admin access (can publish) for ' + (hrs / 24) + ' day(s)?')) return;
+      try { const j = await call(b.dataset.grant ? 'grant' : 'revoke', { name: name, hours: hrs }); team = j.team; render(); toast(b.dataset.grant ? name + ' can publish until access runs out.' : name + ' is back to supervisor.'); }
+      catch (err) { toast(err.message); }
+      return;
+    }
+    if (b.dataset.pick) { b.closest('.img-f').querySelector('[data-up]').click(); return; }
+    if (b.dataset.clearimg) { const inp = document.getElementById(b.dataset.clearimg); inp.value = ''; inp.dispatchEvent(new Event('input', { bubbles: true })); return; }
+    const list = s.path ? getP(doc, s.path) : null, d = b.closest('.item'), i = d ? +d.dataset.i : -1, op = opened[sec] || (opened[sec] = {});
+    if (b.hasAttribute('data-add')) { list.unshift(Object.assign(s.newItem(), { _uid: uid() })); if (s.path === 'shelves') autoCode(list[0]); Object.keys(op).forEach(k => delete op[k]); op[0] = true; setDirty(true); render(); return; }
+    if (b.hasAttribute('data-del')) {
+      const it = list[i];
+      let msg = 'Remove “' + (s.title(it) || 'this item') + '”?';
+      if (s.path === 'shelves') { const n = usesOf(it.id); if (n) msg += '\n\n' + n + ' item(s) or lesson(s) use this. They will be hidden until you move them to another shelf.'; }
+      if (!confirm(msg)) return;
+      list.splice(i, 1); Object.keys(op).forEach(k => delete op[k]); setDirty(true); render(); return;
+    }
+    if (b.hasAttribute('data-dup')) { const c = clone(list[i]); c._uid = uid(); if (s.path === 'shelves') { c.id = ''; c._auto = 1; autoCode(c); } list.splice(i + 1, 0, c); op[i + 1] = true; setDirty(true); render(); return; }
+    if (b.dataset.mv) { let j = i + (+b.dataset.mv); while (s.zf && j >= 0 && j < list.length && itemZone(s, list[j]) !== s.zf) j += +b.dataset.mv; if (j < 0 || j >= list.length) return; const t = list[i]; list[i] = list[j]; list[j] = t; const o = op[i]; op[i] = op[j]; op[j] = o; setDirty(true); render(); }
+  });
+  ed.addEventListener('change', async e => {
+    const el = e.target;
+    if (el.dataset && el.dataset.up) {
+      const file = el.files && el.files[0]; if (!file) return;
+      const target = document.getElementById(el.dataset.up);
+      try {
+        setStatus('Uploading photo…');
+        const dataUrl = await shrink(file, LOCAL ? 600 : 1000);
+        let url = dataUrl;
+        if (!LOCAL) url = (await call('upload', { dataUrl: dataUrl, name: file.name })).url;
+        target.value = url; target.dispatchEvent(new Event('input', { bubbles: true }));
+        toast('Photo added. Save or Publish to keep it.');
+      } catch (err) { toast('Upload failed: ' + err.message); setDirty(dirty); }
+      return;
+    }
+  });
+  function shrink(file, max) {          // resize in the browser so uploads stay small and fast
+    return new Promise((res, rej) => {
+      if (!/^image\//.test(file.type)) return rej(new Error('Please choose an image file.'));
+      const img = new Image(), url = URL.createObjectURL(file);
+      img.onload = () => {
+        const k = Math.min(1, max / Math.max(img.width, img.height)), c = document.createElement('canvas');
+        c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
+        const g = c.getContext('2d'); g.fillStyle = '#ffffff'; g.fillRect(0, 0, c.width, c.height); g.drawImage(img, 0, 0, c.width, c.height);
+        URL.revokeObjectURL(url); res(c.toDataURL('image/jpeg', 0.82));
+      };
+      img.onerror = () => { URL.revokeObjectURL(url); rej(new Error('Could not read that image.')); };
+      img.src = url;
+    });
+  }
+  $('#nav').addEventListener('click', e => { const b = e.target.closest('[data-sec]'); if (b) { sec = b.dataset.sec; render(); window.scrollTo(0, 0); } });
+
+  /* ---------------- save / publish ---------------- */
+  function tidy() {                     // give new shelves a code, drop empty rows
+    const used = new Set();
+    (doc.shelves || []).forEach(s => { let id = slug(s.id || s.name), n = 2; const base = id; while (used.has(id)) id = base + '-' + n++; s.id = id; used.add(id); delete s._auto; });
+    delete doc.api;
+  }
+  function autoCode(sh) {                 // new shelf: code follows its name, and stock/specials follow the code
+    const old = sh.id, used = new Set((doc.shelves || []).filter(x => x !== sh).map(x => x.id));
+    let id = slug(sh.name), n = 2; const base = id; while (used.has(id)) id = base + '-' + n++;
+    sh.id = id;
+    if (old && old !== id) { ['stock', 'lessons', 'news', 'challenges', 'topics', 'media', 'specials'].forEach(k => (doc[k] || []).forEach(x => { if (x.shelf === old) x.shelf = id; })); ((doc.ancients || {}).files || []).forEach(x => { if (x.shelf === old) x.shelf = id; }); }
+  }
+  async function save(publish, reviewNote, force) {
+    tidy();
+    const review = publish && role !== 'admin' && !LOCAL;
+    if (LOCAL) {
+      if (publish) { const cur = ls.get('s31_local_published'); if (cur) { previous = cur; ls.set('s31_local_previous', cur); } }
+      let ok = ls.set('s31_local_draft', doc);
+      if (ok && publish) ok = ls.set('s31_local_published', doc);
+      if (!ok) { toast('Browser storage is full. Use image links instead of uploads in demo mode.'); return; }
+      if (publish) live = clone(doc);
+    } else {
+      setStatus(review ? 'Sending…' : publish ? 'Publishing…' : 'Saving…');
+      let j;
+      try { j = await call(review ? 'review' : publish ? 'publish' : 'save', { data: doc, note: reviewNote || '', rev: rev, force: !!force }); }
+      catch (err) { if (err.info && err.info.error === 'conflict') return conflict(err.info, publish, reviewNote); throw err; }
+      if (j.rev != null) rev = j.rev;
+      activity.unshift({ when: new Date().toISOString(), who: me, what: review ? 'Sent for review' : publish ? 'Published' : 'Saved draft' });
+      if (publish && !review) { previous = live; live = clone(doc); ls.del('s31_cache'); reviewWho = ''; reviewNote = ''; }
+    }
+    setDirty(false); setStatus((review ? 'Sent for review ' : publish ? 'Published ' : 'Draft saved ') + now()); render();
+    toast(review ? 'Sent. The admin will check it and publish.' : publish ? 'Published. The site shows it now.' : 'Draft saved. Not live until it is published.');
+  }
+  async function conflict(info, publish, reviewNote) {
+    const who = info.by && info.by !== me ? info.by : 'Someone', when = info.at ? fmtWhen(info.at) : 'just now';
+    setDirty(true); setStatus('Not saved: ' + who + ' saved at ' + when);
+    if (confirm(who + ' saved changes at ' + when + ', after you opened the editor.\n\nOK = load their latest version. Your edits are downloaded as a backup file first, so nothing is lost.\nCancel = keep your version.')) {
+      version('dl');
+      const j = await call('load');
+      doc = clone(j.draft || j.published || START); delete doc.api; ensureUids(doc);
+      for (const k in START) if (!(k in doc)) doc[k] = clone(START[k]);
+      live = j.published; previous = j.previous; rev = j.rev; activity = j.log || [];
+      setDirty(false); setStatus('Loaded ' + who + '’s latest version'); render();
+      toast('Loaded the latest version. Your edits are in the downloaded backup file.');
+      return;
+    }
+    if (confirm('Replace ' + who + '’s changes with your version?\n\nTheir changes since ' + when + ' will be lost.')) return save(publish, reviewNote, true);
+    toast('Not saved. Your edits are still on screen.');
+  }
+  $('#bSave').addEventListener('click', () => save(false).catch(err => { setDirty(true); toast(err.message); }));
+  $('#bPublish').addEventListener('click', () => {
+    if (role !== 'admin' && !LOCAL) { const n = prompt('Send your changes to the admin for review.\nNote for the admin (optional):', ''); if (n === null) return; save(true, n).catch(err => { setDirty(true); toast(err.message); }); return; }
+    if (confirm('Publish these changes to the live site?')) save(true).catch(err => { setDirty(true); toast(err.message); });
+  });
+  $('#bPreview').addEventListener('click', async () => {
+    try { if (dirty) await save(false); } catch (err) { toast(err.message); return; }
+    if (window.S31_ADMIN_PREVIEW) { toast('Preview opens your store page once the admin is on your site.'); return; }
+    window.open('index.html?preview=1', '_blank');
+  });
+  $('#bOut').addEventListener('click', async () => {
+    if (dirty && !confirm('You have unsaved changes. Log out anyway?')) return;
+    try { await call('logout'); } catch (e) {}
+    token = ''; ss.del('s31_admin_token'); dirty = false; location.reload();
+  });
+  function version(v) {
+    if (v === 'dl') {
+      const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(doc, null, 2)], { type: 'application/json' }));
+      a.download = 'section31-backup-' + new Date().toISOString().slice(0, 10) + '.json'; a.click(); return;
+    }
+    const src = v === 'live' ? live : v === 'prev' ? previous : START;
+    if (!src || !confirm('Replace what is in the editor with this version? (Nothing changes on the site until you Publish.)')) return;
+    doc = clone(src); delete doc.api; ensureUids(doc); setDirty(true); render(); toast('Loaded. Check it, then Save or Publish.');
+  }
+
+  /* ---------------- start ---------------- */
+  function showLogin(msg) { $('#login').hidden = false; $('#app').hidden = true; $('#hdr').hidden = true; $('#loginMsg').textContent = msg || ''; $('#pin').value = ''; $('#pin').focus(); }
+  function showApp() {
+    $('#login').hidden = true; $('#app').hidden = false; $('#hdr').hidden = false; $('#bOut').hidden = LOCAL;
+    $('#modeTag').textContent = LOCAL ? 'ADMIN · LOCAL DEMO' : (role === 'admin' ? (base === 'admin' ? 'ADMIN' : 'TEMP ADMIN') : 'SUPERVISOR') + (me ? ' · ' + me.toUpperCase() : '');
+    $('#bPublish').textContent = role === 'admin' || LOCAL ? 'Publish' : 'Send for review';
+    if (tempUntil) $('#modeTag').title = 'Admin access until ' + fmtWhen(tempUntil);
+    render();
+  }
+  async function loadRemote() {
+    const j = await call('load');
+    live = j.published; previous = j.previous; me = j.user || ''; activity = j.log || []; rev = j.rev == null ? null : j.rev;
+    role = j.role || 'supervisor'; base = j.base || role; tempUntil = j.tempUntil || ''; team = j.team || [];
+    if (!doc) doc = clone(j.draft || j.published || START);
+    ensureUids(doc);
+    for (const k in START) if (!(k in doc)) doc[k] = clone(START[k]);   // new sections added later
+    delete doc.api;
+    const changed = j.draft && JSON.stringify(j.draft) !== JSON.stringify(j.published);
+    const rv = changed && activity.find(x => x.what === 'Sent for review' || x.what === 'Published');
+    setStatus(rv && rv.what === 'Sent for review' ? 'Waiting for review (from ' + rv.who + ')' : changed ? 'Draft has unpublished changes' : 'Up to date');
+    reviewWho = rv && rv.what === 'Sent for review' ? rv.who : ''; reviewNote = reviewWho ? (rv.detail || '') : '';
+    if (role === 'admin' && reviewWho) sec = 'changes';
+    showApp();
+    if (role === 'admin' && rv && rv.what === 'Sent for review') toast(rv.who + ' sent changes for review. They are listed under Changes to publish.');
+  }
+  $('#loginForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const msg = $('#loginMsg'); msg.style.color = 'var(--dim)'; msg.textContent = 'Checking…';
+    try {
+      const r = await fetch(API, { method: 'POST', body: JSON.stringify({ action: 'login', pin: $('#pin').value }) });
+      const j = await r.json();
+      if (!j.ok) throw new Error(j.error || 'Login failed.');
+      token = j.token; ss.set('s31_admin_token', token); $('#pin').value = '';
+      await loadRemote();
+    } catch (err) { msg.style.color = 'var(--alert)'; msg.textContent = err.message; }
+  });
+
+  if (LOCAL) {
+    live = ls.get('s31_local_published'); previous = ls.get('s31_local_previous');
+    doc = clone(ls.get('s31_local_draft') || live || START);
+    ensureUids(doc);
+    for (const k in START) if (!(k in doc)) doc[k] = clone(START[k]);
+    setStatus('Local demo');
+    showApp();
+  } else if (token) {
+    loadRemote().catch(() => showLogin());
+  } else showLogin();
+})();
+</script>
+</body>
+</html>
