@@ -532,7 +532,8 @@ function s31App() {
   $('#contactList').innerHTML =
     '<li><span class="k">Address</span><span>' + esc(C.address) + '</span></li>' +
     '<li><span class="k">Hours</span>' + C.hours.map(h => '<span>' + esc(h[0]) + ' · ' + esc(h[1]) + '</span>').join('') + '</li>' +
-    '<li><span class="k">WhatsApp</span><a href="https://wa.me/' + esc(C.whatsapp) + '" target="_blank" rel="noopener">+' + esc(C.whatsapp) + '</a></li>' +
+    '<li><span class="k">WhatsApp</span><a href="https://wa.me/' + esc(C.whatsapp) + '" target="_blank" rel="noopener">+' + esc(C.whatsapp) + '</a>' +
+      (C.whatsapp2 ? '<a href="https://wa.me/' + esc(C.whatsapp2) + '" target="_blank" rel="noopener">+' + esc(C.whatsapp2) + '</a>' : '') + '</li>' +
     '<li><span class="k">Instagram</span><span>' + esc(C.instagram) + '</span></li>' +
     '<li><span class="k">Email</span><a href="mailto:' + esc(C.email) + '">' + esc(C.email) + '</a></li>';
 

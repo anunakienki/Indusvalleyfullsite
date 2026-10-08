@@ -28,6 +28,7 @@ const S31 = {
     address: '[Street address goes here]',
     hours: [['Tue – Fri', '10:00 – 18:00'], ['Saturday', '09:00 – 16:00'], ['Sun – Mon', 'Closed']],
     whatsapp: '27000000000',            // digits only, with country code
+    whatsapp2: '',                      // optional second number, shown under Find us
     instagram: '@section31.za',
     email: 'hello@section31.example'
   },
