@@ -536,6 +536,12 @@ function s31App() {
       (C.whatsapp2 ? '<a href="https://wa.me/' + esc(C.whatsapp2) + '" target="_blank" rel="noopener">+' + esc(C.whatsapp2) + '</a>' : '') + '</li>' +
     '<li><span class="k">Instagram</span><span>' + esc(C.instagram) + '</span></li>' +
     '<li><span class="k">Email</span><a href="mailto:' + esc(C.email) + '">' + esc(C.email) + '</a></li>';
+  // slim contact line in the footer of every page
+  $('#footContact').innerHTML = [
+    C.address ? '<span>' + esc(C.address) + '</span>' : '',
+    C.whatsapp ? '<a href="https://wa.me/' + esc(C.whatsapp) + '" target="_blank" rel="noopener">WhatsApp +' + esc(C.whatsapp) + '</a>' : '',
+    (C.hours && C.hours[0]) ? '<span>' + esc(C.hours[0][0]) + ' · ' + esc(C.hours[0][1]) + '</span>' : '',
+    '<a href="#door">Find us →</a>'].filter(Boolean).join('<i aria-hidden="true">·</i>');
 
   /* ---------- header: hide on scroll down, show on scroll up ---------- */
   (function () {

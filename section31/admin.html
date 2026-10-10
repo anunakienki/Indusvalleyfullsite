@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Section 31 · Admin</title>
 <link rel="icon" href="assets/favicon.svg">
-<link rel="stylesheet" href="css/section31.css?v=20261008c">
+<link rel="stylesheet" href="css/section31.css?v=20261009a">
 <style>
 body{padding-bottom:40px}
 [hidden]{display:none!important}
@@ -117,7 +117,7 @@ body{padding-bottom:40px}
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script src="js/data.js?v=20261008c"></script>
+<script src="js/data.js?v=20261009a"></script>
 <script>
 (function () {
   'use strict';
@@ -303,7 +303,7 @@ body{padding-bottom:40px}
         { k: 'bookingLink', t: 'text', l: 'Booking page link', h: 'Google Calendar or Calendly' }, { k: 'delivery', t: 'area', l: 'Delivery note', wide: 1 },
         { k: 'prelaunch', t: 'check', l: 'Pre-launch mode: hide prices and specials, show Notify me buttons and the opening banner', wide: 1 },
         { k: 'launchNote', t: 'area', l: 'Opening banner text', wide: 1 },
-        { k: 'demo', t: 'check', l: 'Show "demo, nothing is sent" notes' }] },
+        { k: 'demo', t: 'check', l: 'Show demo notes ("Demo build" in the footer). Untick when live' }] },
     { id: 'zones', label: 'Zone names', type: 'list', path: 'zones', fixed: 1, help: 'Names and lines on the facility map. Zones themselves can’t be added or removed here.',
       title: i => 'Zone ' + i.no + ' · ' + i.name, sub: i => i.role,
       fields: [{ k: 'name', t: 'text', l: 'Name' }, { k: 'short', t: 'text', l: 'Button & menu name', h: 'Short, e.g. Holodeck' }, { k: 'role', t: 'text', l: 'Role' }, { k: 'line', t: 'area', l: 'Line', wide: 1 }, { k: 'pull', t: 'text', l: 'Comes back for' }, { k: 'color', t: 'color', l: 'Accent colour' }] },

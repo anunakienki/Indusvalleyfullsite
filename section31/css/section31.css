@@ -415,3 +415,7 @@ html[data-view]:not([data-view="home"]) main{padding-top:24px}
 @media (prefers-reduced-motion:reduce){.zbtn,.dock-peek{transition:none}}
 .dock-peek.up{top:auto;bottom:calc(100% + 14px)}
 @media (max-width:620px){.zbtn{font-size:.64rem;letter-spacing:.08em}.zbtn .nm{justify-content:flex-start;text-align:left}.zbtn .no{padding:9px 9px 9px 13px}}
+
+/* footer contact line */
+.foot-contact{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;color:var(--dim)}
+.foot-contact i{font-style:normal;color:var(--faint)}
