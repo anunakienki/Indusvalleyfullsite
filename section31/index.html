@@ -12,8 +12,8 @@
 <meta property="og:description" content="Classified treasures for the ultimate collector. Open to all. Part of the Indus Valley digital mall.">
 <meta property="og:image" content="https://indusvalley.earth/section31/assets/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="stylesheet" href="css/section31.css?v=20261009a">
-<script src="js/pre.js?v=20261009a"></script>
+<link rel="stylesheet" href="css/section31.css?v=20261017a">
+<script src="js/pre.js?v=20261017a"></script>
 </head>
 <body id="top">
 <a class="skip-link" href="#main">Skip to content</a>
@@ -52,6 +52,7 @@
       <a href="#clearance">Clearance</a>
       <a href="#door">Find us</a>
     </nav>
+    <button class="chip cart-btn" id="cartBtn" type="button" hidden aria-label="Open your cart">Cart · <b>0</b></button>
     <button class="chip" id="clearChip" type="button" aria-label="Request clearance">Clearance: Visitor</button>
   </div>
 </header>
@@ -490,9 +491,51 @@
   </form>
 </dialog>
 
+<button class="cart-fab" id="cartFab" type="button" hidden aria-label="Open your cart">Cart · <b>0</b></button>
+
+<dialog id="cartDlg" class="cart-dlg" aria-labelledby="cartTitle">
+  <div id="cartStep1">
+    <div class="kicker">Your cart</div>
+    <h3 id="cartTitle">Requisition order</h3>
+    <p class="muted" id="cartEmpty">Your cart is empty. Tap <b>Add to cart</b> on any item.</p>
+    <div id="cartFormWrap">
+      <ul class="cart-items" id="cartItems"></ul>
+      <div class="field"><label for="cartDelivery">Delivery</label><select id="cartDelivery"></select></div>
+      <div class="cart-totals" id="cartTotals"></div>
+      <form id="cartForm" novalidate>
+        <div class="field"><label for="coName">Name</label><input id="coName" autocomplete="name" required></div>
+        <div class="field"><label for="coPhone">WhatsApp or phone</label><input id="coPhone" type="tel" autocomplete="tel" required></div>
+        <div class="field"><label for="coEmail">Email (optional)</label><input id="coEmail" type="email" autocomplete="email"></div>
+        <div class="field" id="cartAddrWrap"><label for="coAddr">Delivery address</label><textarea id="coAddr" rows="3" autocomplete="street-address"></textarea></div>
+        <p class="fine">Under 18? Ask a parent or guardian to place the order.</p>
+        <div class="result" id="cartMsg" aria-live="polite" style="color:var(--alert)"></div>
+        <div class="dlg-actions">
+          <button class="btn small" type="button" id="cartClose">Keep browsing</button>
+          <button class="btn small primary" type="submit">Place order</button>
+        </div>
+      </form>
+    </div>
+    <div class="dlg-actions" id="cartEmptyClose"><button class="btn small" type="button" onclick="document.getElementById('cartDlg').close()">Close</button></div>
+  </div>
+  <div id="cartStep2" hidden>
+    <div class="kicker">Order logged</div>
+    <h3>Order <span id="orderRef"></span></h3>
+    <p>Pay <b id="orderTotal"></b> by EFT into this account:</p>
+    <ul class="contact-list bank-list" id="bankList"></ul>
+    <p class="muted" id="payNote"></p>
+    <p><b>Then send us your order and proof of payment:</b></p>
+    <div class="pop-btns">
+      <a class="btn small primary" id="popWa" target="_blank" rel="noopener">Send on WhatsApp</a>
+      <a class="btn small" id="popMail">Send by email</a>
+    </div>
+    <p class="fine">Attach your proof of payment to the message. Your order isn't reserved until we receive it.</p>
+    <div class="dlg-actions"><button class="btn small" type="button" id="cartDone">Done</button></div>
+  </div>
+</dialog>
+
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script src="js/data.js?v=20261009a"></script>
-<script src="js/app.js?v=20261009a"></script>
+<script src="js/data.js?v=20261017a"></script>
+<script src="js/app.js?v=20261017a"></script>
 </body>
 </html>

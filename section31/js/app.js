@@ -86,6 +86,104 @@ function s31App() {
   const shelfOf = id => SHELVES.find(s => s.id === id);
   const zoneOf = s => (s && s.zone) || 'zone1';
   const STATUS = { in: '', low: 'Low stock', out: 'Sold out', preorder: 'Pre-order' };
+
+  /* ---------- online cart + EFT checkout (no login needed) ----------
+     Shows only when Pre-launch mode is off and Cart & payment → "Online cart on" is ticked.
+     The cart lives in this browser only. The order goes to the store by WhatsApp or email. */
+  const SHOP = S31.shop || {};
+  const CART = !PRE && !!SHOP.cart;
+  const priceNum = p => { const m = String(p || '').replace(/\s/g, '').match(/^R?([\d,]+(?:\.\d{1,2})?)$/i); return m ? parseFloat(m[1].replace(/,/g, '')) : null; };
+  const money = n => 'R' + (Math.round(n * 100) / 100).toFixed(2).replace(/\.00$/, '').replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  const itemKey = it => it.name + (it.line ? ' ' + it.line : '');
+  let cart = [];
+  try { cart = JSON.parse(localStorage.getItem('s31_cart') || '[]') || []; } catch (e) { cart = []; }
+  function saveCart() { try { localStorage.setItem('s31_cart', JSON.stringify(cart)); } catch (e) {} }
+  function syncCart() {   // drop items that are gone or sold out, refresh prices
+    cart = cart.filter(c => {
+      const it = (S31.stock || []).find(s => itemKey(s) === c.key && !s.hidden);
+      if (!it || it.status === 'out' || priceNum(it.price) == null) return false;
+      c.price = priceNum(it.price); c.pre = it.status === 'preorder'; return true;
+    });
+    saveCart();
+  }
+  function cartCount() { return cart.reduce((a, c) => a + c.qty, 0); }
+  function updateCartBtn() {
+    const b = $('#cartBtn'), f = $('#cartFab'); if (!b) return;
+    b.hidden = !CART; b.querySelector('b').textContent = cartCount();
+    if (f) { f.hidden = !CART || !cartCount(); f.querySelector('b').textContent = cartCount(); }
+  }
+  function addToCart(key) {
+    const it = (S31.stock || []).find(s => itemKey(s) === key); if (!it) return;
+    const c = cart.find(x => x.key === key);
+    if (c) c.qty++; else cart.push({ key: key, price: priceNum(it.price), qty: 1, pre: it.status === 'preorder' });
+    saveCart(); updateCartBtn(); toast('Added to cart: ' + key);
+  }
+  const deliveryOpts = () => (SHOP.delivery || []).map(r => [].concat(r)).filter(r => r[0]).map(r => ({ name: String(r[0]).trim(), fee: priceNum(r[1]) || 0 }));
+  function totals() {
+    const sub = cart.reduce((a, c) => a + c.price * c.qty, 0), opts = deliveryOpts(), sel = $('#cartDelivery');
+    const d = opts[sel ? +sel.value || 0 : 0] || { name: '', fee: 0 };
+    const free = priceNum(SHOP.freeOver), fee = d.fee > 0 && free != null && sub >= free ? 0 : d.fee;
+    return { sub: sub, d: d, fee: fee, total: sub + fee };
+  }
+  function renderCart() {
+    syncCart(); updateCartBtn();
+    const box = $('#cartItems'), t = totals();
+    $('#cartEmpty').hidden = !!cart.length; $('#cartFormWrap').hidden = !cart.length;
+    box.innerHTML = cart.map((c, i) => '<li><span class="ci-name">' + esc(c.key) + (c.pre ? ' <em>pre-order</em>' : '') + '<small>' + money(c.price) + ' each</small></span>' +
+      '<span class="ci-qty"><button type="button" class="q" data-q="' + i + '" data-d="-1" aria-label="One less">−</button><b>' + c.qty + '</b><button type="button" class="q" data-q="' + i + '" data-d="1" aria-label="One more">+</button></span>' +
+      '<span class="ci-sum">' + money(c.price * c.qty) + '</span></li>').join('');
+    const free = priceNum(SHOP.freeOver);
+    $('#cartTotals').innerHTML = '<div><span>Items</span><span>' + money(t.sub) + '</span></div>' +
+      '<div><span>' + esc(t.d.name || 'Delivery') + '</span><span>' + (t.d.fee > 0 && t.fee === 0 ? 'Free' : money(t.fee)) + '</span></div>' +
+      (free != null && t.d.fee > 0 && t.sub < free ? '<div class="fine"><span>Free courier on orders over ' + money(free) + '</span><span></span></div>' : '') +
+      '<div class="tot"><span>Total</span><span>' + money(t.total) + '</span></div>';
+    $('#cartAddrWrap').hidden = !(t.d.fee > 0 || /courier|deliver/i.test(t.d.name));
+  }
+  function openCart() {
+    const sel = $('#cartDelivery'), opts = deliveryOpts();
+    sel.innerHTML = opts.map((o, i) => '<option value="' + i + '">' + esc(o.name) + (o.fee ? ' · ' + money(o.fee) : ' · free') + '</option>').join('');
+    $('#cartStep1').hidden = false; $('#cartStep2').hidden = true; $('#cartMsg').textContent = '';
+    renderCart();
+    const d = $('#cartDlg'); if (typeof d.showModal === 'function') d.showModal(); else d.setAttribute('open', '');
+  }
+  if (CART) {
+    $('#cartBtn').addEventListener('click', openCart);
+    $('#cartFab').addEventListener('click', openCart);
+    $('#cartClose').addEventListener('click', () => $('#cartDlg').close());
+    $('#cartDelivery').addEventListener('change', renderCart);
+    $('#cartItems').addEventListener('click', e => {
+      const b = e.target.closest('[data-q]'); if (!b) return;
+      const c = cart[+b.dataset.q]; c.qty += +b.dataset.d; if (c.qty < 1) cart.splice(+b.dataset.q, 1);
+      saveCart(); renderCart();
+    });
+    $('#cartForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const t = totals(), name = $('#coName').value.trim(), phone = $('#coPhone').value.trim(), email = $('#coEmail').value.trim(), addr = $('#coAddr').value.trim();
+      const needAddr = !$('#cartAddrWrap').hidden, msg = $('#cartMsg');
+      if (!name || !phone || (needAddr && !addr)) { msg.textContent = 'Please add your name, a WhatsApp or phone number' + (needAddr ? ' and the delivery address.' : '.'); return; }
+      const n = new Date(), ref = 'S31-' + String(n.getFullYear()).slice(2) + pad(n.getMonth() + 1) + pad(n.getDate()) + '-' + Math.random().toString(36).slice(2, 6).toUpperCase();
+      const lines = cart.map(c => c.qty + ' x ' + c.key + (c.pre ? ' (pre-order)' : '') + ' = ' + money(c.price * c.qty));
+      const order = 'SECTION 31 ORDER ' + ref + '\n\n' + lines.join('\n') + '\n\nItems: ' + money(t.sub) + '\n' + t.d.name + ': ' + (t.d.fee > 0 && t.fee === 0 ? 'Free' : money(t.fee)) + '\nTOTAL: ' + money(t.total) +
+        '\n\nName: ' + name + '\nPhone: ' + phone + (email ? '\nEmail: ' + email : '') + (needAddr ? '\nDeliver to: ' + addr : '') + '\n\nProof of payment attached.';
+      const B = SHOP.bank || {}, bankRows = [['Account holder', B.holder], ['Bank', B.bank], ['Account number', B.account], ['Branch code', B.branch], ['Account type', B.type], ['Reference', ref]].filter(r => r[1]);
+      $('#orderRef').textContent = ref; $('#orderTotal').textContent = money(t.total);
+      $('#bankList').innerHTML = bankRows.map(r => '<li><span class="k">' + esc(r[0]) + '</span><span>' + esc(r[1]) + '</span><button type="button" class="link" data-copy="' + esc(r[1]) + '">copy</button></li>').join('');
+      $('#payNote').textContent = SHOP.note || '';
+      const mail = SHOP.popEmail || S31.contact.email;
+      $('#popWa').href = waLink(order);
+      $('#popMail').href = 'mailto:' + encodeURIComponent(mail) + '?subject=' + encodeURIComponent('Order ' + ref + ' · proof of payment') + '&body=' + encodeURIComponent(order);
+      $('#popMail').hidden = !mail;
+      $('#cartStep1').hidden = true; $('#cartStep2').hidden = false;
+      cart = []; saveCart(); updateCartBtn();
+    });
+    $('#bankList').addEventListener('click', e => {
+      const b = e.target.closest('[data-copy]'); if (!b) return;
+      try { navigator.clipboard.writeText(b.dataset.copy).then(() => toast('Copied: ' + b.dataset.copy)); } catch (err) {}
+    });
+    $('#cartDone').addEventListener('click', () => $('#cartDlg').close());
+    document.addEventListener('click', e => { const b = e.target.closest('[data-cart]'); if (b) addToCart(b.dataset.cart); });
+  }
+  updateCartBtn();
   const CATS = [
     { zone: 'zone1', action: 'pull', collapsed: true, hint: 'Tap a shelf to open it.', el: { sp: '#specialsGrid', filters: '#comicFilters', file: '#shelfFile', grid: '#comicGrid' } },
     { zone: 'zone2', action: 'wa',   collapsed: true, hint: 'Pick a game to see its lessons and gear.', el: { sp: '#kmSpecials',  filters: '#kmFilters',  file: '#kmFile',  grid: '#kmGrid', lessons: '#kmLessons' } },
@@ -262,6 +360,10 @@ function s31App() {
       let btn;
       if (PRE) btn = '<a class="btn small" target="_blank" rel="noopener" href="' + waLink('Hi Section 31, please let me know when this arrives: ' + key) + '">Notify me</a>';
       else if (it.status === 'out') btn = '<button type="button" class="btn small" disabled>Sold out</button>';
+      else if (CART && priceNum(it.price) != null) {
+        btn = '<button type="button" class="btn small primary" data-cart="' + esc(key) + '">' + (it.status === 'preorder' ? 'Pre-order · add to cart' : 'Add to cart') + '</button>';
+        if (c.action === 'pull') { const on = pull.indexOf(key) > -1; btn += '<button type="button" class="link pull-link" data-pull="' + esc(key) + '">' + (on ? 'On your pull list ✓' : '+ Weekly pull list') + '</button>'; }
+      }
       else if (c.action === 'pull') {
         const on = pull.indexOf(key) > -1, verb = it.shelf === 'comics' || it.shelf === 'startrek' ? 'Add to pull list' : 'Reserve';
         btn = '<button type="button" class="btn small' + (on ? ' primary' : '') + '" data-pull="' + esc(key) + '">' + (on ? 'On your list ✓' : (it.status === 'preorder' ? 'Pre-order' : verb)) + '</button>';

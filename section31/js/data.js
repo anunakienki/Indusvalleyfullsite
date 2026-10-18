@@ -20,6 +20,15 @@ const S31 = {
   // Pre-launch: hides prices and specials, shows "Notify me" / "Register interest" buttons and an opening banner.
   // Untick "Pre-launch mode" in the admin (Store details) on opening day.
   prelaunch: true,
+  // Online cart + EFT checkout. Works only when prelaunch is false. Edit in admin → Cart & payment.
+  shop: {
+    cart: true,
+    delivery: [['Collect in store', '0'], ['Courier · Pietermaritzburg', '80'], ['Courier · rest of South Africa', '120']],
+    freeOver: '',                       // free courier on orders over this amount (empty = never)
+    popEmail: '',                       // where proof of payment goes (empty = contact email)
+    bank: { holder: '[Account holder]', bank: '[Bank]', account: '[Account number]', branch: '[Branch code]', type: '[Account type]' },
+    note: 'Use your order number as the payment reference. We pack and courier your order once the payment reflects in our account.'
+  },
   launchNote: 'This is a preview while we finalise stock, lessons and prices. Tap Notify me on anything you like and we’ll message you when it’s ready.',
 
   tagline: 'Classified treasures for the ultimate collector.',
