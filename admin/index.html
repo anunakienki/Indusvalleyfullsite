@@ -107,8 +107,236 @@
       <button type="button" class="btn" id="addStoreBtn" style="width:100%;margin-top:16px;">+ Add a new store</button>
     </div>
 
+    <div style="margin-top:56px;padding-top:40px;border-top:1px solid var(--hairline);">
+      <p class="eyebrow">Location &amp; Contact</p>
+      <h1 style="font-family:var(--display);font-size:2rem;margin-bottom:8px;">Store details</h1>
+      <p style="color:var(--dust);">Address, map link, and contact info — shown on each store's contact section.</p>
 
-    <div class="orbit-store-popup" id="storeEditModal" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:340px;max-width:90vw;z-index:900;text-align:left;" hidden>
+      <div class="form-field" style="margin-top:24px;">
+        <label for="detailsStoreSelect">Store</label>
+        <select id="detailsStoreSelect" style="width:100%;background:var(--space-black);border:1px solid var(--hairline);border-radius:10px;padding:12px 14px;color:var(--starlight);font-family:var(--body);font-size:0.95rem;">
+          <option value="">Loading stores…</option>
+        </select>
+      </div>
+
+      <form id="storeDetailsForm" class="member-form" style="margin-top:16px;">
+        <div class="form-field">
+          <label for="detailsAddress">Address</label>
+          <input type="text" id="detailsAddress" placeholder="123 Main Road, Your Town">
+        </div>
+        <div class="form-field">
+          <label for="detailsMapLink">Google Maps link</label>
+          <input type="text" id="detailsMapLink" placeholder="https://maps.app.goo.gl/...">
+        </div>
+        <div class="form-field">
+          <label for="detailsWhatsapp">WhatsApp number</label>
+          <input type="text" id="detailsWhatsapp" placeholder="27821234567">
+        </div>
+        <div class="form-field">
+          <label for="detailsInstagram">Instagram handle</label>
+          <input type="text" id="detailsInstagram" placeholder="@yourstore">
+        </div>
+        <div class="form-field">
+          <label for="detailsEmail">Email</label>
+          <input type="email" id="detailsEmail" placeholder="hello@yourstore.com">
+        </div>
+        <div class="form-field">
+          <label for="detailsPhone">Phone number</label>
+          <input type="text" id="detailsPhone" placeholder="082 123 4567">
+        </div>
+        <div class="form-field">
+          <label for="detailsBookingLink">Booking link (Google Calendar, Calendly, etc. — shows a "Book Now" button if set)</label>
+          <input type="text" id="detailsBookingLink" placeholder="https://calendar.google.com/...">
+        </div>
+
+        <div class="form-field">
+          <label style="margin-bottom:12px;">Sections shown on this store's page</label>
+          <p style="font-size:0.8rem;color:var(--dust);margin:-6px 0 14px;">Off by default — turn on only what's relevant for this store.</p>
+          <label class="consent-row"><input type="checkbox" id="detailsShopEnabled"><span>Shop</span></label>
+          <label class="consent-row"><input type="checkbox" id="detailsGalleryEnabled"><span>Gallery</span></label>
+          <label class="consent-row"><input type="checkbox" id="detailsEventsEnabled"><span>Upcoming / Events</span></label>
+          <label class="consent-row"><input type="checkbox" id="detailsReviewsEnabled"><span>Reviews</span></label>
+          <label class="consent-row"><input type="checkbox" id="detailsContactEnabled"><span>Find Us / Contact</span></label>
+        </div>
+        <button type="submit" class="btn primary" id="storeDetailsSubmit">Save details</button>
+        <p class="form-msg" id="storeDetailsMsg" hidden></p>
+      </form>
+    </div>
+
+    <div style="margin-top:56px;padding-top:40px;border-top:1px solid var(--hairline);">
+      <p class="eyebrow">Catalog</p>
+      <h1 style="font-family:var(--display);font-size:2rem;margin-bottom:8px;">Manage products</h1>
+      <p style="color:var(--dust);">Add, edit, or remove products — with real photos — for any store.</p>
+
+      <div class="form-field" style="margin-top:24px;">
+        <label for="productsStoreSelect">Store</label>
+        <select id="productsStoreSelect" style="width:100%;background:var(--space-black);border:1px solid var(--hairline);border-radius:10px;padding:12px 14px;color:var(--starlight);font-family:var(--body);font-size:0.95rem;">
+          <option value="">Loading stores…</option>
+        </select>
+      </div>
+
+      <div id="productList" style="margin-top:20px;display:flex;flex-direction:column;gap:10px;"></div>
+
+      <button type="button" class="btn" id="addProductBtn" style="width:100%;margin-top:16px;">+ Add a product</button>
+    </div>
+
+    <div class="admin-modal-backdrop" id="productEditBackdrop" hidden></div>
+    <div class="orbit-store-popup admin-modal" id="productEditModal" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:340px;max-width:90vw;z-index:900;text-align:left;" hidden>
+      <button class="orbit-popup-close" id="productEditClose" aria-label="Close">×</button>
+      <p class="eyebrow" style="margin-bottom:16px;">Product details</p>
+      <form id="productEditForm" class="member-form">
+        <input type="hidden" id="productEditId">
+        <div class="form-field">
+          <label for="productEditCategory">Category</label>
+          <select id="productEditCategory" style="width:100%;background:var(--space-black);border:1px solid var(--hairline);border-radius:10px;padding:12px 14px;color:var(--starlight);font-family:var(--body);font-size:0.95rem;">
+            <option value="">— choose a category —</option>
+            <option value="__new__">+ Add new category…</option>
+          </select>
+          <input type="text" id="productEditCategoryNew" placeholder="New category name" style="margin-top:8px;" hidden>
+        </div>
+        <div class="form-field">
+          <label for="productEditName">Product name</label>
+          <input type="text" id="productEditName" required>
+        </div>
+        <div class="form-field">
+          <label for="productEditVariant">Description / variant</label>
+          <input type="text" id="productEditVariant" placeholder="e.g. 30ml, 300 drops">
+        </div>
+        <div class="form-field">
+          <label for="productEditPrice">Price / display text</label>
+          <input type="text" id="productEditPrice" placeholder="e.g. R150, or 1000mg CBD">
+        </div>
+        <div class="form-field">
+          <label for="productEditPhotoFile">Photo</label>
+          <input type="file" id="productEditPhotoFile" accept="image/*">
+          <div id="productPhotoPreviewWrap" style="margin-top:10px;" hidden>
+            <img id="productPhotoPreview" style="width:100%;max-height:160px;object-fit:cover;border-radius:10px;display:block;">
+          </div>
+          <p id="productUploadStatus" style="font-size:0.78rem;color:var(--dust);margin-top:6px;"></p>
+          <input type="hidden" id="productEditPhotoUrl">
+        </div>
+        <div class="form-field">
+          <label for="productEditStatus">Status</label>
+          <select id="productEditStatus" style="width:100%;background:var(--space-black);border:1px solid var(--hairline);border-radius:10px;padding:12px 14px;color:var(--starlight);font-family:var(--body);font-size:0.95rem;">
+            <option value="active">Active (visible)</option>
+            <option value="hidden">Hidden</option>
+          </select>
+        </div>
+        <button type="submit" class="btn primary" id="productEditSave" style="width:100%;">Save product</button>
+        <button type="button" class="btn" id="productEditDelete" style="width:100%;margin-top:8px;color:var(--plasma-pink);">Delete this product</button>
+        <p class="form-msg" id="productEditMsg" hidden></p>
+      </form>
+    </div>
+
+    <div style="margin-top:56px;padding-top:40px;border-top:1px solid var(--hairline);">
+      <p class="eyebrow">Showcase</p>
+      <h1 style="font-family:var(--display);font-size:2rem;margin-bottom:8px;">Manage gallery</h1>
+      <p style="color:var(--dust);">Optional — only shows on a store's page if it has at least one photo.</p>
+      <div class="form-field" style="margin-top:24px;">
+        <label for="galleryStoreSelect">Store</label>
+        <select id="galleryStoreSelect" style="width:100%;background:var(--space-black);border:1px solid var(--hairline);border-radius:10px;padding:12px 14px;color:var(--starlight);font-family:var(--body);font-size:0.95rem;">
+          <option value="">Loading stores…</option>
+        </select>
+      </div>
+      <div id="galleryList" style="margin-top:20px;display:flex;flex-direction:column;gap:10px;"></div>
+      <button type="button" class="btn" id="addGalleryBtn" style="width:100%;margin-top:16px;">+ Add a photo</button>
+    </div>
+
+    <div class="admin-modal-backdrop" id="galleryEditBackdrop" hidden></div>
+    <div class="orbit-store-popup admin-modal" id="galleryEditModal" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:340px;max-width:90vw;z-index:900;text-align:left;" hidden>
+      <button class="orbit-popup-close" id="galleryEditClose" aria-label="Close">×</button>
+      <p class="eyebrow" style="margin-bottom:16px;">Photo details</p>
+      <form id="galleryEditForm" class="member-form">
+        <input type="hidden" id="galleryEditId">
+        <div class="form-field">
+          <label for="galleryEditPhotoFile">Photo</label>
+          <input type="file" id="galleryEditPhotoFile" accept="image/*">
+          <div id="galleryPhotoPreviewWrap" style="margin-top:10px;" hidden>
+            <img id="galleryPhotoPreview" style="width:100%;max-height:160px;object-fit:cover;border-radius:10px;display:block;">
+          </div>
+          <p id="galleryUploadStatus" style="font-size:0.78rem;color:var(--dust);margin-top:6px;"></p>
+          <input type="hidden" id="galleryEditPhotoUrl">
+        </div>
+        <div class="form-field">
+          <label for="galleryEditCaption">Caption (optional)</label>
+          <input type="text" id="galleryEditCaption" placeholder="e.g. Studio session, March 2026">
+        </div>
+        <button type="submit" class="btn primary" id="galleryEditSave" style="width:100%;">Save photo</button>
+        <button type="button" class="btn" id="galleryEditDelete" style="width:100%;margin-top:8px;color:var(--plasma-pink);">Delete this photo</button>
+        <p class="form-msg" id="galleryEditMsg" hidden></p>
+      </form>
+    </div>
+
+    <div style="margin-top:56px;padding-top:40px;border-top:1px solid var(--hairline);">
+      <p class="eyebrow">Calendar</p>
+      <h1 style="font-family:var(--display);font-size:2rem;margin-bottom:8px;">Manage events</h1>
+      <p style="color:var(--dust);">Optional — shows on a store's page only if there's at least one upcoming event.</p>
+      <div class="form-field" style="margin-top:24px;">
+        <label for="eventsStoreSelect">Store</label>
+        <select id="eventsStoreSelect" style="width:100%;background:var(--space-black);border:1px solid var(--hairline);border-radius:10px;padding:12px 14px;color:var(--starlight);font-family:var(--body);font-size:0.95rem;">
+          <option value="">Loading stores…</option>
+        </select>
+      </div>
+      <div id="eventsAdminList" style="margin-top:20px;display:flex;flex-direction:column;gap:10px;"></div>
+      <button type="button" class="btn" id="addEventBtn" style="width:100%;margin-top:16px;">+ Add an event</button>
+    </div>
+
+    <div class="admin-modal-backdrop" id="eventEditBackdrop" hidden></div>
+    <div class="orbit-store-popup admin-modal" id="eventEditModal" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:340px;max-width:90vw;z-index:900;text-align:left;" hidden>
+      <button class="orbit-popup-close" id="eventEditClose" aria-label="Close">×</button>
+      <p class="eyebrow" style="margin-bottom:16px;">Event details</p>
+      <form id="eventEditForm" class="member-form">
+        <input type="hidden" id="eventEditId">
+        <div class="form-field"><label for="eventEditTitle">Title</label><input type="text" id="eventEditTitle" required></div>
+        <div class="form-field"><label for="eventEditDate">Date</label><input type="date" id="eventEditDate" required></div>
+        <div class="form-field"><label for="eventEditTime">Time (optional)</label><input type="text" id="eventEditTime" placeholder="e.g. 7pm"></div>
+        <div class="form-field"><label for="eventEditDescription">Description (optional)</label><input type="text" id="eventEditDescription"></div>
+        <button type="submit" class="btn primary" id="eventEditSave" style="width:100%;">Save event</button>
+        <button type="button" class="btn" id="eventEditDelete" style="width:100%;margin-top:8px;color:var(--plasma-pink);">Delete this event</button>
+        <p class="form-msg" id="eventEditMsg" hidden></p>
+      </form>
+    </div>
+
+    <div style="margin-top:56px;padding-top:40px;border-top:1px solid var(--hairline);">
+      <p class="eyebrow">Social proof</p>
+      <h1 style="font-family:var(--display);font-size:2rem;margin-bottom:8px;">Manage reviews</h1>
+      <p style="color:var(--dust);">Optional — shows on a store's page only if it has at least one review.</p>
+      <div class="form-field" style="margin-top:24px;">
+        <label for="reviewsStoreSelect">Store</label>
+        <select id="reviewsStoreSelect" style="width:100%;background:var(--space-black);border:1px solid var(--hairline);border-radius:10px;padding:12px 14px;color:var(--starlight);font-family:var(--body);font-size:0.95rem;">
+          <option value="">Loading stores…</option>
+        </select>
+      </div>
+      <div id="reviewsAdminList" style="margin-top:20px;display:flex;flex-direction:column;gap:10px;"></div>
+      <button type="button" class="btn" id="addReviewBtn" style="width:100%;margin-top:16px;">+ Add a review</button>
+    </div>
+
+    <div class="admin-modal-backdrop" id="reviewEditBackdrop" hidden></div>
+    <div class="orbit-store-popup admin-modal" id="reviewEditModal" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:340px;max-width:90vw;z-index:900;text-align:left;" hidden>
+      <button class="orbit-popup-close" id="reviewEditClose" aria-label="Close">×</button>
+      <p class="eyebrow" style="margin-bottom:16px;">Review details</p>
+      <form id="reviewEditForm" class="member-form">
+        <input type="hidden" id="reviewEditId">
+        <div class="form-field"><label for="reviewEditName">Reviewer name</label><input type="text" id="reviewEditName" required></div>
+        <div class="form-field">
+          <label for="reviewEditRating">Rating</label>
+          <select id="reviewEditRating" style="width:100%;background:var(--space-black);border:1px solid var(--hairline);border-radius:10px;padding:12px 14px;color:var(--starlight);font-family:var(--body);font-size:0.95rem;">
+            <option value="5">★★★★★ (5)</option>
+            <option value="4">★★★★☆ (4)</option>
+            <option value="3">★★★☆☆ (3)</option>
+            <option value="2">★★☆☆☆ (2)</option>
+            <option value="1">★☆☆☆☆ (1)</option>
+          </select>
+        </div>
+        <div class="form-field"><label for="reviewEditText">Review text</label><input type="text" id="reviewEditText" required></div>
+        <button type="submit" class="btn primary" id="reviewEditSave" style="width:100%;">Save review</button>
+        <button type="button" class="btn" id="reviewEditDelete" style="width:100%;margin-top:8px;color:var(--plasma-pink);">Delete this review</button>
+        <p class="form-msg" id="reviewEditMsg" hidden></p>
+      </form>
+    </div>
+
+    <div class="admin-modal-backdrop" id="storeEditBackdrop" hidden></div>
+    <div class="orbit-store-popup admin-modal" id="storeEditModal" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:340px;max-width:90vw;z-index:900;text-align:left;" hidden>
       <button class="orbit-popup-close" id="storeEditClose" aria-label="Close">×</button>
       <p class="eyebrow" style="margin-bottom:16px;">Store details</p>
       <form id="storeEditForm" class="member-form">
@@ -119,22 +347,24 @@
         </div>
         <div class="form-field">
           <label for="storeEditSub">One-line description</label>
-          <input type="text" id="storeEditSub">
+          <input type="text" id="storeEditSub" placeholder="e.g. custom talking presenters">
         </div>
         <div class="form-field">
-          <label for="storeEditUrl">URL path (e.g. /relicandink/)</label>
-          <input type="text" id="storeEditUrl">
+          <label for="storeEditUrl">Store address (filled in for you)</label>
+          <input type="text" id="storeEditUrl" placeholder="/storename/">
         </div>
         <div class="form-field">
-          <label for="storeEditLogo">Logo image path (optional — leave blank to use a colored initial instead)</label>
+          <label for="storeEditLogo">Logo file (optional)</label>
           <input type="text" id="storeEditLogo" placeholder="/assets/logo-vertical-medium.png">
         </div>
         <div class="form-field">
-          <label for="storeEditColor">Color</label>
-          <input type="color" id="storeEditColor" style="width:100%;height:44px;padding:4px;background:var(--space-black);border:1px solid var(--hairline);border-radius:10px;">
+          <label for="storeEditColor">Colour (tap one, or type a code)</label>
+          <div id="storeColorSwatches" style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:10px;"></div>
+          <input type="text" id="storeEditColorHex" maxlength="7" placeholder="#2DE2D0" autocomplete="off">
+          <input type="color" id="storeEditColor" hidden>
         </div>
         <div class="form-field">
-          <label for="storeEditInitial">Initial letter (shown if no logo)</label>
+          <label for="storeEditInitial">Initial letter (filled in for you)</label>
           <input type="text" id="storeEditInitial" maxlength="2">
         </div>
         <div class="form-field">
@@ -409,13 +639,46 @@
       document.getElementById('storeEditInitial').value = s.initial || '';
       document.getElementById('storeEditStatus').value = s.status || 'coming-soon';
       document.getElementById('storeEditAgeRestricted').checked = !!s.ageRestricted;
+      var isNew = !s.id;
+      document.getElementById('storeEditUrl').dataset.auto = isNew ? '1' : '0';
+      document.getElementById('storeEditInitial').dataset.auto = isNew ? '1' : '0';
       document.getElementById('storeEditMsg').hidden = true;
       editModal.hidden = false;
+      editModal.dispatchEvent(new Event('colorsync'));
     }
 
     document.getElementById('addStoreBtn').addEventListener('click', function(){
       openEditModal({ id: '', name: '', sub: '', url: '', logo: '', color: '#999999', initial: '', status: 'coming-soon', ageRestricted: false, order: 99 });
     });
+    // Colour: tap a swatch or type a hex code (the native colour picker doesn't open on every phone).
+    (function(){
+      var cols = ['#2DE2D0','#6E9B5A','#4FA88A','#B8933F','#C97B3D','#FF7A66','#C4508F','#7A6BB0','#4A7FD6','#19E3FF'];
+      var box = document.getElementById('storeColorSwatches'), hex = document.getElementById('storeEditColorHex'), real = document.getElementById('storeEditColor');
+      function setColor(c){ c = c.toUpperCase(); real.value = /^#[0-9A-F]{6}$/.test(c) ? c : real.value; hex.value = c; mark(); }
+      function mark(){ Array.prototype.forEach.call(box.children, function(b){ b.style.outline = (b.dataset.c === real.value.toUpperCase()) ? '2px solid #fff' : 'none'; }); }
+      cols.forEach(function(c){
+        var b = document.createElement('button'); b.type = 'button'; b.dataset.c = c; b.setAttribute('aria-label', 'Colour ' + c);
+        b.style.cssText = 'width:36px;height:36px;border-radius:50%;border:1px solid rgba(255,255,255,.25);cursor:pointer;background:' + c + ';outline-offset:2px;';
+        b.addEventListener('click', function(){ setColor(c); });
+        box.appendChild(b);
+      });
+      hex.addEventListener('input', function(){ var v = hex.value.trim(); if(v && v.charAt(0) !== '#'){ v = '#' + v; hex.value = v; } if(/^#[0-9a-fA-F]{6}$/.test(v)){ real.value = v.toUpperCase(); mark(); } });
+      // keep in step when the editor opens with an existing colour
+      new MutationObserver(function(){}).observe(real, {attributes:true});
+      document.getElementById('storeEditModal').addEventListener('colorsync', function(){ hex.value = real.value.toUpperCase(); mark(); });
+    })();
+    // Make onboarding easy: fill the address and initial from the name until the owner edits them.
+    (function(){
+      var nameF = document.getElementById('storeEditName'), urlF = document.getElementById('storeEditUrl'), iniF = document.getElementById('storeEditInitial');
+      function slug(n){ return n.toLowerCase().replace(/[^a-z0-9]+/g, ''); }
+      nameF.addEventListener('input', function(){
+        var n = nameF.value.trim();
+        if(urlF.dataset.auto !== '0'){ urlF.value = n ? '/' + slug(n) + '/' : ''; }
+        if(iniF.dataset.auto !== '0'){ iniF.value = n ? n.charAt(0).toUpperCase() : ''; }
+      });
+      urlF.addEventListener('input', function(){ urlF.dataset.auto = '0'; });
+      iniF.addEventListener('input', function(){ iniF.dataset.auto = '0'; });
+    })();
     document.getElementById('storeEditClose').addEventListener('click', function(){ editModal.hidden = true; });
     document.getElementById('storeEditDelete').addEventListener('click', function(){
       var id = document.getElementById('storeEditId').value;
@@ -443,7 +706,7 @@
         id: id,
         name: name,
         sub: document.getElementById('storeEditSub').value,
-        url: document.getElementById('storeEditUrl').value,
+        url: document.getElementById('storeEditUrl').value || ('/' + name.toLowerCase().replace(/[^a-z0-9]+/g, '') + '/'),
         logo: document.getElementById('storeEditLogo').value,
         color: document.getElementById('storeEditColor').value,
         initial: document.getElementById('storeEditInitial').value || name.charAt(0).toUpperCase(),
@@ -476,6 +739,711 @@
     document.getElementById('pinSubmit').addEventListener('click', function(){
       setTimeout(loadStores, 50); // small delay so this runs after the existing pin-submit handler shows adminApp
     });
+  })();
+
+  // ===================== Store details (location & contact) =====================
+  (function(){
+    function pin(){ return document.getElementById('adminPin').value.trim(); }
+
+    function populateStoreSelect(selectEl){
+      fetch(APPS_SCRIPT_URL + '?action=getStores')
+        .then(function(res){ return res.json(); })
+        .then(function(data){
+          selectEl.innerHTML = '';
+          (data.stores || []).forEach(function(s){
+            var opt = document.createElement('option');
+            opt.value = s.id;
+            opt.textContent = s.name;
+            selectEl.appendChild(opt);
+          });
+          selectEl.dispatchEvent(new Event('change'));
+        })
+        .catch(function(){
+          selectEl.innerHTML = '<option value="">Could not load stores</option>';
+        });
+    }
+
+    function loadStoreDetails(storeId){
+      if(!storeId) return;
+      ['detailsAddress','detailsMapLink','detailsWhatsapp','detailsInstagram','detailsEmail','detailsPhone','detailsBookingLink'].forEach(function(id){
+        document.getElementById(id).value = '';
+        document.getElementById(id).placeholder = 'Loading current details…';
+      });
+      fetch(APPS_SCRIPT_URL + '?action=getStoreSettings&storeId=' + encodeURIComponent(storeId))
+        .then(function(res){ return res.json(); })
+        .then(function(data){
+          var s = data.settings || {};
+          document.getElementById('detailsAddress').value = s.address || '';
+          document.getElementById('detailsMapLink').value = s.mapLink || '';
+          document.getElementById('detailsWhatsapp').value = s.whatsapp || '';
+          document.getElementById('detailsInstagram').value = s.instagram || '';
+          document.getElementById('detailsEmail').value = s.email || '';
+          document.getElementById('detailsPhone').value = s.phone || '';
+          document.getElementById('detailsBookingLink').value = s.bookingLink || '';
+          document.getElementById('detailsShopEnabled').checked = s.shopEnabled === 'TRUE';
+          document.getElementById('detailsGalleryEnabled').checked = s.galleryEnabled === 'TRUE';
+          document.getElementById('detailsEventsEnabled').checked = s.eventsEnabled === 'TRUE';
+          document.getElementById('detailsReviewsEnabled').checked = s.reviewsEnabled === 'TRUE';
+          document.getElementById('detailsContactEnabled').checked = s.contactEnabled === 'TRUE';
+          ['detailsAddress','detailsMapLink','detailsWhatsapp','detailsInstagram','detailsEmail','detailsPhone','detailsBookingLink'].forEach(function(id){
+            document.getElementById(id).placeholder = '';
+          });
+        });
+    }
+
+    var detailsSelect = document.getElementById('detailsStoreSelect');
+    detailsSelect.addEventListener('change', function(){
+      loadStoreDetails(this.value);
+    });
+
+    document.getElementById('storeDetailsForm').addEventListener('submit', function(ev){
+      ev.preventDefault();
+      var msg = document.getElementById('storeDetailsMsg');
+      var btn = document.getElementById('storeDetailsSubmit');
+
+      var storeName = detailsSelect.options[detailsSelect.selectedIndex]
+        ? detailsSelect.options[detailsSelect.selectedIndex].textContent
+        : detailsSelect.value;
+
+      var payload = {
+        action: 'saveStoreSettings',
+        pin: pin(),
+        storeId: detailsSelect.value,
+        address: document.getElementById('detailsAddress').value,
+        mapLink: document.getElementById('detailsMapLink').value,
+        whatsapp: document.getElementById('detailsWhatsapp').value,
+        instagram: document.getElementById('detailsInstagram').value,
+        email: document.getElementById('detailsEmail').value,
+        phone: document.getElementById('detailsPhone').value,
+        bookingLink: document.getElementById('detailsBookingLink').value,
+        shopEnabled: document.getElementById('detailsShopEnabled').checked,
+        galleryEnabled: document.getElementById('detailsGalleryEnabled').checked,
+        eventsEnabled: document.getElementById('detailsEventsEnabled').checked,
+        reviewsEnabled: document.getElementById('detailsReviewsEnabled').checked,
+        contactEnabled: document.getElementById('detailsContactEnabled').checked
+      };
+
+      var confirmText = 'Save these details for ' + storeName + '?\n\n' +
+        'Address: ' + (payload.address || '(blank)') + '\n' +
+        'Map link: ' + (payload.mapLink || '(blank)') + '\n' +
+        'WhatsApp: ' + (payload.whatsapp || '(blank)') + '\n' +
+        'Instagram: ' + (payload.instagram || '(blank)') + '\n' +
+        'Email: ' + (payload.email || '(blank)') + '\n' +
+        'Phone: ' + (payload.phone || '(blank)') + '\n' +
+        'Booking link: ' + (payload.bookingLink || '(blank)') + '\n' +
+        'Sections on: ' + (['shopEnabled','galleryEnabled','eventsEnabled','reviewsEnabled','contactEnabled']
+          .filter(function(k){ return payload[k]; })
+          .map(function(k){ return k.replace('Enabled',''); })
+          .join(', ') || '(none)') + '\n\n' +
+        'Double check these are correct before saving.';
+      if(!confirm(confirmText)) return;
+
+      msg.hidden = true;
+      btn.disabled = true;
+      btn.textContent = 'Saving…';
+
+      fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload)
+      })
+        .then(function(res){ return res.json(); })
+        .then(function(data){
+          if(data.success){
+            msg.hidden = false;
+            msg.style.color = 'var(--bio-green)';
+            msg.textContent = 'Saved.';
+          } else {
+            throw new Error(data.error || 'Failed to save');
+          }
+        })
+        .catch(function(err){
+          msg.hidden = false;
+          msg.style.color = 'var(--plasma-pink)';
+          msg.textContent = err.message === 'Invalid admin PIN' ? 'Wrong PIN.' : "Couldn't save — try again.";
+        })
+        .finally(function(){
+          btn.disabled = false;
+          btn.textContent = 'Save details';
+        });
+    });
+
+    document.getElementById('pinSubmit').addEventListener('click', function(){
+      setTimeout(function(){ populateStoreSelect(detailsSelect); }, 50);
+    });
+  })();
+
+  // ===================== Manage products =====================
+  (function(){
+    function pin(){ return document.getElementById('adminPin').value.trim(); }
+
+    var productsSelect = document.getElementById('productsStoreSelect');
+    var productListEl = document.getElementById('productList');
+    var modal = document.getElementById('productEditModal');
+    var uploadedPhotoUrl = '';
+
+    function populateStoreSelect(){
+      fetch(APPS_SCRIPT_URL + '?action=getStores')
+        .then(function(res){ return res.json(); })
+        .then(function(data){
+          productsSelect.innerHTML = '';
+          (data.stores || []).forEach(function(s){
+            var opt = document.createElement('option');
+            opt.value = s.id;
+            opt.textContent = s.name;
+            productsSelect.appendChild(opt);
+          });
+          loadProducts(productsSelect.value);
+        })
+        .catch(function(){
+          productsSelect.innerHTML = '<option value="">Could not load stores</option>';
+        });
+    }
+
+    var knownCategories = [];
+
+    function updateCategoryDropdown(selectedValue){
+      var select = document.getElementById('productEditCategory');
+      select.innerHTML = '<option value="">— choose a category —</option>';
+      knownCategories.forEach(function(cat){
+        var opt = document.createElement('option');
+        opt.value = cat;
+        opt.textContent = cat;
+        select.appendChild(opt);
+      });
+      var newOpt = document.createElement('option');
+      newOpt.value = '__new__';
+      newOpt.textContent = '+ Add new category…';
+      select.appendChild(newOpt);
+
+      var newCategoryField = document.getElementById('productEditCategoryNew');
+      if(selectedValue && knownCategories.indexOf(selectedValue) === -1){
+        // Editing a product whose category isn't in the known list yet
+        // (e.g. it was just typed as new elsewhere) — fall back to the
+        // new-category field so the real value isn't lost.
+        select.value = '__new__';
+        newCategoryField.value = selectedValue;
+        newCategoryField.hidden = false;
+      } else {
+        select.value = selectedValue || '';
+        newCategoryField.hidden = true;
+        newCategoryField.value = '';
+      }
+    }
+
+    document.getElementById('productEditCategory').addEventListener('change', function(){
+      var newCategoryField = document.getElementById('productEditCategoryNew');
+      newCategoryField.hidden = this.value !== '__new__';
+      if(this.value === '__new__') newCategoryField.focus();
+    });
+
+    function loadProducts(storeId){
+      if(!storeId){ productListEl.innerHTML = ''; return; }
+      productListEl.innerHTML = 'Loading…';
+      fetch(APPS_SCRIPT_URL + '?action=getProducts&storeId=' + encodeURIComponent(storeId))
+        .then(function(res){ return res.json(); })
+        .then(function(data){
+          var products = data.products || [];
+          var cats = [];
+          products.forEach(function(p){
+            if(p.category && cats.indexOf(p.category) === -1) cats.push(p.category);
+          });
+          knownCategories = cats.sort();
+          renderProductList(products);
+        })
+        .catch(function(){
+          productListEl.innerHTML = '<p style="color:var(--plasma-pink);">Could not load products.</p>';
+        });
+    }
+
+    function renderProductList(products){
+      productListEl.innerHTML = '';
+      if(products.length === 0){
+        productListEl.innerHTML = '<p style="color:var(--dust);font-size:0.9rem;">No products yet for this store.</p>';
+        return;
+      }
+      products.forEach(function(p){
+        var row = document.createElement('div');
+        row.style.cssText = 'display:flex;align-items:center;gap:14px;border:1px solid var(--hairline);border-radius:12px;padding:12px 14px;background:var(--nebula-violet);cursor:pointer;';
+        var thumb = p.photoUrl
+          ? '<img src="' + p.photoUrl + '" style="width:40px;height:40px;border-radius:8px;object-fit:cover;flex-shrink:0;">'
+          : '<div style="width:40px;height:40px;border-radius:8px;background:var(--space-black);flex-shrink:0;"></div>';
+        row.innerHTML = thumb +
+          '<div style="flex:1;min-width:0;">' +
+            '<div style="font-weight:600;color:var(--starlight);">' + p.name + '</div>' +
+            '<div style="font-size:0.8rem;color:var(--dust);">' + (p.category || '') + ' · ' + (p.price || '') + (p.status === 'hidden' ? ' · hidden' : '') + '</div>' +
+          '</div>';
+        row.addEventListener('click', function(){ openProductModal(p); });
+        productListEl.appendChild(row);
+      });
+    }
+
+    function openProductModal(p){
+      document.getElementById('productEditId').value = p.id || '';
+      updateCategoryDropdown(p.category || '');
+      document.getElementById('productEditName').value = p.name || '';
+      document.getElementById('productEditVariant').value = p.variant || '';
+      document.getElementById('productEditPrice').value = p.price || '';
+      document.getElementById('productEditStatus').value = p.status || 'active';
+      document.getElementById('productEditPhotoUrl').value = p.photoUrl || '';
+      uploadedPhotoUrl = p.photoUrl || '';
+      document.getElementById('productEditPhotoFile').value = '';
+      var previewWrap = document.getElementById('productPhotoPreviewWrap');
+      if(p.photoUrl){
+        document.getElementById('productPhotoPreview').src = p.photoUrl;
+        previewWrap.hidden = false;
+      } else {
+        previewWrap.hidden = true;
+      }
+      document.getElementById('productUploadStatus').textContent = '';
+      document.getElementById('productEditMsg').hidden = true;
+      document.getElementById('productEditDelete').hidden = !p.id;
+      modal.hidden = false;
+    }
+
+    document.getElementById('addProductBtn').addEventListener('click', function(){
+      openProductModal({ id: '', category: '', name: '', variant: '', price: '', status: 'active', photoUrl: '' });
+    });
+    document.getElementById('productEditClose').addEventListener('click', function(){ modal.hidden = true; });
+
+    document.getElementById('productEditPhotoFile').addEventListener('change', function(ev){
+      var file = ev.target.files[0];
+      if(!file) return;
+      var statusEl = document.getElementById('productUploadStatus');
+      statusEl.textContent = 'Uploading…';
+
+      var reader = new FileReader();
+      reader.onload = function(){
+        var base64 = reader.result.split(',')[1];
+        fetch(APPS_SCRIPT_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({
+            action: 'uploadImage',
+            pin: pin(),
+            base64: base64,
+            filename: file.name,
+            contentType: file.type
+          })
+        })
+          .then(function(res){ return res.json(); })
+          .then(function(data){
+            if(data.success){
+              uploadedPhotoUrl = data.url;
+              document.getElementById('productEditPhotoUrl').value = data.url;
+              document.getElementById('productPhotoPreview').src = data.url;
+              document.getElementById('productPhotoPreviewWrap').hidden = false;
+              statusEl.textContent = 'Uploaded.';
+            } else {
+              statusEl.textContent = data.error || 'Upload failed.';
+            }
+          })
+          .catch(function(){
+            statusEl.textContent = 'Upload failed — check your connection.';
+          });
+      };
+      reader.readAsDataURL(file);
+    });
+
+    document.getElementById('productEditDelete').addEventListener('click', function(){
+      var id = document.getElementById('productEditId').value;
+      if(!id){ modal.hidden = true; return; }
+      if(!confirm('Delete this product? This cannot be undone.')) return;
+      fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ action: 'deleteProduct', pin: pin(), id: id })
+      })
+        .then(function(res){ return res.json(); })
+        .then(function(){ modal.hidden = true; loadProducts(productsSelect.value); });
+    });
+
+    document.getElementById('productEditForm').addEventListener('submit', function(ev){
+      ev.preventDefault();
+      var msg = document.getElementById('productEditMsg');
+
+      var finalCategory = document.getElementById('productEditCategory').value === '__new__'
+        ? document.getElementById('productEditCategoryNew').value.trim()
+        : document.getElementById('productEditCategory').value;
+
+      if(!finalCategory){
+        msg.hidden = false;
+        msg.textContent = 'Please choose or type a category.';
+        return;
+      }
+
+      var payload = {
+        action: 'saveProduct',
+        pin: pin(),
+        id: document.getElementById('productEditId').value,
+        storeId: productsSelect.value,
+        category: finalCategory,
+        name: document.getElementById('productEditName').value,
+        variant: document.getElementById('productEditVariant').value,
+        price: document.getElementById('productEditPrice').value,
+        photoUrl: uploadedPhotoUrl,
+        status: document.getElementById('productEditStatus').value
+      };
+
+      fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload)
+      })
+        .then(function(res){ return res.json(); })
+        .then(function(data){
+          if(data.success){
+            modal.hidden = true;
+            loadProducts(productsSelect.value);
+          } else {
+            msg.hidden = false;
+            msg.textContent = data.error === 'Invalid admin PIN' ? 'Wrong PIN.' : "Couldn't save — try again.";
+          }
+        })
+        .catch(function(){
+          msg.hidden = false;
+          msg.textContent = "Couldn't save — check your connection.";
+        });
+    });
+
+    productsSelect.addEventListener('change', function(){
+      loadProducts(this.value);
+    });
+
+    document.getElementById('pinSubmit').addEventListener('click', function(){
+      setTimeout(populateStoreSelect, 50);
+    });
+  })();
+
+  // ===================== Manage gallery =====================
+  (function(){
+    function pin(){ return document.getElementById('adminPin').value.trim(); }
+    var select = document.getElementById('galleryStoreSelect');
+    var listEl = document.getElementById('galleryList');
+    var modal = document.getElementById('galleryEditModal');
+    var uploadedUrl = '';
+
+    function populateStores(){
+      fetch(APPS_SCRIPT_URL + '?action=getStores')
+        .then(function(r){ return r.json(); })
+        .then(function(data){
+          select.innerHTML = '';
+          (data.stores || []).forEach(function(s){
+            var opt = document.createElement('option'); opt.value = s.id; opt.textContent = s.name;
+            select.appendChild(opt);
+          });
+          loadList(select.value);
+        })
+        .catch(function(){ select.innerHTML = '<option value="">Could not load stores</option>'; });
+    }
+
+    function loadList(storeId){
+      if(!storeId){ listEl.innerHTML = ''; return; }
+      listEl.innerHTML = 'Loading…';
+      fetch(APPS_SCRIPT_URL + '?action=getGallery&storeId=' + encodeURIComponent(storeId))
+        .then(function(r){ return r.json(); })
+        .then(function(data){ render(data.items || []); })
+        .catch(function(){ listEl.innerHTML = '<p style="color:var(--plasma-pink);">Could not load.</p>'; });
+    }
+
+    function render(items){
+      listEl.innerHTML = '';
+      if(!items.length){ listEl.innerHTML = '<p style="color:var(--dust);font-size:0.9rem;">No photos yet for this store.</p>'; return; }
+      items.forEach(function(item){
+        var row = document.createElement('div');
+        row.style.cssText = 'display:flex;align-items:center;gap:14px;border:1px solid var(--hairline);border-radius:12px;padding:12px 14px;background:var(--nebula-violet);cursor:pointer;';
+        row.innerHTML = '<img src="' + item.photoUrl + '" style="width:40px;height:40px;border-radius:8px;object-fit:cover;flex-shrink:0;">' +
+          '<div style="flex:1;min-width:0;color:var(--starlight);">' + (item.caption || '(no caption)') + '</div>';
+        row.addEventListener('click', function(){ openModal(item); });
+        listEl.appendChild(row);
+      });
+    }
+
+    function openModal(item){
+      document.getElementById('galleryEditId').value = item.id || '';
+      document.getElementById('galleryEditCaption').value = item.caption || '';
+      document.getElementById('galleryEditPhotoUrl').value = item.photoUrl || '';
+      uploadedUrl = item.photoUrl || '';
+      document.getElementById('galleryEditPhotoFile').value = '';
+      var wrap = document.getElementById('galleryPhotoPreviewWrap');
+      if(item.photoUrl){ document.getElementById('galleryPhotoPreview').src = item.photoUrl; wrap.hidden = false; }
+      else { wrap.hidden = true; }
+      document.getElementById('galleryUploadStatus').textContent = '';
+      document.getElementById('galleryEditMsg').hidden = true;
+      document.getElementById('galleryEditDelete').hidden = !item.id;
+      modal.hidden = false;
+    }
+
+    document.getElementById('addGalleryBtn').addEventListener('click', function(){ openModal({}); });
+    document.getElementById('galleryEditClose').addEventListener('click', function(){ modal.hidden = true; });
+
+    document.getElementById('galleryEditPhotoFile').addEventListener('change', function(ev){
+      var file = ev.target.files[0];
+      if(!file) return;
+      var statusEl = document.getElementById('galleryUploadStatus');
+      statusEl.textContent = 'Uploading…';
+      var reader = new FileReader();
+      reader.onload = function(){
+        var base64 = reader.result.split(',')[1];
+        fetch(APPS_SCRIPT_URL, {
+          method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({ action: 'uploadImage', pin: pin(), base64: base64, filename: file.name, contentType: file.type })
+        })
+          .then(function(r){ return r.json(); })
+          .then(function(data){
+            if(data.success){
+              uploadedUrl = data.url;
+              document.getElementById('galleryEditPhotoUrl').value = data.url;
+              document.getElementById('galleryPhotoPreview').src = data.url;
+              document.getElementById('galleryPhotoPreviewWrap').hidden = false;
+              statusEl.textContent = 'Uploaded.';
+            } else { statusEl.textContent = data.error || 'Upload failed.'; }
+          })
+          .catch(function(){ statusEl.textContent = 'Upload failed — check your connection.'; });
+      };
+      reader.readAsDataURL(file);
+    });
+
+    document.getElementById('galleryEditDelete').addEventListener('click', function(){
+      var id = document.getElementById('galleryEditId').value;
+      if(!id){ modal.hidden = true; return; }
+      if(!confirm('Delete this photo?')) return;
+      fetch(APPS_SCRIPT_URL, {
+        method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ action: 'deleteGalleryItem', pin: pin(), id: id })
+      }).then(function(r){ return r.json(); }).then(function(){ modal.hidden = true; loadList(select.value); });
+    });
+
+    document.getElementById('galleryEditForm').addEventListener('submit', function(ev){
+      ev.preventDefault();
+      var msg = document.getElementById('galleryEditMsg');
+      if(!uploadedUrl){ msg.hidden = false; msg.textContent = 'Please upload a photo first.'; return; }
+      fetch(APPS_SCRIPT_URL, {
+        method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({
+          action: 'saveGalleryItem', pin: pin(),
+          id: document.getElementById('galleryEditId').value,
+          storeId: select.value, photoUrl: uploadedUrl,
+          caption: document.getElementById('galleryEditCaption').value
+        })
+      })
+        .then(function(r){ return r.json(); })
+        .then(function(data){
+          if(data.success){ modal.hidden = true; loadList(select.value); }
+          else { msg.hidden = false; msg.textContent = data.error === 'Invalid admin PIN' ? 'Wrong PIN.' : "Couldn't save."; }
+        })
+        .catch(function(){ msg.hidden = false; msg.textContent = "Couldn't save — check your connection."; });
+    });
+
+    select.addEventListener('change', function(){ loadList(this.value); });
+    document.getElementById('pinSubmit').addEventListener('click', function(){ setTimeout(populateStores, 50); });
+  })();
+
+  // ===================== Manage events =====================
+  (function(){
+    function pin(){ return document.getElementById('adminPin').value.trim(); }
+    var select = document.getElementById('eventsStoreSelect');
+    var listEl = document.getElementById('eventsAdminList');
+    var modal = document.getElementById('eventEditModal');
+
+    function populateStores(){
+      fetch(APPS_SCRIPT_URL + '?action=getStores')
+        .then(function(r){ return r.json(); })
+        .then(function(data){
+          select.innerHTML = '';
+          (data.stores || []).forEach(function(s){
+            var opt = document.createElement('option'); opt.value = s.id; opt.textContent = s.name;
+            select.appendChild(opt);
+          });
+          loadList(select.value);
+        })
+        .catch(function(){ select.innerHTML = '<option value="">Could not load stores</option>'; });
+    }
+
+    function loadList(storeId){
+      if(!storeId){ listEl.innerHTML = ''; return; }
+      listEl.innerHTML = 'Loading…';
+      fetch(APPS_SCRIPT_URL + '?action=getEvents&storeId=' + encodeURIComponent(storeId))
+        .then(function(r){ return r.json(); })
+        .then(function(data){ render(data.items || []); })
+        .catch(function(){ listEl.innerHTML = '<p style="color:var(--plasma-pink);">Could not load.</p>'; });
+    }
+
+    function render(items){
+      listEl.innerHTML = '';
+      if(!items.length){ listEl.innerHTML = '<p style="color:var(--dust);font-size:0.9rem;">No events yet for this store.</p>'; return; }
+      items.forEach(function(item){
+        var row = document.createElement('div');
+        row.style.cssText = 'border:1px solid var(--hairline);border-radius:12px;padding:12px 14px;background:var(--nebula-violet);cursor:pointer;';
+        row.innerHTML = '<div style="font-weight:600;color:var(--starlight);">' + item.title + '</div>' +
+          '<div style="font-size:0.8rem;color:var(--dust);">' + (item.date || '') + (item.time ? ' · ' + item.time : '') + '</div>';
+        row.addEventListener('click', function(){ openModal(item); });
+        listEl.appendChild(row);
+      });
+    }
+
+    function openModal(item){
+      document.getElementById('eventEditId').value = item.id || '';
+      document.getElementById('eventEditTitle').value = item.title || '';
+      document.getElementById('eventEditDate').value = item.date || '';
+      document.getElementById('eventEditTime').value = item.time || '';
+      document.getElementById('eventEditDescription').value = item.description || '';
+      document.getElementById('eventEditMsg').hidden = true;
+      document.getElementById('eventEditDelete').hidden = !item.id;
+      modal.hidden = false;
+    }
+
+    document.getElementById('addEventBtn').addEventListener('click', function(){ openModal({}); });
+    document.getElementById('eventEditClose').addEventListener('click', function(){ modal.hidden = true; });
+
+    document.getElementById('eventEditDelete').addEventListener('click', function(){
+      var id = document.getElementById('eventEditId').value;
+      if(!id){ modal.hidden = true; return; }
+      if(!confirm('Delete this event?')) return;
+      fetch(APPS_SCRIPT_URL, {
+        method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ action: 'deleteEvent', pin: pin(), id: id })
+      }).then(function(r){ return r.json(); }).then(function(){ modal.hidden = true; loadList(select.value); });
+    });
+
+    document.getElementById('eventEditForm').addEventListener('submit', function(ev){
+      ev.preventDefault();
+      var msg = document.getElementById('eventEditMsg');
+      fetch(APPS_SCRIPT_URL, {
+        method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({
+          action: 'saveEvent', pin: pin(),
+          id: document.getElementById('eventEditId').value,
+          storeId: select.value,
+          title: document.getElementById('eventEditTitle').value,
+          date: document.getElementById('eventEditDate').value,
+          time: document.getElementById('eventEditTime').value,
+          description: document.getElementById('eventEditDescription').value
+        })
+      })
+        .then(function(r){ return r.json(); })
+        .then(function(data){
+          if(data.success){ modal.hidden = true; loadList(select.value); }
+          else { msg.hidden = false; msg.textContent = data.error === 'Invalid admin PIN' ? 'Wrong PIN.' : "Couldn't save."; }
+        })
+        .catch(function(){ msg.hidden = false; msg.textContent = "Couldn't save — check your connection."; });
+    });
+
+    select.addEventListener('change', function(){ loadList(this.value); });
+    document.getElementById('pinSubmit').addEventListener('click', function(){ setTimeout(populateStores, 50); });
+  })();
+
+  // ===================== Manage reviews =====================
+  (function(){
+    function pin(){ return document.getElementById('adminPin').value.trim(); }
+    var select = document.getElementById('reviewsStoreSelect');
+    var listEl = document.getElementById('reviewsAdminList');
+    var modal = document.getElementById('reviewEditModal');
+
+    function populateStores(){
+      fetch(APPS_SCRIPT_URL + '?action=getStores')
+        .then(function(r){ return r.json(); })
+        .then(function(data){
+          select.innerHTML = '';
+          (data.stores || []).forEach(function(s){
+            var opt = document.createElement('option'); opt.value = s.id; opt.textContent = s.name;
+            select.appendChild(opt);
+          });
+          loadList(select.value);
+        })
+        .catch(function(){ select.innerHTML = '<option value="">Could not load stores</option>'; });
+    }
+
+    function loadList(storeId){
+      if(!storeId){ listEl.innerHTML = ''; return; }
+      listEl.innerHTML = 'Loading…';
+      fetch(APPS_SCRIPT_URL + '?action=getReviews&storeId=' + encodeURIComponent(storeId))
+        .then(function(r){ return r.json(); })
+        .then(function(data){ render(data.items || []); })
+        .catch(function(){ listEl.innerHTML = '<p style="color:var(--plasma-pink);">Could not load.</p>'; });
+    }
+
+    function render(items){
+      listEl.innerHTML = '';
+      if(!items.length){ listEl.innerHTML = '<p style="color:var(--dust);font-size:0.9rem;">No reviews yet for this store.</p>'; return; }
+      items.forEach(function(item){
+        var row = document.createElement('div');
+        row.style.cssText = 'border:1px solid var(--hairline);border-radius:12px;padding:12px 14px;background:var(--nebula-violet);cursor:pointer;';
+        row.innerHTML = '<div style="font-weight:600;color:var(--starlight);">' + item.name + ' — ' + '★'.repeat(item.rating || 0) + '</div>' +
+          '<div style="font-size:0.85rem;color:var(--dust);">"' + item.text + '"</div>';
+        row.addEventListener('click', function(){ openModal(item); });
+        listEl.appendChild(row);
+      });
+    }
+
+    function openModal(item){
+      document.getElementById('reviewEditId').value = item.id || '';
+      document.getElementById('reviewEditName').value = item.name || '';
+      document.getElementById('reviewEditRating').value = item.rating || '5';
+      document.getElementById('reviewEditText').value = item.text || '';
+      document.getElementById('reviewEditMsg').hidden = true;
+      document.getElementById('reviewEditDelete').hidden = !item.id;
+      modal.hidden = false;
+    }
+
+    document.getElementById('addReviewBtn').addEventListener('click', function(){ openModal({}); });
+    document.getElementById('reviewEditClose').addEventListener('click', function(){ modal.hidden = true; });
+
+    document.getElementById('reviewEditDelete').addEventListener('click', function(){
+      var id = document.getElementById('reviewEditId').value;
+      if(!id){ modal.hidden = true; return; }
+      if(!confirm('Delete this review?')) return;
+      fetch(APPS_SCRIPT_URL, {
+        method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ action: 'deleteReview', pin: pin(), id: id })
+      }).then(function(r){ return r.json(); }).then(function(){ modal.hidden = true; loadList(select.value); });
+    });
+
+    document.getElementById('reviewEditForm').addEventListener('submit', function(ev){
+      ev.preventDefault();
+      var msg = document.getElementById('reviewEditMsg');
+      fetch(APPS_SCRIPT_URL, {
+        method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({
+          action: 'saveReview', pin: pin(),
+          id: document.getElementById('reviewEditId').value,
+          storeId: select.value,
+          name: document.getElementById('reviewEditName').value,
+          rating: document.getElementById('reviewEditRating').value,
+          text: document.getElementById('reviewEditText').value
+        })
+      })
+        .then(function(r){ return r.json(); })
+        .then(function(data){
+          if(data.success){ modal.hidden = true; loadList(select.value); }
+          else { msg.hidden = false; msg.textContent = data.error === 'Invalid admin PIN' ? 'Wrong PIN.' : "Couldn't save."; }
+        })
+        .catch(function(){ msg.hidden = false; msg.textContent = "Couldn't save — check your connection."; });
+    });
+
+    select.addEventListener('change', function(){ loadList(this.value); });
+    document.getElementById('pinSubmit').addEventListener('click', function(){ setTimeout(populateStores, 50); });
+  })();
+
+  // ===================== Modal backdrops =====================
+  // Keeps each backdrop's visibility in sync with its modal automatically,
+  // regardless of which of the several places in the code above opens or
+  // closes that modal — avoids having to update every toggle point by hand.
+  (function(){
+    function linkBackdrop(modalId, backdropId){
+      var modal = document.getElementById(modalId);
+      var backdrop = document.getElementById(backdropId);
+      if(!modal || !backdrop) return;
+      var sync = function(){ backdrop.hidden = modal.hidden; };
+      sync();
+      new MutationObserver(sync).observe(modal, { attributes: true, attributeFilter: ['hidden'] });
+      backdrop.addEventListener('click', function(){ modal.hidden = true; });
+    }
+    linkBackdrop('productEditModal', 'productEditBackdrop');
+    linkBackdrop('storeEditModal', 'storeEditBackdrop');
+    linkBackdrop('galleryEditModal', 'galleryEditBackdrop');
+    linkBackdrop('eventEditModal', 'eventEditBackdrop');
+    linkBackdrop('reviewEditModal', 'reviewEditBackdrop');
   })();
 </script>
 </body>
