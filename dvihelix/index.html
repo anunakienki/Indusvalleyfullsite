@@ -1,0 +1,475 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DviHelix — Get your TalkTwin — Indus Valley</title>
+<meta name="description" content="DviHelix creates TalkTwin: a custom talking presenter for your brand. Ads for TikTok, Instagram and WhatsApp without actors, crews or retakes. Part of the Indus Valley digital mall.">
+<meta property="og:title" content="Get your TalkTwin, by DviHelix">
+<meta property="og:description" content="Your brand's own talking presenter. No actors, no film crew, no retakes.">
+<meta property="og:image" content="/dvihelix/assets/dvihelix-og.png">
+<meta name="theme-color" content="#0B1B33">
+<link rel="icon" href="assets/dvihelix-icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;500;600;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+<style>
+  /* ---------- DviHelix store skin (sits on the shared mall shell) ---------- */
+  :root{
+    --dh-navy:#0B1B33;
+    --dh-navy-2:#10264a;
+    --dh-teal:#2DE2D0;
+    --dh-teal-dim:rgba(45,226,208,0.16);
+    --dh-coral:#FF7A66;
+    --dh-text:#E8F1F6;
+    --dh-mute:#9fb3c8;
+    --dh-line:rgba(232,241,246,0.12);
+  }
+  body{background:radial-gradient(ellipse at 50% -10%, #173563 0%, var(--dh-navy) 55%) fixed, var(--dh-navy);color:var(--dh-text);}
+  #dhApp{--store-accent:var(--dh-teal);}
+  .sp-header{background:rgba(11,27,51,0.88);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--dh-line);}
+  .dh-brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--dh-text);font-family:'Orbitron',sans-serif;font-weight:900;font-size:1.15rem;letter-spacing:.02em;}
+  .dh-brand b{color:var(--dh-teal);font-weight:900;}
+  .dh-brand svg{width:26px;height:26px;flex:none;}
+  .header-links > a:not(.back-link):hover{color:var(--dh-teal);}
+
+  .dh-wrap{max-width:1120px;margin:0 auto;padding:0 20px;}
+  .dh-eyebrow{font-family:var(--mono);font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--dh-teal);margin:0 0 12px;}
+  .dh-h2{font-family:'Inter',sans-serif;font-weight:800;font-size:clamp(1.7rem,4.2vw,2.6rem);line-height:1.1;margin:0 0 14px;color:var(--dh-text);letter-spacing:-.01em;}
+  .dh-lead{color:var(--dh-mute);font-size:1.05rem;line-height:1.6;max-width:60ch;margin:0;}
+  section.dh-sec{padding:72px 0;border-top:1px solid var(--dh-line);}
+
+  /* buttons */
+  .dh-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 22px;border-radius:999px;font-weight:700;font-size:1rem;text-decoration:none;border:1px solid transparent;cursor:pointer;transition:transform .15s, box-shadow .2s, background .2s;min-height:48px;}
+  .dh-btn:hover{transform:translateY(-1px);}
+  .dh-btn--coral{background:var(--dh-coral);color:#1a0d0a;box-shadow:0 8px 28px -8px rgba(255,122,102,.7);}
+  .dh-btn--ghost{border-color:rgba(45,226,208,.5);color:var(--dh-teal);background:transparent;}
+  .dh-btn--ghost:hover{background:var(--dh-teal-dim);}
+
+  /* hero */
+  .dh-hero{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center;padding:56px 20px 72px;}
+  .dh-hero h1{font-family:'Inter',sans-serif;font-weight:800;font-size:clamp(2.3rem,6.4vw,4.1rem);line-height:1.02;letter-spacing:-.02em;margin:0 0 18px;}
+  .dh-hero h1 .t{color:var(--dh-teal);text-shadow:0 0 28px rgba(45,226,208,.45);}
+  .dh-hero .dh-lead{font-size:1.12rem;margin-bottom:28px;}
+  .dh-cta-row{display:flex;flex-wrap:wrap;gap:12px;}
+  .dh-proof{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:26px;color:var(--dh-mute);font-size:.92rem;}
+  .dh-proof span::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--dh-teal);margin-right:8px;vertical-align:middle;box-shadow:0 0 8px var(--dh-teal);}
+
+  /* phone frame for 9:16 video */
+  .dh-phone{position:relative;width:min(330px,100%);margin:0 auto;aspect-ratio:9/16;border-radius:30px;padding:8px;background:linear-gradient(160deg,rgba(45,226,208,.55),rgba(255,122,102,.35));box-shadow:0 0 0 1px rgba(45,226,208,.25),0 30px 80px -20px rgba(45,226,208,.45);}
+  .dh-phone video,.dh-phone .dh-vph{width:100%;height:100%;border-radius:23px;object-fit:cover;background:#07111f;display:block;}
+  .dh-vph{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:var(--dh-mute);text-align:center;padding:24px;font-size:.92rem;}
+  .dh-vph svg{width:64px;height:64px;opacity:.9;}
+  .dh-sound{position:absolute;right:18px;bottom:18px;border:0;border-radius:999px;padding:9px 13px;font:600 .82rem 'Inter',sans-serif;background:rgba(11,27,51,.8);color:var(--dh-text);cursor:pointer;border:1px solid var(--dh-line);}
+
+  /* how it works */
+  .dh-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:36px;counter-reset:st;}
+  .dh-step{padding:22px;border:1px solid var(--dh-line);border-radius:18px;background:rgba(16,38,74,.55);}
+  .dh-step::before{counter-increment:st;content:"0" counter(st);font-family:var(--mono);color:var(--dh-teal);font-size:.85rem;}
+  .dh-step h3{margin:10px 0 6px;font-size:1.08rem;}
+  .dh-step p{margin:0;color:var(--dh-mute);font-size:.95rem;line-height:1.55;}
+
+  /* showcase */
+  .dh-reel{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:22px;margin-top:36px;}
+  .dh-reel figure{margin:0;}
+  .dh-reel .dh-phone{width:100%;border-radius:24px;padding:6px;}
+  .dh-reel .dh-phone video,.dh-reel .dh-vph{border-radius:19px;}
+  .dh-reel figcaption{margin-top:12px;}
+  .dh-reel figcaption b{display:block;font-size:1rem;}
+  .dh-reel figcaption span{color:var(--dh-mute);font-size:.9rem;}
+
+  /* packages */
+  .dh-plans{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:36px;}
+  .dh-plan{position:relative;padding:26px;border-radius:20px;border:1px solid var(--dh-line);background:rgba(16,38,74,.55);display:flex;flex-direction:column;}
+  .dh-plan--hot{border-color:rgba(45,226,208,.6);box-shadow:0 0 0 1px rgba(45,226,208,.2),0 20px 60px -24px rgba(45,226,208,.55);}
+  .dh-badge{position:absolute;top:-12px;left:22px;background:var(--dh-coral);color:#1a0d0a;font:800 .72rem 'Inter',sans-serif;letter-spacing:.08em;text-transform:uppercase;padding:5px 10px;border-radius:999px;}
+  .dh-plan h3{margin:0 0 4px;font-size:1.2rem;}
+  .dh-plan .len{color:var(--dh-mute);font-size:.92rem;margin:0 0 18px;}
+  .dh-price{font-family:'Inter',sans-serif;font-weight:800;font-size:2.2rem;line-height:1;margin:0;}
+  .dh-price small{font-size:.95rem;font-weight:600;color:var(--dh-mute);}
+  .dh-was{color:var(--dh-mute);text-decoration:line-through;font-size:.92rem;margin:6px 0 18px;min-height:1.2em;}
+  .dh-plan ul{list-style:none;margin:0 0 22px;padding:0;color:var(--dh-text);font-size:.95rem;line-height:1.5;}
+  .dh-plan li{padding-left:24px;position:relative;margin:8px 0;}
+  .dh-plan li::before{content:"";position:absolute;left:2px;top:.55em;width:10px;height:6px;border-left:2px solid var(--dh-teal);border-bottom:2px solid var(--dh-teal);transform:rotate(-45deg);}
+  .dh-plan .dh-btn{margin-top:auto;}
+  .dh-monthly{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px;}
+  .dh-extras{margin-top:28px;display:flex;flex-wrap:wrap;gap:10px 26px;color:var(--dh-mute);font-size:.93rem;}
+  .dh-extras b{color:var(--dh-text);font-weight:600;}
+
+  /* uses */
+  .dh-uses{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px;}
+  .dh-uses span{padding:10px 16px;border-radius:999px;border:1px solid var(--dh-line);background:rgba(16,38,74,.55);font-size:.95rem;}
+
+  /* faq */
+  .dh-faq{margin-top:28px;display:grid;gap:12px;max-width:820px;}
+  .dh-faq details{border:1px solid var(--dh-line);border-radius:14px;background:rgba(16,38,74,.45);padding:16px 20px;}
+  .dh-faq summary{cursor:pointer;font-weight:600;list-style:none;}
+  .dh-faq summary::-webkit-details-marker{display:none;}
+  .dh-faq summary::after{content:"+";float:right;color:var(--dh-teal);font-weight:800;}
+  .dh-faq details[open] summary::after{content:"–";}
+  .dh-faq p{color:var(--dh-mute);margin:10px 0 0;line-height:1.6;}
+
+  /* contact */
+  .dh-contact{text-align:center;padding:84px 0 96px;border-top:1px solid var(--dh-line);}
+  .dh-contact .dh-lead{margin:0 auto 28px;}
+  .dh-contact .dh-cta-row{justify-content:center;}
+  .dh-handle{font-family:var(--mono);color:var(--dh-teal);margin-top:22px;}
+  .dh-form{max-width:640px;margin:8px auto 0;text-align:left;display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  .dh-field{display:flex;flex-direction:column;gap:6px;}
+  .dh-field--full{grid-column:1 / -1;}
+  .dh-field label{font-size:.9rem;font-weight:600;color:var(--dh-text);}
+  .dh-field label span{color:var(--dh-mute);font-weight:400;}
+  .dh-field input,.dh-field select,.dh-field textarea{width:100%;box-sizing:border-box;background:rgba(7,17,31,.75);border:1px solid var(--dh-line);border-radius:12px;padding:13px 14px;color:var(--dh-text);font:400 1rem 'Inter',sans-serif;min-height:48px;}
+  .dh-field textarea{min-height:120px;resize:vertical;}
+  .dh-field input:focus,.dh-field select:focus,.dh-field textarea:focus{outline:none;border-color:var(--dh-teal);box-shadow:0 0 0 3px var(--dh-teal-dim);}
+  .dh-field select option{background:var(--dh-navy);}
+  .dh-hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;}
+  .dh-form .dh-btn{grid-column:1 / -1;width:100%;}
+  .dh-form-msg{grid-column:1 / -1;margin:0;padding:14px 16px;border-radius:12px;font-size:.95rem;line-height:1.5;}
+  .dh-form-msg.ok{background:rgba(45,226,208,.12);border:1px solid rgba(45,226,208,.45);color:var(--dh-text);}
+  .dh-form-msg.err{background:rgba(255,122,102,.12);border:1px solid rgba(255,122,102,.5);color:var(--dh-text);}
+  @media (max-width:560px){ .dh-form{grid-template-columns:1fr;} }
+  .dh-foot{padding:26px 0 40px;color:var(--dh-mute);font-size:.85rem;text-align:center;border-top:1px solid var(--dh-line);}
+  .dh-foot a{color:var(--dh-mute);}
+
+  @media (max-width:900px){
+    .dh-hero{grid-template-columns:1fr;gap:36px;padding-top:28px;}
+    .dh-steps{grid-template-columns:1fr 1fr;}
+    .dh-plans{grid-template-columns:1fr;}
+    .dh-monthly{grid-template-columns:1fr;}
+  }
+  @media (max-width:520px){
+    .dh-steps{grid-template-columns:1fr;}
+    section.dh-sec{padding:56px 0;}
+    .header-links > a:not(.back-link){display:none;}
+    .dh-cta-row .dh-btn{width:100%;}
+  }
+</style>
+</head>
+<body>
+
+<div class="starfield" aria-hidden="true"></div>
+<div class="starfield starfield-mid" aria-hidden="true"></div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="helix" viewBox="0 0 32 32">
+    <path d="M9 3c0 7 14 9 14 13S9 22 9 29" fill="none" stroke="#2DE2D0" stroke-width="2.6" stroke-linecap="round"/>
+    <path d="M23 3c0 7-14 9-14 13s14 6 14 13" fill="none" stroke="#FF7A66" stroke-width="2.6" stroke-linecap="round"/>
+    <path d="M11.5 7.5h9M13 11.5h6M13 20.5h6M11.5 24.5h9" stroke="#E8F1F6" stroke-opacity=".55" stroke-width="1.6" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="play" viewBox="0 0 64 64">
+    <circle cx="32" cy="32" r="30" fill="none" stroke="#2DE2D0" stroke-width="2"/>
+    <path d="M26 21l18 11-18 11z" fill="#2DE2D0"/>
+  </symbol>
+</svg>
+
+<div id="dhApp">
+  <header class="sp-header">
+    <div class="wrap nav-row">
+      <a class="dh-brand" href="#top" aria-label="DviHelix home"><svg><use href="#helix"/></svg><span>Dvi<b>Helix</b></span></a>
+      <nav class="header-links">
+        <a href="#how">How it works</a>
+        <a href="#showcase">Showcase</a>
+        <a href="#packages">Packages</a>
+        <a href="#contact">Contact</a>
+        <a class="back-link" href="/">← Indus Valley</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- HERO -->
+    <section class="dh-wrap dh-hero">
+      <div>
+        <p class="dh-eyebrow">DviHelix · Presenter Studio</p>
+        <h1>Your brand's own <span class="t">talking presenter.</span></h1>
+        <p class="dh-lead">Meet <b>TalkTwin</b>: a custom presenter designed in your colours, with its own voice, that speaks for your business in ads for TikTok, Instagram, Facebook and WhatsApp. No actors, no film crew, no endless retakes.</p>
+        <div class="dh-cta-row">
+          <a class="dh-btn dh-btn--coral" href="#contact">Get your TalkTwin</a>
+          <a class="dh-btn dh-btn--ghost" href="#showcase">See it in action</a>
+        </div>
+        <div class="dh-proof">
+          <span>Made in South Africa</span>
+          <span>Vertical 9:16, ready to post</span>
+          <span>Your logo, deals &amp; call to action</span>
+        </div>
+      </div>
+      <div class="dh-phone" id="heroPhone"></div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="dh-sec" id="how">
+      <div class="dh-wrap">
+        <p class="dh-eyebrow">How it works</p>
+        <h2 class="dh-h2">From brief to ready-to-post ad.</h2>
+        <p class="dh-lead">You tell us about your business. We design your presenter, give it a voice, write the script and deliver finished ads with captions and your branding.</p>
+        <div class="dh-steps">
+          <div class="dh-step"><h3>Brief</h3><p>Your products, your customers, your colours and the look you want for your presenter.</p></div>
+          <div class="dh-step"><h3>Design</h3><p>We create 2–4 presenter options dressed in your brand. You pick your TalkTwin.</p></div>
+          <div class="dh-step"><h3>Voice &amp; script</h3><p>A voice you approve, locked in for every ad. Short, punchy lines written to sell.</p></div>
+          <div class="dh-step"><h3>Deliver</h3><p>Finished vertical ads with captions, your logo and your call to action on the end card.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SHOWCASE -->
+    <section class="dh-sec" id="showcase">
+      <div class="dh-wrap">
+        <p class="dh-eyebrow">Showcase</p>
+        <h2 class="dh-h2">Seen on the feed.</h2>
+        <p class="dh-lead">Tap a clip to play it with sound.</p>
+        <div class="dh-reel" id="reel"></div>
+      </div>
+    </section>
+
+    <!-- USES -->
+    <section class="dh-sec">
+      <div class="dh-wrap">
+        <p class="dh-eyebrow">One presenter, many jobs</p>
+        <h2 class="dh-h2">Your chef, tech expert, tour guide…</h2>
+        <p class="dh-lead">Your TalkTwin can be anything your business needs. A few favourites:</p>
+        <div class="dh-uses">
+          <span>Product launches</span><span>Weekly specials</span><span>Festive &amp; Diwali promos</span>
+          <span>Black Friday deals</span><span>Explainer clips</span><span>WhatsApp status ads</span>
+          <span>Website welcome video</span><span>Mascot characters</span><span>Two-presenter conversations</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- PACKAGES -->
+    <section class="dh-sec" id="packages">
+      <div class="dh-wrap">
+        <p class="dh-eyebrow">Packages</p>
+        <h2 class="dh-h2">Simple pricing. Launch specials on now.</h2>
+        <p class="dh-lead">Every Standard and Feature ad comes with a free Bonus Short (up to 15 s) cut for TikTok and Reels. Prices in rand.</p>
+        <div class="dh-plans" id="plans"></div>
+        <div class="dh-monthly" id="monthly"></div>
+        <div class="dh-extras" id="extras"></div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="dh-sec">
+      <div class="dh-wrap">
+        <p class="dh-eyebrow">Questions</p>
+        <h2 class="dh-h2">Good to know.</h2>
+        <div class="dh-faq">
+          <details><summary>Can my TalkTwin look and sound like me?</summary><p>Yes, with your written permission and your own photo and voice sample. We never copy a real person's face or voice without their consent.</p></details>
+          <details><summary>How long does it take?</summary><p>Most single ads are ready within a few working days of you approving the presenter and voice. Seasonal rush orders, just ask.</p></details>
+          <details><summary>Can you change the deal or logo later?</summary><p>Yes. Swapping your logo, deal or call to action on an existing ad is quick and doesn't need a new recording.</p></details>
+          <details><summary>What languages?</summary><p>English for now, with local South African accents. Ask us about other languages.</p></details>
+          <details><summary>Do I own the ads?</summary><p>Yes, the finished ads are yours to post anywhere. We'll only show them in our portfolio if you say it's OK.</p></details>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="dh-contact" id="contact">
+      <div class="dh-wrap">
+        <svg width="56" height="56" aria-hidden="true"><use href="#helix"/></svg>
+        <h2 class="dh-h2" style="margin-top:12px;">Get your TalkTwin, by DviHelix.</h2>
+        <p class="dh-lead">Tell us about your business and what you'd like to promote. We'll come back to you with presenter ideas, usually within one working day.</p>
+
+        <!-- Netlify Forms: submissions are emailed via the Netlify dashboard (Forms → Form notifications). No address is stored in this page. -->
+        <form class="dh-form" id="dhForm" name="dvihelix-enquiry" method="POST" action="/dvihelix/#contact" data-netlify="true" netlify-honeypot="company-website">
+          <input type="hidden" name="form-name" value="dvihelix-enquiry">
+          <p class="dh-hp"><label>Leave this empty <input name="company-website" tabindex="-1" autocomplete="off"></label></p>
+          <div class="dh-field">
+            <label for="fName">Your name</label>
+            <input id="fName" name="name" type="text" required autocomplete="name">
+          </div>
+          <div class="dh-field">
+            <label for="fBiz">Business name</label>
+            <input id="fBiz" name="business" type="text" required autocomplete="organization">
+          </div>
+          <div class="dh-field">
+            <label for="fEmail">Email</label>
+            <input id="fEmail" name="email" type="email" required autocomplete="email">
+          </div>
+          <div class="dh-field">
+            <label for="fPhone">Phone / WhatsApp <span>(optional)</span></label>
+            <input id="fPhone" name="phone" type="tel" autocomplete="tel" inputmode="tel">
+          </div>
+          <div class="dh-field dh-field--full">
+            <label for="fPkg">I'm interested in</label>
+            <select id="fPkg" name="package">
+              <option value="Not sure yet">Not sure yet, help me choose</option>
+              <option>Quick Hit (15 s)</option>
+              <option>Standard (30 s + Bonus Short)</option>
+              <option>Feature (60 s + Bonus Short)</option>
+              <option>Starter monthly plan</option>
+              <option>Growth monthly plan</option>
+              <option>TalkTwin creation only</option>
+            </select>
+          </div>
+          <div class="dh-field dh-field--full">
+            <label for="fMsg">What would you like to promote?</label>
+            <textarea id="fMsg" name="message" required placeholder="e.g. Our Diwali special, a new product, or a welcome video for our website"></textarea>
+          </div>
+          <button class="dh-btn dh-btn--coral" type="submit" id="fSend">Send enquiry</button>
+          <p class="dh-form-msg" id="fMsgBox" role="status" hidden></p>
+        </form>
+
+        <div class="dh-cta-row" id="contactBtns" style="margin-top:22px;"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="dh-foot">
+    DviHelix · your brand's double · a store in the <a href="/">Indus Valley</a> digital mall
+  </footer>
+</div>
+
+<script>
+  /* ================== EDIT HERE ==================
+     Extra contact buttons under the form: leave a value empty ("") to hide that button.
+     Do NOT put the business email address here, enquiries come in through the form.
+     WhatsApp: digits only with country code, e.g. "27731234567". */
+  var CONTACT = {
+    whatsapp: "",
+    instagram: "",   // "https://www.instagram.com/dvihelix.za/" once the account is live
+    tiktok: "",      // "https://www.tiktok.com/@dvihelix.za" once the account is live
+    email: ""
+  };
+
+  /* Showcase clips (9:16 MP4s in /dvihelix/videos/). The first one plays in the hero.
+     Client work goes here only after the client agrees to portfolio use. */
+  var CLIPS = [
+    { src: "videos/dvihelix-intro-kai.mp4", poster: "videos/dvihelix-intro-kai.jpg",     title: "The Intro",      sub: "Kai, DviHelix's own presenter" },
+    { src: "videos/dvihelix-diwali-priya.mp4", poster: "videos/dvihelix-diwali-priya.jpg",  title: "Happy Diwali",   sub: "Priya, festive template with your logo & deal" }
+  ];
+
+  /* Packages (from the TalkTwin price list). price = what the customer pays now;
+     was = the list price shown crossed out (leave "" for none). */
+  var PLANS = [
+    { name: "Quick Hit", len: "Up to 15 seconds", price: "R1,750", was: "R1,950",
+      items: ["One short punchy ad", "Captions + your logo", "Perfect for a single special"] },
+    { name: "Standard", len: "30 s ad + 15 s Bonus Short", price: "R2,950", was: "R3,500", hot: "Most popular",
+      items: ["Full 30-second ad", "Free 15 s Bonus Short", "Captions, logo & call to action", "One round of changes"] },
+    { name: "Feature", len: "60 s ad + 15 s Bonus Short", price: "R4,950", was: "R5,500",
+      items: ["Full 60-second story ad", "Free 15 s Bonus Short", "Captions, logo & call to action", "One round of changes"] }
+  ];
+  var MONTHLY = [
+    { name: "Starter", len: "Monthly plan", price: "R11,900", per: "/month",
+      items: ["4 Standard ads + 4 Bonus Shorts", "TalkTwin creation included (R3,500 value)"] },
+    { name: "Growth", len: "Monthly plan", price: "R21,500", per: "/month",
+      items: ["8 Standard ads + 8 Bonus Shorts", "1 two-presenter conversation ad", "TalkTwin creation included (R3,500 value)"] }
+  ];
+  var EXTRAS = [
+    ["TalkTwin creation", "R3,500 once-off"],
+    ["Extra line (~7 s)", "R550"],
+    ["Extra round of changes", "R550"]
+  ];
+  /* ================================================ */
+
+  function el(tag, cls, html){ var e=document.createElement(tag); if(cls) e.className=cls; if(html!=null) e.innerHTML=html; return e; }
+  function esc(s){ return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
+
+  function placeholder(){ return el('div','dh-vph','<svg><use href="#play"/></svg><span>Video coming soon</span>'); }
+
+  function makeVideo(clip, opts){
+    var v=document.createElement('video');
+    v.src=clip.src; v.playsInline=true; v.setAttribute('playsinline',''); v.preload='metadata';
+    if(opts.autoplay){ v.muted=true; v.autoplay=true; v.loop=true; }
+    else { v.controls=true; }
+    if(clip.poster) v.poster=clip.poster;
+    v.addEventListener('error',function(){ var par=v.parentNode; v.replaceWith(placeholder()); var b=par&&par.querySelector('.dh-sound'); if(b) b.remove(); });
+    return v;
+  }
+
+  // hero
+  (function(){
+    var box=document.getElementById('heroPhone');
+    if(!CLIPS.length){ box.appendChild(placeholder()); return; }
+    var v=makeVideo(CLIPS[0],{autoplay:true});
+    box.appendChild(v);
+    var b=el('button','dh-sound','🔊 Sound on'); b.type='button';
+    b.onclick=function(){ v.muted=!v.muted; if(!v.muted){ v.currentTime=0; v.play(); } b.textContent=v.muted?'🔊 Sound on':'🔇 Mute'; };
+    box.appendChild(b);
+  })();
+
+  // reel
+  (function(){
+    var reel=document.getElementById('reel');
+    CLIPS.forEach(function(c){
+      var f=el('figure'); var p=el('div','dh-phone'); p.appendChild(makeVideo(c,{}));
+      f.appendChild(p); f.appendChild(el('figcaption',null,'<b>'+esc(c.title)+'</b><span>'+esc(c.sub)+'</span>'));
+      reel.appendChild(f);
+    });
+  })();
+
+  // packages
+  function planCard(p){
+    var d=el('div','dh-plan'+(p.hot?' dh-plan--hot':''));
+    var h=(p.hot?'<span class="dh-badge">'+esc(p.hot)+'</span>':'')+
+      '<h3>'+esc(p.name)+'</h3><p class="len">'+esc(p.len)+'</p>'+
+      '<p class="dh-price">'+esc(p.price)+(p.per?'<small>'+esc(p.per)+'</small>':'')+'</p>'+
+      '<p class="dh-was">'+(p.was?'Usually '+esc(p.was):'')+'</p>'+
+      '<ul>'+p.items.map(function(i){return '<li>'+esc(i)+'</li>';}).join('')+'</ul>'+
+      '<a class="dh-btn '+(p.hot?'dh-btn--coral':'dh-btn--ghost')+'" href="#contact" data-pkg="'+esc(p.name)+'">Order '+esc(p.name)+'</a>';
+    d.innerHTML=h; return d;
+  }
+  PLANS.forEach(function(p){ document.getElementById('plans').appendChild(planCard(p)); });
+  MONTHLY.forEach(function(p){ document.getElementById('monthly').appendChild(planCard(p)); });
+  document.getElementById('extras').innerHTML=EXTRAS.map(function(x){return '<span><b>'+esc(x[0])+':</b> '+esc(x[1])+'</span>';}).join('');
+
+  // contact buttons
+  (function(){
+    var row=document.getElementById('contactBtns'), first=true;
+    function add(href,label){ if(!href) return; var a=el('a','dh-btn '+(first?'dh-btn--coral':'dh-btn--ghost'),esc(label)); a.href=href; if(/^https?:/.test(href)){a.target='_blank';a.rel='noopener';} row.appendChild(a); first=false; }
+    if(CONTACT.whatsapp) add('https://wa.me/'+CONTACT.whatsapp+'?text='+encodeURIComponent('Hi DviHelix, I would like a TalkTwin for my business.'),'WhatsApp us');
+    add(CONTACT.instagram,'DM on Instagram');
+    add(CONTACT.tiktok,'Message on TikTok');
+    if(CONTACT.email) add('mailto:'+CONTACT.email+'?subject='+encodeURIComponent('TalkTwin enquiry'),'Email us');
+  })();
+
+  // "Order X" buttons pick that package in the form
+  document.addEventListener('click',function(e){
+    var a=e.target.closest&&e.target.closest('a[data-pkg]'); if(!a) return;
+    var sel=document.getElementById('fPkg'), want=a.getAttribute('data-pkg').toLowerCase();
+    for(var i=0;i<sel.options.length;i++){ if(sel.options[i].text.toLowerCase().indexOf(want)===0){ sel.selectedIndex=i; break; } }
+  });
+
+  // enquiry form: send to Netlify Forms without leaving the page
+  (function(){
+    var f=document.getElementById('dhForm'), box=document.getElementById('fMsgBox'), btn=document.getElementById('fSend');
+    function show(cls,txt){ box.className='dh-form-msg '+cls; box.textContent=txt; box.hidden=false; }
+    f.addEventListener('submit',function(e){
+      e.preventDefault();
+      if(f.elements['company-website'].value) return; // bot
+      btn.disabled=true; btn.textContent='Sending…';
+      var body=new URLSearchParams(new FormData(f)).toString();
+      fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:body})
+        .then(function(r){
+          if(!r.ok) throw new Error(r.status);
+          f.reset();
+          Array.prototype.forEach.call(f.querySelectorAll('.dh-field'),function(x){x.hidden=true;});
+          btn.hidden=true;
+          show('ok','Thank you! Your enquiry has been sent. We\'ll be in touch soon with presenter ideas for your business.');
+        })
+        .catch(function(){
+          btn.disabled=false; btn.textContent='Send enquiry';
+          show('err','Sorry, that didn\'t go through. Please check your connection and try again.');
+        });
+    });
+  })();
+
+  // auto-hide header on scroll down (mall standard)
+  (function(){
+    var h=document.querySelector('.sp-header'); if(!h) return;
+    var sp=document.createElement('div'); sp.style.height=h.offsetHeight+'px'; h.parentNode.insertBefore(sp,h.nextSibling);
+    window.addEventListener('resize',function(){ sp.style.height=h.offsetHeight+'px'; });
+    var last=window.scrollY, tick=false;
+    window.addEventListener('scroll',function(){
+      if(tick) return; tick=true;
+      requestAnimationFrame(function(){ var y=window.scrollY;
+        if(y>last && y>80) h.classList.add('header-hidden'); else h.classList.remove('header-hidden');
+        last=y; tick=false; });
+    },{passive:true});
+  })();
+</script>
+</body>
+</html>
+
+</body></html>

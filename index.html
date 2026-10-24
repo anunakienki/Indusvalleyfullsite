@@ -96,8 +96,9 @@
   var FALLBACK_STORES = [
     { id: "earthy-essentials", name: "Earthy Essentials", sub: "wellness & botanicals", color: "#6E9B5A", initial: "E", url: "/earthyessentials/", logo: "/assets/logo-vertical-medium.png", status: "live" },
     { id: "lo-music", name: "Lo Music", sub: "lessons, repairs, gigs", color: "#B8933F", initial: "L", url: "/lomusic/", logo: "", status: "coming-soon" },
-    { id: "relic-and-ink", name: "Relic & Ink", sub: "comics & collectibles", color: "#7A6BB0", initial: "R", url: "/relicandink/", logo: "", status: "coming-soon" },
+    { id: "section31", name: "Section 31", sub: "classified", color: "#19E3FF", initial: "S", url: "/section31/", logo: "/assets/logo-section31.png", status: "coming-soon", ageRestricted: false },
     { id: "earth-forge-3d", name: "Earth Forge 3D", sub: "custom 3D printing", color: "#C97B3D", initial: "F", url: "/earthforge3d/", logo: "", status: "coming-soon" },
+    { id: "dvihelix", name: "DviHelix", sub: "custom talking presenters", color: "#2DE2D0", initial: "D", url: "/dvihelix/", logo: "/assets/logo-dvihelix.png", status: "live", ageRestricted: false },
     { id: "chronicles-of-the-herb", name: "Chronicles of the Herb", sub: "wellness & herbal supplements", color: "#4FA88A", initial: "C", url: "/chroniclesoftheherb/", logo: "", status: "coming-soon" }
   ];
 
@@ -109,7 +110,7 @@
       color: s.color || '#999999',
       initial: s.initial || (s.name ? s.name.charAt(0).toUpperCase() : '?'),
       url: s.url,
-      logo: s.logo || null,
+      logo: s.logo || (s.id === 'section31' ? '/assets/logo-section31.png' : null),
       comingSoon: s.status === 'coming-soon' || s.status === 'planning',
       placeholder: s.status === 'reserved' || !s.name
     };
@@ -147,13 +148,21 @@
       popupEyebrow.textContent = s.comingSoon ? 'Coming soon' : 'Now open';
       // Every store shows ITS OWN logo if it has one, or ITS OWN color/initial/name
       // as a fallback — never another store's branding.
-      if(s.logo && !s.comingSoon){
+      if(s.logo){
         popupLogo.src = s.logo;
         popupLogo.alt = s.name;
         popupLogo.hidden = false;
-        popupFallback.hidden = true;
+        if(s.comingSoon){
+          // coming-soon store with a logo: logo plus the store name, no letter circle
+          popupFallbackCircle.style.display = 'none';
+          popupFallbackName.textContent = s.name;
+          popupFallback.hidden = false;
+        } else {
+          popupFallback.hidden = true;
+        }
       } else {
         popupLogo.hidden = true;
+        popupFallbackCircle.style.display = '';
         popupFallbackCircle.style.background = s.color;
         popupFallbackCircle.textContent = s.initial;
         popupFallbackName.textContent = s.name;
