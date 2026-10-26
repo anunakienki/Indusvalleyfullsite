@@ -1442,3 +1442,6 @@ footer.site a{color:var(--store-accent, var(--bio-green));text-decoration:none;}
   .directory-heading{margin-top:0;}
   .landing{padding-bottom:96px;} /* keeps Browse A-Z clear of the floating Netlify badge */
 }
+
+/* Garden of Balance — portrait (9:16) answer videos for Indica / Sativa / Hybrid */
+.video-frame.portrait{aspect-ratio:9/16;max-width:320px;width:100%;justify-self:center;}
