@@ -123,6 +123,7 @@
     <a class="brand" href="#top"><img src="../assets/logo-vertical-medium.png" alt="Earthy Essentials" class="brand-mark"></a>
     <nav class="header-links">
       <a href="#learn">Garden of Balance</a>
+      <a href="education/">Education Centre</a>
       <a href="#contact">Contact</a>
       <a class="back-link" href="/">← Indus Valley</a>
     </nav>
@@ -169,6 +170,10 @@
           <div class="question-list" id="questionList" role="list"></div>
         </div>
       </div>
+
+      <p style="text-align:center;margin-top:28px;">
+        <a class="btn primary" href="education/">Open the Education Centre →</a>
+      </p>
     </section>
   </section>
 
@@ -805,34 +810,43 @@
   // To add or change content: edit this object only. Each guide has a list of
   // {q, file} pairs — q is the question text shown as a button, file is the
   // path to that guide's video answer once you've uploaded it to /videos/.
-  // Filenames below are placeholders — upload your real .mp4 files to match
-  // these paths (or edit the paths to match your filenames).
+  // All 12 answer videos are uploaded (Oct 2026). Paths are relative to /earthyessentials/.
   var GUIDES = {
+    gaia: {
+      label: 'Gaia',
+      role: 'Guardian of the Garden',
+      wide: true,
+      questions: [
+        { q: 'What is the Garden of Balance?', file: 'videos/gaia/what-is-the-garden.mp4' },
+        { q: 'Which guide is right for me?', file: 'videos/gaia/which-guide.mp4' },
+        { q: 'Any advice for first-timers?', file: 'videos/gaia/first-timer.mp4' }
+      ]
+    },
     indica: {
       label: 'Indica',
       role: 'Rest & Ease',
       questions: [
-        { q: 'What is Indica good for?', file: '/videos/indica/what-is-indica.mp4' },
-        { q: 'Will it help me sleep?', file: '/videos/indica/sleep.mp4' },
-        { q: 'Best time of day to use it?', file: '/videos/indica/best-time.mp4' }
+        { q: 'What is Indica good for?', file: 'videos/indica/what-is-indica.mp4' },
+        { q: 'Will it help me sleep?', file: 'videos/indica/sleep.mp4' },
+        { q: 'Best time of day to use it?', file: 'videos/indica/best-time.mp4' }
       ]
     },
     sativa: {
       label: 'Sativa',
       role: 'Energy & Focus',
       questions: [
-        { q: 'What is Sativa good for?', file: '/videos/sativa/what-is-sativa.mp4' },
-        { q: 'Can it help with focus?', file: '/videos/sativa/focus.mp4' },
-        { q: 'Best time of day to use it?', file: '/videos/sativa/best-time.mp4' }
+        { q: 'What is Sativa good for?', file: 'videos/sativa/what-is-sativa.mp4' },
+        { q: 'Can it help with focus?', file: 'videos/sativa/focus.mp4' },
+        { q: 'Best time of day to use it?', file: 'videos/sativa/best-time.mp4' }
       ]
     },
     hybrid: {
       label: 'Hybrid',
       role: 'Balance',
       questions: [
-        { q: 'What is a Hybrid strain?', file: '/videos/hybrid/what-is-hybrid.mp4' },
-        { q: 'How do I choose Indica- vs Sativa-leaning?', file: '/videos/hybrid/leaning.mp4' },
-        { q: 'Good for a first-time hybrid user?', file: '/videos/hybrid/first-time.mp4' }
+        { q: 'What is a Hybrid strain?', file: 'videos/hybrid/what-is-hybrid.mp4' },
+        { q: 'How do I choose Indica- vs Sativa-leaning?', file: 'videos/hybrid/leaning.mp4' },
+        { q: 'Good for a first-time hybrid user?', file: 'videos/hybrid/first-time.mp4' }
       ]
     }
   };
@@ -843,7 +857,8 @@
     var videoEl = document.getElementById('learnVideo');
     var placeholderEl = document.getElementById('learnPlaceholder');
     var placeholderText = document.getElementById('learnPlaceholderText');
-    var activeGuide = 'indica';
+    var activeGuide = 'gaia';
+    var frameEl = videoEl.parentNode;
 
     function renderTabs(){
       tabsEl.innerHTML = '';
@@ -886,6 +901,8 @@
       videoEl.hidden = true;
       placeholderEl.hidden = false;
       placeholderText.textContent = 'Select a question';
+      // Gaia's answers are widescreen; the guides' answers are portrait.
+      frameEl.classList.toggle('portrait', !GUIDES[activeGuide].wide);
     }
 
     function playAnswer(item){
@@ -903,6 +920,7 @@
       };
     }
 
+    resetPlayer();
     renderTabs();
     renderQuestions();
   })();
