@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Education Centre — Earthy Essentials</title>
+<meta name="description" content="The Garden of Balance Education Centre: pick a question and Gaia, Indica, Sativa or Hybrid answers on video. Adults 18+ only.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../style.css">
+<link rel="icon" type="image/png" sizes="192x192" href="../../assets/favicon-192.png">
+<link rel="icon" type="image/png" sizes="64x64" href="../../assets/favicon-64.png">
+<script>
+  // 18+ / EarthPass gate: shared with the main store via localStorage.
+  // Not verified yet? Send them to the store entrance, then back here.
+  (function(){
+    var ok = false;
+    try{ ok = localStorage.getItem('ee_age_ok') === '1' && localStorage.getItem('ee_member_ok') === '1'; }catch(e){}
+    if(!ok){ window.location.replace('../'); }
+  })();
+</script>
+<style>
+  /* ---------- Education Centre (page-only styles) ---------- */
+  .edu{--g:var(--bio-green);}
+  .edu-hero{padding:40px 0 8px;text-align:center;}
+  .edu-hero h1{font-size:clamp(2rem,6vw,3.2rem);margin-bottom:10px;}
+  .edu-hero p.lede{color:var(--dust);max-width:620px;margin:0 auto;line-height:1.6;}
+  .edu-notice{
+    display:inline-block;margin-top:16px;padding:6px 14px;border-radius:100px;
+    font-family:var(--mono);font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;
+    color:var(--plasma-pink);border:1px solid var(--plasma-pink-dim);
+  }
+
+  .edu-layout{
+    display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);
+    gap:28px;align-items:start;padding:32px 0 64px;
+  }
+
+  /* Player */
+  .edu-player{position:sticky;top:16px;}
+  .edu-screen{
+    position:relative;border-radius:16px;overflow:hidden;background:#000;
+    border:1px solid var(--hairline);aspect-ratio:16/9;
+    box-shadow:0 0 40px -10px color-mix(in srgb, var(--g) 45%, transparent);
+    transition:box-shadow .3s ease;
+  }
+  .edu-screen.portrait{aspect-ratio:9/16;max-width:300px;margin:0 auto;}
+  .edu-screen video{width:100%;height:100%;display:block;background:#000;}
+  .edu-idle{
+    position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:12px;padding:24px;text-align:center;color:var(--dust);
+    background:radial-gradient(circle at 50% 40%, rgba(124,255,178,0.10), transparent 65%);
+  }
+  .edu-idle[hidden]{display:none;}
+  .edu-idle .play-dot{width:56px;height:56px;font-size:1.1rem;}
+  .edu-idle p{margin:0;font-family:var(--mono);font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase;}
+
+  .edu-now{margin-top:16px;}
+  .edu-now .who{
+    font-family:var(--mono);font-size:0.72rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--g);
+  }
+  .edu-now h2{font-size:1.35rem;margin:6px 0 0;}
+  .edu-controls{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;}
+  .edu-controls .btn{flex:1 1 auto;min-width:120px;}
+  .edu-controls .btn[disabled]{opacity:.35;cursor:default;}
+  .edu-copy{font-family:var(--mono);font-size:0.72rem;color:var(--dust);margin-top:10px;min-height:1em;}
+
+  /* Question list */
+  .edu-search{
+    width:100%;padding:12px 16px;border-radius:12px;border:1px solid var(--hairline);
+    background:var(--nebula-violet);color:var(--starlight);font:inherit;font-size:0.95rem;
+  }
+  .edu-search::placeholder{color:var(--dust);}
+  .edu-search:focus{outline:none;border-color:var(--bio-green);}
+  .edu-filters{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 6px;}
+  .edu-filters .avatar-tab{padding:8px 16px;font-size:0.78rem;}
+  .edu-filters .avatar-tab.active{background:var(--c);border-color:var(--c);}
+
+  .edu-group{margin-top:22px;}
+  .edu-group[hidden]{display:none;}
+  .edu-group-head{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+  .edu-badge{
+    width:38px;height:38px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;
+    font-family:var(--display);font-weight:700;color:var(--space-black);background:var(--c);
+  }
+  .edu-group-head h3{margin:0;font-size:1.1rem;}
+  .edu-group-head span{display:block;font-family:var(--mono);font-size:0.68rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--dust);}
+
+  .edu-q{
+    width:100%;display:flex;align-items:center;gap:12px;text-align:left;
+    padding:13px 16px;margin-bottom:8px;border-radius:12px;cursor:pointer;
+    border:1px solid var(--hairline);background:var(--nebula-violet);color:var(--starlight);
+    font:inherit;font-size:0.95rem;transition:border-color .2s ease, transform .15s ease, background .2s ease;
+  }
+  .edu-q[hidden]{display:none;}
+  .edu-q:hover{border-color:var(--c);transform:translateX(2px);}
+  .edu-q.playing{border-color:var(--c);background:color-mix(in srgb, var(--c) 14%, var(--nebula-violet));}
+  .edu-q .t{flex:1;}
+  .edu-q .d{font-family:var(--mono);font-size:0.72rem;color:var(--dust);flex:none;}
+  .edu-q .tick{
+    width:20px;height:20px;border-radius:50%;flex:none;border:1px solid var(--hairline);
+    display:flex;align-items:center;justify-content:center;font-size:0.7rem;color:transparent;
+  }
+  .edu-q.watched .tick{background:var(--c);border-color:var(--c);color:var(--space-black);}
+  .edu-q.playing .tick{border-color:var(--c);color:var(--c);background:transparent;font-size:0.55rem;}
+  .edu-empty{color:var(--dust);font-size:0.9rem;margin-top:18px;}
+  .edu-progress{font-family:var(--mono);font-size:0.72rem;color:var(--dust);margin-top:22px;}
+
+  .edu-foot{border-top:1px solid var(--hairline);padding:22px 0 90px;color:var(--dust);font-size:0.82rem;line-height:1.6;text-align:center;}
+  .edu-foot a{color:var(--bio-green);}
+
+  @media (max-width:860px){
+    .edu-layout{grid-template-columns:1fr;gap:22px;padding-top:20px;}
+    .edu-player{position:static;}
+    .edu-screen.portrait{max-width:300px;}
+  }
+</style>
+</head>
+<body class="watermark-earthy">
+
+<div class="starfield" aria-hidden="true"></div>
+<div class="starfield starfield-mid" aria-hidden="true"></div>
+<div class="starfield starfield-fast" aria-hidden="true"></div>
+
+<header class="site">
+  <div class="wrap nav-row">
+    <a class="brand" href="../"><img src="../../assets/logo-vertical-medium.png" alt="Earthy Essentials" class="brand-mark"></a>
+    <nav class="header-links">
+      <a href="../">Store</a>
+      <a class="back-link" href="/">← Indus Valley</a>
+    </nav>
+  </div>
+</header>
+
+<main class="edu wrap" id="top">
+  <section class="edu-hero">
+    <p class="eyebrow">The Garden of Balance</p>
+    <h1>Education Centre</h1>
+    <p class="lede">Choose a question and your guide answers on video. Start with Gaia if you're new, then meet Indica, Sativa and Hybrid.</p>
+    <span class="edu-notice">Adults 18+ only · Not medical advice</span>
+  </section>
+
+  <section class="edu-layout">
+    <div class="edu-player" id="player">
+      <div class="edu-screen" id="screen">
+        <video id="eduVideo" controls playsinline preload="none" hidden></video>
+        <div class="edu-idle" id="idle">
+          <span class="play-dot">▶</span>
+          <p id="idleText">Pick a question to begin</p>
+        </div>
+      </div>
+      <div class="edu-now">
+        <p class="who" id="nowWho">Gaia · Guardian of the Garden</p>
+        <h2 id="nowTitle">Welcome to the Garden</h2>
+      </div>
+      <div class="edu-controls">
+        <button class="btn" type="button" id="prevBtn">← Previous</button>
+        <button class="btn primary" type="button" id="nextBtn">Next question →</button>
+        <button class="btn" type="button" id="shareBtn" title="Copy a link straight to this answer">Copy link</button>
+      </div>
+      <p class="edu-copy" id="copyMsg" aria-live="polite"></p>
+    </div>
+
+    <div class="edu-list">
+      <label for="eduSearch" class="eyebrow" style="display:block;margin-bottom:8px;">Find a question</label>
+      <input type="search" id="eduSearch" class="edu-search" placeholder="e.g. sleep, focus, first time…" autocomplete="off">
+      <div class="edu-filters" id="filters" role="tablist" aria-label="Filter by guide"></div>
+      <div id="groups"></div>
+      <p class="edu-empty" id="empty" hidden>No questions match that. Try another word.</p>
+      <p class="edu-progress" id="progress"></p>
+    </div>
+  </section>
+</main>
+
+<footer class="edu-foot">
+  <div class="wrap">
+    For adults 18+ only. These videos are general education, not medical advice. Never mix cannabis with alcohol or other substances.<br>
+    <a href="../">← Back to Earthy Essentials</a>
+  </div>
+</footer>
+
+<script>
+  // ===================== Education Centre content =====================
+  // To add a video: add a {id, q, file, dur} line under the right guide.
+  //   id   = short unique name (used in share links, e.g. #indica-sleep)
+  //   file = path relative to /earthyessentials/
+  //   wide = true for widescreen (16:9) videos; leave out for upright (9:16)
+  var GUIDES = [
+    { key:'gaia', label:'Gaia', role:'Guardian of the Garden', color:'#7cffb2', questions:[
+      { id:'gaia-welcome', q:'Welcome to the Garden', file:'videos/gaia/welcome.mp4', dur:'0:38' },
+      { id:'gaia-garden', q:'What is the Garden of Balance?', file:'videos/gaia/what-is-the-garden.mp4', dur:'1:21', wide:true },
+      { id:'gaia-guide', q:'Which guide is right for me?', file:'videos/gaia/which-guide.mp4', dur:'0:25', wide:true },
+      { id:'gaia-first', q:'Any advice for first-timers?', file:'videos/gaia/first-timer.mp4', dur:'0:26', wide:true }
+    ]},
+    { key:'indica', label:'Indica', role:'The night guide · Rest & ease', color:'#b49bff', questions:[
+      { id:'indica-what', q:'What is Indica good for?', file:'videos/indica/what-is-indica.mp4', dur:'0:49' },
+      { id:'indica-sleep', q:'Will it help me sleep?', file:'videos/indica/sleep.mp4', dur:'0:23' },
+      { id:'indica-time', q:'When is the best time to use it?', file:'videos/indica/best-time.mp4', dur:'0:28' }
+    ]},
+    { key:'sativa', label:'Sativa', role:'The daylight guide · Energy & focus', color:'#ffc95c', questions:[
+      { id:'sativa-what', q:'What is Sativa good for?', file:'videos/sativa/what-is-sativa.mp4', dur:'0:46' },
+      { id:'sativa-focus', q:'Can it help with focus?', file:'videos/sativa/focus.mp4', dur:'0:20' },
+      { id:'sativa-time', q:'When is the best time to use it?', file:'videos/sativa/best-time.mp4', dur:'0:22' }
+    ]},
+    { key:'hybrid', label:'Hybrid', role:'The dawn guide · The middle path', color:'#ff4fa3', questions:[
+      { id:'hybrid-what', q:'What is a Hybrid strain?', file:'videos/hybrid/what-is-hybrid.mp4', dur:'0:50' },
+      { id:'hybrid-leaning', q:'How do I choose Indica- or Sativa-leaning?', file:'videos/hybrid/leaning.mp4', dur:'0:23' },
+      { id:'hybrid-first', q:'Is a Hybrid good for a first-timer?', file:'videos/hybrid/first-time.mp4', dur:'0:21' }
+    ]}
+  ];
+
+  (function(){
+    var BASE = '../';                       // videos live in /earthyessentials/videos/
+    var WATCHED_KEY = 'ee_edu_watched';
+    var $ = function(id){ return document.getElementById(id); };
+    var video = $('eduVideo'), screen = $('screen'), idle = $('idle'), idleText = $('idleText');
+    var flat = [];                          // every question in play order
+    var current = -1, filter = 'all', query = '';
+
+    var watched = {};
+    try{ watched = JSON.parse(localStorage.getItem(WATCHED_KEY) || '{}') || {}; }catch(e){ watched = {}; }
+    function saveWatched(){ try{ localStorage.setItem(WATCHED_KEY, JSON.stringify(watched)); }catch(e){} }
+
+    // ---- Build filters + grouped list ----
+    var filtersEl = $('filters'), groupsEl = $('groups');
+    function addFilter(key, label, color){
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'avatar-tab'; b.textContent = label;
+      b.dataset.key = key; b.setAttribute('role','tab');
+      b.style.setProperty('--c', color || 'var(--bio-green)');
+      b.addEventListener('click', function(){ filter = key; applyFilter(); });
+      filtersEl.appendChild(b);
+    }
+    addFilter('all', 'All guides');
+    GUIDES.forEach(function(g){
+      addFilter(g.key, g.label, g.color);
+      var group = document.createElement('div');
+      group.className = 'edu-group'; group.dataset.key = g.key;
+      group.style.setProperty('--c', g.color);
+      group.innerHTML = '<div class="edu-group-head"><div class="edu-badge">' + g.label.charAt(0) +
+        '</div><div><h3>' + g.label + '</h3><span>' + g.role + '</span></div></div>';
+      g.questions.forEach(function(item){
+        item.guide = g; item.index = flat.length; flat.push(item);
+        var b = document.createElement('button');
+        b.type = 'button'; b.className = 'edu-q'; b.id = 'q-' + item.id;
+        b.innerHTML = '<span class="tick" aria-hidden="true">✓</span><span class="t"></span><span class="d"></span>';
+        b.querySelector('.t').textContent = item.q;
+        b.querySelector('.d').textContent = item.dur;
+        b.addEventListener('click', function(){ play(item.index, true); });
+        item.el = b;
+        group.appendChild(b);
+      });
+      groupsEl.appendChild(group);
+    });
+
+    function applyFilter(){
+      [].forEach.call(filtersEl.children, function(b){
+        var on = b.dataset.key === filter;
+        b.classList.toggle('active', on); b.setAttribute('aria-selected', on ? 'true' : 'false');
+      });
+      var any = false;
+      [].forEach.call(groupsEl.children, function(group){
+        var key = group.dataset.key, shown = 0;
+        flat.forEach(function(item){
+          if(item.guide.key !== key) return;
+          var match = (filter === 'all' || filter === key) &&
+            (!query || (item.q + ' ' + item.guide.label).toLowerCase().indexOf(query) !== -1);
+          item.el.hidden = !match; if(match) shown++;
+        });
+        group.hidden = shown === 0; if(shown) any = true;
+      });
+      $('empty').hidden = any;
+    }
+    $('eduSearch').addEventListener('input', function(){
+      query = this.value.trim().toLowerCase();
+      if(query) filter = 'all';   // search across every guide
+      applyFilter();
+    });
+    function markTicks(){
+      flat.forEach(function(i){ i.el.querySelector('.tick').textContent = i.el.classList.contains('playing') ? '▶' : '✓'; });
+    }
+
+    function renderProgress(){
+      var n = flat.filter(function(i){ return watched[i.id]; }).length;
+      $('progress').textContent = n + ' of ' + flat.length + ' answers watched';
+      flat.forEach(function(i){ i.el.classList.toggle('watched', !!watched[i.id]); });
+      markTicks();
+    }
+
+    // ---- Player ----
+    function setNow(item){
+      document.querySelector('.edu').style.setProperty('--g', item.guide.color);
+      $('nowWho').textContent = item.guide.label + ' · ' + item.guide.role;
+      $('nowTitle').textContent = item.q;
+    }
+    function play(i, userClicked){
+      var item = flat[i]; if(!item) return;
+      current = i;
+      flat.forEach(function(x){ x.el.classList.toggle('playing', x === item); });
+      markTicks();
+      screen.classList.toggle('portrait', !item.wide);
+      setNow(item);
+      video.hidden = false; idle.hidden = true;
+      video.src = BASE + item.file;
+      video.play().catch(function(){ /* autoplay blocked: controls are visible */ });
+      $('prevBtn').disabled = i === 0;
+      $('nextBtn').disabled = i === flat.length - 1;
+      $('copyMsg').textContent = '';
+      if(history.replaceState) history.replaceState(null, '', '#' + item.id);
+      // On phones the list sits under the player, so bring the player into view.
+      if(userClicked && window.matchMedia('(max-width:860px)').matches){
+        $('player').scrollIntoView({behavior:'smooth', block:'start'});
+      }
+    }
+    video.addEventListener('ended', function(){
+      var item = flat[current]; if(!item) return;
+      watched[item.id] = 1; saveWatched(); renderProgress();
+    });
+    video.addEventListener('error', function(){
+      if(!video.getAttribute('src')) return;
+      video.hidden = true; idle.hidden = false; idleText.textContent = 'Video coming soon';
+    });
+    $('prevBtn').addEventListener('click', function(){ play(Math.max(0, current - 1), true); });
+    $('nextBtn').addEventListener('click', function(){ play(Math.min(flat.length - 1, current + 1), true); });
+    $('shareBtn').addEventListener('click', function(){
+      var item = flat[current] || flat[0];
+      var url = location.href.split('#')[0] + '#' + item.id;
+      var done = function(){ $('copyMsg').textContent = 'Link copied: ' + url; };
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(url).then(done, function(){ $('copyMsg').textContent = url; });
+      } else { $('copyMsg').textContent = url; }
+    });
+
+    // ---- Start: open a shared link (#indica-sleep) or show the welcome card ----
+    applyFilter(); renderProgress();
+    var startId = location.hash.replace('#','');
+    var start = flat.filter(function(i){ return i.id === startId; })[0];
+    if(start){ play(start.index, false); }
+    else {
+      setNow(flat[0]); flat[0].el.classList.add('playing'); markTicks();
+      screen.classList.add('portrait'); current = 0;
+      $('prevBtn').disabled = true;
+      idle.style.cursor = 'pointer';
+      idle.addEventListener('click', function(){ if(video.hidden) play(current, false); });
+      $('nextBtn').textContent = 'Next question →';
+    }
+
+    // ---- Auto-hide header (standing rule for every store) ----
+    var headerEl = document.querySelector('header.site');
+    var spacer = document.createElement('div');
+    spacer.style.height = headerEl.offsetHeight + 'px';
+    headerEl.parentNode.insertBefore(spacer, headerEl.nextSibling);
+    window.addEventListener('resize', function(){ spacer.style.height = headerEl.offsetHeight + 'px'; });
+    var lastY = window.scrollY, ticking = false;
+    window.addEventListener('scroll', function(){
+      if(ticking) return; ticking = true;
+      requestAnimationFrame(function(){
+        var y = window.scrollY;
+        headerEl.classList.toggle('header-hidden', y > lastY && y > 80);
+        lastY = y; ticking = false;
+      });
+    }, {passive:true});
+    // Keep the sticky player clear of the header when it's showing.
+    window.addEventListener('scroll', function(){
+      $('player').style.top = headerEl.classList.contains('header-hidden') ? '16px' : (headerEl.offsetHeight + 16) + 'px';
+    }, {passive:true});
+  })();
+</script>
+</body>
+</html>
