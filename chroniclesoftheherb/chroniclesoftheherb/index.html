@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chronicles of the Herb — CBD Wellness &amp; Holistic Healing | Indus Valley</title>
+<meta name="description" content="Chronicles of the Herb — CBD wellness, Shanti Natural Care CBD, herbal remedies and holistic healing. Part of the Indus Valley digital mall.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+<style>
+  /* Chronicles-only extras (everything else comes from ../style.css) */
+  .coth-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px;}
+  .coth-chip{
+    font-family:var(--mono);font-size:0.72rem;letter-spacing:0.06em;text-transform:uppercase;
+    padding:8px 14px;border-radius:999px;border:1px solid var(--hairline);
+    background:transparent;color:var(--dust);cursor:pointer;
+  }
+  .coth-chip:hover{color:var(--starlight);border-color:var(--dust);}
+  .coth-chip.is-active{background:var(--store-accent);border-color:var(--store-accent);color:var(--space-black);}
+  .coth-cat-label{display:block;font-family:var(--mono);font-size:0.68rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--store-accent);margin-bottom:4px;}
+  .coth-photo-empty{width:100%;aspect-ratio:1/1;border-radius:8px;margin-bottom:10px;display:flex;align-items:center;justify-content:center;background:var(--space-black);color:var(--dust);font-size:1.6rem;}
+  .coth-soon{position:relative;overflow:hidden;}
+  .coth-soon::after{
+    content:"Coming soon";position:absolute;top:14px;right:-34px;transform:rotate(35deg);
+    background:var(--store-accent);color:var(--space-black);
+    font-family:var(--mono);font-size:0.62rem;letter-spacing:0.08em;text-transform:uppercase;padding:4px 40px;
+  }
+  .coth-steps{counter-reset:step;list-style:none;padding:0;margin:20px 0 0;display:grid;gap:12px;max-width:640px;}
+  .coth-steps li{counter-increment:step;position:relative;padding:14px 16px 14px 56px;border:1px solid var(--hairline);border-radius:12px;background:var(--nebula-violet);color:var(--dust);font-size:0.92rem;}
+  .coth-steps li::before{content:counter(step);position:absolute;left:16px;top:12px;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--store-accent);color:var(--space-black);font-family:var(--display);font-weight:700;font-size:0.9rem;}
+  .coth-steps li strong{color:var(--starlight);}
+  .coth-disclaimer{margin-top:20px;border:1px solid var(--hairline);border-radius:14px;padding:18px 22px;background:rgba(255,255,255,0.02);max-width:760px;}
+  .coth-disclaimer p{font-size:0.82rem;color:var(--dust);line-height:1.6;margin:0 0 8px;max-width:none;}
+  .coth-disclaimer p:last-child{margin-bottom:0;}
+  .coth-muted{color:var(--dust);font-size:0.85rem;}
+  .coth-brandrow{display:flex;align-items:center;gap:16px;}
+  .coth-brandrow img{width:72px;height:72px;border-radius:50%;border:1px solid var(--hairline);flex-shrink:0;}
+  .coth-group-title{font-family:var(--display);font-size:1.1rem;color:var(--store-accent);margin:32px 0 0;}
+  /* Shanti photos are small (~128px): show them at natural-ish size on a light tile */
+  #shantiGrid .product-card-photo,.coth-shanti-grid .product-card-photo{
+    object-fit:contain;padding:12%;background:#ececec;
+  }
+  /* Mobile: stack brand above links so the header never runs off-screen; 2-column gallery */
+  @media (max-width:640px){
+    .sp-header .nav-row{grid-template-columns:1fr;row-gap:10px;justify-items:center;padding:6px 0;}
+    .sp-header .sp-brand{font-size:1.15rem;}
+    .sp-header .header-links{grid-column:1;justify-self:center;flex-wrap:wrap;justify-content:center;gap:8px 14px;}
+    #galleryGrid{grid-template-columns:1fr 1fr;}
+    .coth-shanti-grid{grid-template-columns:1fr 1fr !important;gap:10px !important;}
+    .coth-shanti-grid .product-card{padding:12px;min-width:0;}
+    .coth-shanti-grid .product-card h4{font-size:0.88rem;}
+    .coth-shanti-grid .product-card .variant{font-size:0.78rem;}
+    #galleryGrid .photo-pending{aspect-ratio:4/3;min-width:0;margin-top:0;}
+  }
+</style>
+</head>
+<body style="--store-accent:#4FA88A;">
+
+<div class="starfield" aria-hidden="true"></div>
+<div class="starfield starfield-mid" aria-hidden="true"></div>
+<div class="starfield starfield-fast" aria-hidden="true"></div>
+
+<!-- No age gate / membership here: Chronicles is CBD wellness + holistic only.
+     (The 18+ EarthPass gate lives on Earthy Essentials.) -->
+
+<header class="sp-header">
+  <div class="wrap nav-row">
+    <a class="sp-brand" href="#top">Chronicles of <span class="sp-brand-accent">the Herb</span></a>
+    <nav class="header-links">
+      <a href="#shop">Shop</a>
+      <a href="#shanti">Shanti CBD</a>
+      <a href="#holistic">Holistic</a>
+      <a href="#order">Order</a>
+      <a class="back-link" href="/">← Indus Valley</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="sp-hero wrap">
+    <p class="eyebrow sp-hero-eyebrow">CBD Wellness · Holistic Healing</p>
+    <h1>Chronicles of the Herb</h1>
+    <p class="sp-tagline">Plant-based wellness, chosen with care: CBD from Shanti Natural Care, traditional herbal remedies, and a holistic approach to looking after body and mind.</p>
+    <div class="gate-actions" style="justify-content:center;margin-top:24px;">
+      <a class="btn primary" href="#shop">Browse the shop</a>
+      <a class="btn" href="#order">How to order</a>
+    </div>
+  </section>
+
+  <div class="wrap">
+
+    <!-- 01 WHAT WE CARRY -->
+    <section class="sp-section">
+      <p class="index">01 / What We Carry</p>
+      <h2>Wellness, naturally</h2>
+      <div class="sp-grid">
+        <article class="sp-card"><h3>CBD Wellness</h3><p>Hemp-derived CBD oils, tinctures and topicals for everyday balance. Non-psychoactive.</p></article>
+        <article class="sp-card"><h3>Shanti Natural Care</h3><p>Proudly South African CBD, blended with indigenous botanicals like Buchu and Rooibos.</p></article>
+        <article class="sp-card"><h3>Herbal &amp; Holistic Remedies</h3><p>Traditional herbal blends for sleep, mood, immunity, digestion and more.</p></article>
+        <article class="sp-card coth-soon"><h3>CBD Edibles</h3><p>A curated range of CBD edibles is on its way. Watch this space.</p></article>
+      </div>
+    </section>
+
+    <!-- 02 SHOP -->
+    <section class="sp-section" id="shop">
+      <p class="index">02 / Shop</p>
+      <h2>Our products</h2>
+      <p class="sp-section-lede">Ask us in-store or on WhatsApp for current prices and stock.</p>
+      <div class="coth-chips" id="catChips" role="tablist" aria-label="Filter by category"></div>
+      <div class="product-grid" id="productGrid" style="margin-top:20px;"></div>
+      <p class="sp-note">⚠ Formulated with reference to published cannabinoid and herbal medicine research, including work by Dr. Shiksha Gallow. Not a substitute for professional medical advice; consult a healthcare provider, especially if pregnant, breastfeeding, on medication, or managing a serious condition.</p>
+    </section>
+
+    <!-- 03 SHANTI -->
+    <section class="sp-section" id="shanti">
+      <p class="index">03 / Featured Brand</p>
+      <div class="coth-brandrow">
+        <img src="assets/shanti/shanti-logo.jpg" alt="Shanti Natural Care logo">
+        <h2 style="margin:0;">CBD from Shanti Natural Care</h2>
+      </div>
+      <p class="sp-section-lede" style="margin-top:14px;">Shanti Natural Care is a South African CBD maker that hand-crafts small batches, combining hemp with local botanicals such as Buchu and Rooibos. Creams, salves, lip balms, massage and temple oils, hair care and soaps, all infused with CBD. For external use.</p>
+      <div id="shantiGrid"></div>
+      <p class="coth-muted" style="margin-top:18px;">Prices are recommended retail. Ask us on WhatsApp what's in stock. All Shanti products are for external use only.</p>
+      <p class="coth-muted" id="shantiEmpty" style="margin-top:14px;">The full Shanti range is being added. Ask us on WhatsApp for what's in stock.</p>
+    </section>
+
+    <!-- 04 HOLISTIC -->
+    <section class="sp-section" id="holistic">
+      <p class="index">04 / Holistic Healing</p>
+      <h2>The whole picture</h2>
+      <p class="sp-section-lede">We see wellness as more than one product. Rest, food, movement, stress and the plants you use all work together, so we take time to understand what you're looking for.</p>
+      <div class="sp-grid">
+        <article class="sp-card"><h3>Rest &amp; Sleep</h3><p>Calming blends and evening routines to help you wind down.</p></article>
+        <article class="sp-card"><h3>Stress &amp; Mood</h3><p>Adaptogens and gentle botanicals for everyday pressure.</p></article>
+        <article class="sp-card"><h3>Body &amp; Movement</h3><p>Support for joints, muscles and recovery.</p></article>
+        <article class="sp-card"><h3>Immunity &amp; Digestion</h3><p>Traditional herbs for seasonal support and gut comfort.</p></article>
+      </div>
+      <p class="coth-muted" style="margin-top:14px;">Not sure where to start? Message us and we'll talk it through with you.</p>
+    </section>
+
+    <!-- 05 GALLERY -->
+    <section class="sp-section" id="gallery">
+      <p class="index">05 / Showcase</p>
+      <h2>In the shop</h2>
+      <div class="photo-gallery photo-gallery--wrap" id="galleryGrid" style="margin-top:24px;">
+        <div class="photo-pending"><span class="play-dot">📷</span><p>Photo coming soon</p></div>
+        <div class="photo-pending"><span class="play-dot">📷</span><p>Photo coming soon</p></div>
+        <div class="photo-pending"><span class="play-dot">📷</span><p>Photo coming soon</p></div>
+        <div class="photo-pending"><span class="play-dot">📷</span><p>Photo coming soon</p></div>
+      </div>
+    </section>
+
+    <!-- 06 ORDER -->
+    <section class="sp-section" id="order">
+      <p class="index">06 / Order &amp; Payment</p>
+      <h2>How to order</h2>
+      <ol class="coth-steps">
+        <li><strong>Choose your products</strong> and message us on WhatsApp or email for price and stock.</li>
+        <li><strong>Pay by EFT</strong> using the details below, with your name + order as the reference.</li>
+        <li><strong>Send your proof of payment</strong> and we'll confirm collection or delivery.</li>
+      </ol>
+
+      <div class="sp-payment-card">
+        <p><strong>EFT / Bank Transfer</strong></p>
+        <p class="sp-payment-line">Account name: <span>Essential Earth (t/a Chronicles of the Herb)</span></p>
+        <p class="sp-payment-line">Bank: <span>Capitec Business</span></p>
+        <p class="sp-payment-line">Account type: <span>Current</span></p>
+        <p class="sp-payment-line">Account number: <span>1056 0948 93</span></p>
+        <p class="sp-payment-line">Branch code: <span>450105</span></p>
+        <p class="sp-payment-line">Reference: <span>Your name + order</span></p>
+      </div>
+      <div class="sp-pop-card" id="contact">
+        <p class="sp-pop-title">Get in touch</p>
+        <p class="sp-pop-text">Questions, orders and proof of payment:</p>
+        <div class="sp-pop-links" id="contactLinks">
+          <span class="sp-pop-link" id="waLink">WhatsApp — [number to be added]</span>
+          <span class="sp-pop-link" id="emailLink">Email — [email to be added]</span>
+        </div>
+      </div>
+
+      <div class="coth-disclaimer">
+        <p><strong style="color:var(--starlight);">Please note</strong></p>
+        <p>Our CBD products are hemp-derived and non-psychoactive. Statements on this page have not been evaluated by the South African Health Products Regulatory Authority (SAHPRA). These products are not intended to diagnose, treat, cure or prevent any disease.</p>
+        <p>Always follow the label. Consult a healthcare professional before use if you are pregnant, breastfeeding, taking medication or managing a medical condition. Keep out of reach of children.</p>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    Chronicles of the Herb — part of the <a href="/">Indus Valley</a> digital mall
+  </div>
+</footer>
+
+<script>
+  var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyYl6u9whFo-Feo1aczUheKbd3rLkEs0ZjsCzrJ6P5FfqUs3s2kt-ZUOWNzQbq3-hpCgg/exec';
+  var STORE_ID = 'chronicles-of-the-herb';
+
+  // Used only if the Products sheet has nothing for this store (or can't be reached).
+  // Add/edit real products in /admin/ > Products (store: Chronicles of the Herb).
+  var FALLBACK_PRODUCTS = [
+    { category:'Herbal & Holistic', name:'Ashwagandha', photoUrl:'assets/products/cbd-ashwagandha.jpg', variant:'Adaptogen & stress support — a traditional herbal tonic used for stress response, sleep, and general vitality.' },
+    { category:'Herbal & Holistic', name:'Deep Sleep Blend', photoUrl:'assets/products/cbd-deep-sleep.jpg', variant:'Valerian, Hops, Chamomile & Wild Oats — a calming blend formulated to support restful sleep.' },
+    { category:'Herbal & Holistic', name:'Joint & Mobility Formula', photoUrl:'assets/products/cbd-joint-mobility.jpg', variant:'Bilberry, Boswellia, Comfrey & other herbs — formulated to support joint comfort and mobility.' },
+    { category:'Herbal & Holistic', name:'Red Vein Kratom', photoUrl:'assets/products/cbd-red-vein-kratom.jpg', variant:'Traditional botanical for pain and mood support. Caution: do not exceed dosage; may interact with pain medication, tranquilisers, or sleeping medication.' },
+    { category:'CBD Wellness', name:'CBD & Hemp Oil Tincture', photoUrl:'assets/products/cbd-hemp-oil-tincture.jpg', variant:'A natural source of vitamins, minerals, and omega-3 fatty acids — general wellness support.' },
+    { category:'Herbal & Holistic', name:"Women's Wellness Blend", photoUrl:'assets/products/cbd-womens-wellness.jpg', variant:'Agrimony, Valerian, Passion Flower, Nettle & Lemon Verbena — formulated to support menstrual comfort, flow, and mood.' },
+    { category:'Herbal & Holistic', name:'Digestive Support Blend', photoUrl:'assets/products/cbd-digestive-support.jpg', variant:'Formulated for indigestion, heartburn, and general stomach discomfort.' },
+    { category:'Herbal & Holistic', name:'Immune Support Formula', photoUrl:'assets/products/cbd-immune-support.jpg', variant:'African Potato, Artichoke, Pomegranate & other herbs — an immune-modulating blend for general wellness support.' },
+    { category:'Herbal & Holistic', name:'Cold & Flu Support Blend', photoUrl:'assets/products/cbd-cold-flu.jpg', variant:'Astragalus, Echinacea, Elderberry & other herbs — formulated to support the body through colds, flu, and sinus congestion.' },
+    { category:'Herbal & Holistic', name:'Mood & Calm Blend', photoUrl:'assets/products/cbd-mood-calm.jpg', variant:"Ashwagandha, Ginkgo Biloba, Rhodiola & St. John's Wort — formulated to support the nervous system through everyday stress." }
+  ];
+  // Shanti products: anything with category "Shanti CBD" goes in the Shanti section (not the main shop).
+  // Add them in /admin/ > Products, or list them here as a fallback:
+  // { category:'Shanti CBD', name:'', variant:'', price:'', photoUrl:'assets/products/shanti/....jpg' }
+  var SHANTI_CATEGORY = 'Shanti CBD';
+  // Prices = Shanti's recommended retail (RRSP 2026). Photos from Shanti's reseller list.
+  var SH = 'assets/shanti/';
+  function sh(group, name, size, variant, price, photo){
+    return { category:'Shanti CBD', group:group, name:name, variant:(size ? size + ' · ' : '') + variant, price:price, photoUrl: photo ? SH + photo + '.jpg' : '' };
+  }
+  var FALLBACK_SHANTI = [
+    sh('Creams & Lotions','CBD All Purpose Body Lotion with Rooibos & Buchu','100g','A gentle CBD body lotion with Rooibos and Buchu, made for sensitive skin.','R360','body-lotion-rooibos-buchu'),
+    sh('Creams & Lotions','CBD Vanilla Body Butter','100g','Rich, vanilla-scented CBD body butter for soft, nourished skin.','R360','body-butter-vanilla'),
+    sh('Creams & Lotions','CBD Body Lotion (New)','50ml','A light CBD body lotion with natural herbal extracts.','R399','body-lotion-50ml'),
+    sh('Creams & Lotions','Deep Penetrating CBD Pain Relief Cream','100g','Eucalyptus & peppermint cream for massaging into stiff, tired muscles and joints.','R370','pain-relief-cream-100g'),
+    sh('Creams & Lotions','CBD Cooling Cream','50ml','Cooling eucalyptus & peppermint CBD cream for tired muscles after a long day.','R399','cooling-cream-50ml'),
+
+    sh('Salves & Lip Balms','Deep Penetrating CBD Healing Salve','100g','Eucalyptus & peppermint salve to massage into sore, tired muscles.','R370','healing-salve-eucalyptus-100g'),
+    sh('Salves & Lip Balms','Deep Penetrating CBD Healing Salve','50g','Eucalyptus & peppermint salve in a handy travel size.','R200','healing-salve-eucalyptus-50g'),
+    sh('Salves & Lip Balms','CBD Healing Salve with Vitamin E & Jojoba','100g','A multipurpose balm for dry skin, cuticles, lips and tattoo aftercare.','R360','healing-salve-vitamin-e-jojoba'),
+    sh('Salves & Lip Balms','CBD Lip Balm, Sweet Orange','15g','CBD lip balm to soothe and hydrate dry lips.','R70','lipbalm-sweet-orange'),
+    sh('Salves & Lip Balms','CBD Lip Balm, Vanilla','15g','CBD lip balm to soothe and hydrate dry lips.','R70','lipbalm-vanilla'),
+    sh('Salves & Lip Balms','CBD Lip Balm, Vitamin E & Jojoba','15g','CBD lip balm to soothe and hydrate dry lips.','R70','lipbalm-vitamin-e-jojoba'),
+    sh('Salves & Lip Balms','CBD Lip Balm, Eucalyptus & Peppermint','15g','A fresh, tingly CBD lip balm for dry lips.','R70','lipbalm-eucalyptus-peppermint'),
+    sh('Salves & Lip Balms','Hemp Lip Balm, Natural','15g','Hempseed oil lip balm to soothe and hydrate.','R70','lipbalm-hemp-natural'),
+
+    sh('Massage & Temple Oils','CBD Temple Oil with Hempseed & Avocado','15ml','Roll-on temple oil for massage and aromatherapy.','R160','temple-oil-hempseed-avocado'),
+    sh('Massage & Temple Oils','CBD Temple Oil, Detox','15ml','Roll-on temple oil for massage and aromatherapy.','R160','temple-oil-detox'),
+    sh('Massage & Temple Oils','CBD Temple Oil, Calming','15ml','Roll-on temple oil for massage and aromatherapy.','R160','temple-oil-calming'),
+    sh('Massage & Temple Oils','CBD Temple Oil, Meditate','15ml','Roll-on temple oil for massage and aromatherapy.','R160','temple-oil-meditate'),
+    sh('Massage & Temple Oils','CBD Temple Oil, Uplift','15ml','Roll-on temple oil for massage and aromatherapy.','R160','temple-oil-uplift'),
+    sh('Massage & Temple Oils','CBD Temple Roller (New)','15ml','Improved temple roller with a metal-ball applicator.','R250','temple-roller'),
+    sh('Massage & Temple Oils','CBD Massage Oil with Wheatgerm & Avocado','50ml','Body massage oil with CBD for sore, tired muscles.','R250','massage-oil'),
+    sh('Massage & Temple Oils','CBD Pain Relief Spray, Eucalyptus & Peppermint 300mg','100ml','Easy spray-on CBD massage oil for muscles and joints.','R300','pain-relief-spray'),
+
+    sh('Bath, Body & Hair','CBD Magnesium Salt Soak & Scrub 100mg','','Magnesium body soak and scrub for tired muscles.','R200','magnesium-soak-scrub'),
+    sh('Bath, Body & Hair','CBD Shampoo with Hempseed & Avocado','250ml','Hempseed & peppermint shampoo with CBD extract.','R150','shampoo'),
+    sh('Bath, Body & Hair','CBD Conditioner with Hempseed & Avocado','250ml','Hempseed & CBD infused conditioner.','R150','conditioner'),
+    sh('Bath, Body & Hair','CBD Natural Hairfood with Hempseed & Avocado','100ml','Natural hairfood with hempseed and avocado oil.','R150','hairfood'),
+    sh('Bath, Body & Hair','CBD Bath Bomb 10mg','small','A CBD-infused bath bomb.','R30',''),
+
+    sh('CBD Soaps','CBD Soap, Milk & Honey','100g','Glycerine-based CBD soap for all skin types.','R70','soap-milk-honey'),
+    sh('CBD Soaps','CBD Soap, Lavender','100g','Glycerine-based CBD soap for all skin types.','R70','soap-lavender'),
+    sh('CBD Soaps','CBD Soap, Rooibos','100g','Glycerine-based CBD soap for all skin types.','R70','soap-rooibos'),
+    sh('CBD Soaps','CBD Soap, Activated Charcoal','100g','Glycerine-based CBD soap for all skin types.','R70','soap-charcoal'),
+    sh('CBD Soaps','CBD Soap, Peach & Orange','100g','Glycerine-based CBD soap for all skin types.','R70','soap-peach-orange'),
+    sh('CBD Soaps','CBD Soap, Lemon & Oats','100g','Glycerine-based CBD soap for all skin types.','R70','soap-lemon-oats'),
+    sh('CBD Soaps','CBD Soap, Sandalwood & Cape Fynbos','100g','Glycerine-based CBD soap for all skin types.','R70','soap-sandalwood-fynbos')
+  ];
+  // Filter chips in the main shop, in this order (only categories that have products show).
+  var CATEGORY_ORDER = ['CBD Wellness','Herbal & Holistic','CBD Edibles'];
+
+  (function(){
+    // ---- Auto-hide header (standing rule: fixed + translateY + spacer + rAF) ----
+    var headerEl = document.querySelector('.sp-header');
+    var spacer = document.createElement('div');
+    function sizeSpacer(){ spacer.style.height = headerEl.offsetHeight + 'px'; }
+    headerEl.parentNode.insertBefore(spacer, headerEl.nextSibling);
+    sizeSpacer();
+    window.addEventListener('resize', sizeSpacer);
+    var lastY = window.scrollY, ticking = false;
+    window.addEventListener('scroll', function(){
+      if(ticking) return;
+      ticking = true;
+      requestAnimationFrame(function(){
+        var y = window.scrollY;
+        if(y > lastY && y > 80) headerEl.classList.add('header-hidden');
+        else headerEl.classList.remove('header-hidden');
+        lastY = y; ticking = false;
+      });
+    }, {passive:true});
+
+    // ---- Products ----
+    var grid = document.getElementById('productGrid');
+    var shantiGrid = document.getElementById('shantiGrid');
+    var shantiEmpty = document.getElementById('shantiEmpty');
+    var chipsEl = document.getElementById('catChips');
+    var allProducts = [];
+    var activeCat = 'All';
+
+    function el(tag, cls, text){
+      var e = document.createElement(tag);
+      if(cls) e.className = cls;
+      if(text != null) e.textContent = text;
+      return e;
+    }
+
+    function renderChips(){
+      var present = [];
+      allProducts.forEach(function(p){ if(p.category && present.indexOf(p.category) === -1) present.push(p.category); });
+      present.sort(function(a,b){
+        var ia = CATEGORY_ORDER.indexOf(a), ib = CATEGORY_ORDER.indexOf(b);
+        return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib) || a.localeCompare(b);
+      });
+      chipsEl.innerHTML = '';
+      if(present.length < 2){ chipsEl.hidden = true; return; }
+      chipsEl.hidden = false;
+      ['All'].concat(present).forEach(function(cat){
+        var b = el('button', 'coth-chip' + (cat === activeCat ? ' is-active' : ''), cat);
+        b.type = 'button';
+        b.setAttribute('role','tab');
+        b.setAttribute('aria-selected', cat === activeCat ? 'true' : 'false');
+        b.addEventListener('click', function(){ activeCat = cat; renderChips(); renderProducts(); });
+        chipsEl.appendChild(b);
+      });
+    }
+
+    function buildCard(p, showCat){
+        var card = el('div', 'product-card');
+        if(p.photoUrl){
+          var img = el('img', 'product-card-photo');
+          img.src = p.photoUrl; img.alt = p.name; img.loading = 'lazy';
+          card.appendChild(img);
+        } else {
+          card.appendChild(el('div', 'coth-photo-empty', '🌿'));
+        }
+        if(showCat && p.category) card.appendChild(el('span', 'coth-cat-label', p.category));
+        card.appendChild(el('h4', null, p.name));
+        if(p.variant) card.appendChild(el('p', 'variant', p.variant));
+        if(p.price) card.appendChild(el('p', 'price', p.price));
+        else card.appendChild(el('span', 'badge', 'Ask in-store'));
+        return card;
+    }
+
+    function renderShanti(list){
+      shantiGrid.innerHTML = '';
+      var groups = [], byGroup = {};
+      list.forEach(function(p){
+        var g = p.group || 'Shanti range';
+        if(!byGroup[g]){ byGroup[g] = []; groups.push(g); }
+        byGroup[g].push(p);
+      });
+      groups.forEach(function(g){
+        if(groups.length > 1) shantiGrid.appendChild(el('h3', 'coth-group-title', g));
+        var gridEl = el('div', 'product-grid coth-shanti-grid');
+        gridEl.style.marginTop = '16px';
+        byGroup[g].forEach(function(p){ gridEl.appendChild(buildCard(p, false)); });
+        shantiGrid.appendChild(gridEl);
+      });
+      shantiGrid.hidden = list.length === 0;
+      shantiEmpty.hidden = list.length > 0;
+    }
+
+    function renderProducts(){
+      grid.innerHTML = '';
+      var list = allProducts.filter(function(p){ return activeCat === 'All' || p.category === activeCat; });
+      list.forEach(function(p){ grid.appendChild(buildCard(p, true)); });
+    }
+
+    function isShanti(p){ return String(p.category || '').trim().toLowerCase() === SHANTI_CATEGORY.toLowerCase(); }
+
+    function useProducts(list, shantiList){
+      allProducts = list.filter(function(p){ return !isShanti(p); });
+      renderShanti(shantiList || list.filter(isShanti));
+      if(CATEGORY_ORDER.indexOf(activeCat) === -1 && activeCat !== 'All') activeCat = 'All';
+      renderChips();
+      renderProducts();
+    }
+
+    useProducts(FALLBACK_PRODUCTS, FALLBACK_SHANTI); // show something instantly
+
+    fetch(APPS_SCRIPT_URL + '?action=getProducts&storeId=' + encodeURIComponent(STORE_ID))
+      .then(function(res){ return res.json(); })
+      .then(function(data){
+        var live = (data && data.products || []).filter(function(p){
+          return p && p.name && String(p.status || 'active').toLowerCase() !== 'hidden';
+        });
+        if(!live.length) return;
+        var liveShanti = live.filter(isShanti);
+        var liveOther = live.filter(function(p){ return !isShanti(p); });
+        useProducts(liveOther.length ? liveOther : FALLBACK_PRODUCTS,
+                    liveShanti.length ? liveShanti : FALLBACK_SHANTI);
+      })
+      .catch(function(){ /* keep fallback */ });
+
+    // ---- Contact details from Store Details (admin) ----
+    fetch(APPS_SCRIPT_URL + '?action=getStoreSettings&storeId=' + encodeURIComponent(STORE_ID))
+      .then(function(res){ return res.json(); })
+      .then(function(data){
+        var s = (data && data.settings) || {};
+        var wa = String(s.whatsapp || '').replace(/[^0-9]/g, '');
+        if(wa){
+          if(wa.charAt(0) === '0') wa = '27' + wa.slice(1);
+          var a = el('a', 'sp-pop-link', 'WhatsApp — ' + s.whatsapp);
+          a.href = 'https://wa.me/' + wa; a.target = '_blank'; a.rel = 'noopener';
+          var old = document.getElementById('waLink'); old.parentNode.replaceChild(a, old);
+        }
+        var email = String(s.email || '').trim();
+        if(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+          var m = el('a', 'sp-pop-link', 'Email — ' + email);
+          m.href = 'mailto:' + email;
+          var oldE = document.getElementById('emailLink'); oldE.parentNode.replaceChild(m, oldE);
+        }
+      })
+      .catch(function(){ /* keep placeholders */ });
+  })();
+</script>
+</body>
+</html>
